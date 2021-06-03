@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "com.example.mywebdemo"
@@ -30,4 +30,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    compile 'com.orhanobut:logger:1.15'
+    compile 'com.zhy:percent-support-extends:1.1.1'
+    compile 'com.balysv:material-ripple:1.0.2'
+    compile 'com.android.support:appcompat-v7:24.0.0-alpha1'
+    compile 'com.android.support:support-v4:23.2.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
