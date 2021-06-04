@@ -23,6 +23,7 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
 public class MainActivity extends AppCompatActivity {
 
     private WebView webView ;
@@ -235,4 +236,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-}
+}*/
