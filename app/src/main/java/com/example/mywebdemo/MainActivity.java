@@ -3,6 +3,7 @@ package com.example.mywebdemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,15 +18,24 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*
 public class MainActivity extends AppCompatActivity {
 
+
+    public ArrayList<String> urlList = new ArrayList<String>();
+    public ArrayList<String> nameList = new ArrayList<String>();
+    public ArrayList<String> flagList = new ArrayList<String>();
+    public String currenturl="";
     private WebView webView ;
     //注册浏览器
     private void initWebView(String url) {
@@ -72,7 +82,41 @@ public class MainActivity extends AppCompatActivity {
 //
 //        });
 
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient(){
+            boolean if_load;
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                if_load=false;
+//                return false;
+//            }
+
+
+
+            //页面完成即加入历史记录
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                if(if_load) {
+                    nameList.add(view.copyBackForwardList().getCurrentItem().getTitle());
+                    currenturl=view.copyBackForwardList().getCurrentItem().getTitle();
+                    urlList.add(currenturl);
+                    nameList=removeDuplicate(nameList);
+                    urlList=removeDuplicate(urlList);
+                    Log.d("array", nameList.toString());
+                    if_load=false;
+                }
+            }
+
+            //页面开始
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon){
+                super.onPageStarted(view, url, favicon);
+
+                if_load=true;
+            }
+
+        });
         LoadUrl(url);
         //拦截跳转后执行
 //        webView.setWebViewClient(new WebViewClient() {
@@ -83,6 +127,15 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //
 //       });
+    }
+    //去重
+    public static ArrayList removeDuplicate(ArrayList list){
+        ArrayList tempList = new ArrayList(list.size());
+        for(int i=0;i<list.size();i++){
+            if(!tempList.contains(list.get(i)))
+                tempList.add(list.get(i));
+        }
+        return tempList;
     }
 
     private void LoadUrl(String url) {
@@ -162,13 +215,20 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.history:
-                                Log.d("TAG", "历史");
+                                Intent intent = new Intent(MainActivity.this,historyActivity.class);
+                                Bundle bundle=new Bundle();
+                                //传递name参数为tinyphp
+                                bundle.putStringArrayList("history",urlList);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                                 break;
                             case R.id.flag:
                                 Log.d("TAG2", "书签");
                                 break;
                             case R.id.add_flag:
-                                Log.d("TAG3", "添加书签");
+                                flagList.add(currenturl);
+                                flagList=removeDuplicate(flagList);
+                                Log.d("array3", flagList.toString());
                                 break;
                         }
                         return false;
@@ -211,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         btn_menu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                LoadUrl("https://www.baidu.com/");
+                LoadUrl("https://m.baidu.com/");
             }
         });
         final EditText myEditText = (EditText) findViewById(R.id.edit_text);
@@ -222,13 +282,14 @@ public class MainActivity extends AppCompatActivity {
                 //url判断并且改成想要的格式
                 String str = myEditText.getText().toString();
                 if (str.equals("")){
-                    str="https://www.baidu.com/";
+                    str="https://m.baidu.com/";
                 }else {
                     if(isUrl(str)){
                         str="http://"+str;
                     }
                     if(!isHttpUrl(str)){
-                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
+//                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
+                        str = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + myEditText.getText().toString()+"&pu=sz%401321_480&t_noscript=jump";
                     }
                 }
 
@@ -236,4 +297,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-}*/
+}
