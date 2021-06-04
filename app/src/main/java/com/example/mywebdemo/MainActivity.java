@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     public ArrayList<String> urlList = new ArrayList<String>();
     public ArrayList<String> nameList = new ArrayList<String>();
+    public ArrayList<String> flagList = new ArrayList<String>();
+    public String currenturl="";
     private WebView webView ;
     //注册浏览器
     private void initWebView(String url) {
@@ -97,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if(if_load) {
                     nameList.add(view.copyBackForwardList().getCurrentItem().getTitle());
-                    urlList.add(view.copyBackForwardList().getCurrentItem().getUrl());
+                    currenturl=view.copyBackForwardList().getCurrentItem().getTitle();
+                    urlList.add(currenturl);
                     nameList=removeDuplicate(nameList);
                     urlList=removeDuplicate(urlList);
                     Log.d("array", nameList.toString());
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //       });
     }
-
+    //去重
     public static ArrayList removeDuplicate(ArrayList list){
         ArrayList tempList = new ArrayList(list.size());
         for(int i=0;i<list.size();i++){
@@ -212,13 +215,20 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.history:
-                                Log.d("TAG", "历史");
+                                Intent intent = new Intent(MainActivity.this,historyActivity.class);
+                                Bundle bundle=new Bundle();
+                                //传递name参数为tinyphp
+                                bundle.putStringArrayList("history",urlList);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                                 break;
                             case R.id.flag:
                                 Log.d("TAG2", "书签");
                                 break;
                             case R.id.add_flag:
-                                Log.d("TAG3", "添加书签");
+                                flagList.add(currenturl);
+                                flagList=removeDuplicate(flagList);
+                                Log.d("array3", flagList.toString());
                                 break;
                         }
                         return false;
@@ -288,5 +298,3 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
-
-//tn=02049043_69_pg
