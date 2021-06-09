@@ -2,10 +2,12 @@ package com.example.mywebdemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -13,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.DownloadListener;
+import android.webkit.URLUtil;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -37,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> flagList = new ArrayList<String>();
     public String currenturl="";
     private WebView webView ;
+
+
+
+
     //注册浏览器
     private void initWebView(String url) {
 
@@ -91,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 
 
-
             //页面完成即加入历史记录
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -127,7 +134,18 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //
 //       });
+
+        //增加下载功能，调用系统的下载管理器
+        webView.setDownloadListener(new DownloadListener() {
+            @Override
+            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+                downloadBySystem(url,contentDisposition,mimetype);
+            }
+        });
     }
+
+
+
     //去重
     public static ArrayList removeDuplicate(ArrayList list){
         ArrayList tempList = new ArrayList(list.size());
@@ -170,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return isurl;
     }
+
 
 
     private Button btn_back;
@@ -296,5 +315,69 @@ public class MainActivity extends AppCompatActivity {
                 initWebView(str);
             }
         });
+    }
+
+
+    //调用系统下载管理器的函数
+    private void downloadBySystem(String url, String contentDisposition, String mimeType) {
+
+// 指定下载地址
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+// 允许媒体扫描，根据下载的文件类型被加入相册、音乐等媒体库
+
+        request.allowScanningByMediaScanner();
+
+// 设置通知的显示类型，下载进行时和完成后显示通知
+
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+// 设置通知栏的标题，如果不设置，默认使用文件名
+
+// request.setTitle("This is title");
+
+// 设置通知栏的描述
+
+// request.setDescription("This is description");
+
+// 允许在计费流量下下载
+
+        request.setAllowedOverMetered(false);
+
+// 允许该记录在下载管理界面可见
+
+        request.setVisibleInDownloadsUi(false);
+
+// 允许漫游时下载
+
+        request.setAllowedOverRoaming(true);
+
+// 允许下载的网路类型
+
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+
+// 设置下载文件保存的路径和文件名
+
+        String fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
+
+        System.out.println("fileName:{}"+ fileName);
+
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+// 另外可选一下方法，自定义下载路径
+
+// request.setDestinationUri()
+
+// request.setDestinationInExternalFilesDir()
+
+        final DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
+// 添加一个下载任务
+
+        long downloadId = downloadManager.enqueue(request);
+
+        System.out.println("downloadId:{}"+ downloadId);
+
     }
 }
