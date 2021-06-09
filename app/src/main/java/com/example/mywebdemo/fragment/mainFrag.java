@@ -1,5 +1,8 @@
 package com.example.mywebdemo.fragment;
 
+import com.example.mywebdemo.FragActivity;
+import com.example.mywebdemo.constance.fragConst;
+
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
@@ -7,10 +10,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +34,7 @@ import com.example.mywebdemo.event.fragEvent;
 import com.example.mywebdemo.event.showDelImg;
 import com.example.mywebdemo.event.zoomEvent;
 import com.example.mywebdemo.constance.fragConst;
+import com.example.mywebdemo.webview.MyWebView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class mainFrag extends baseFrag{
+//控制fragment的文件
+public class mainFrag extends baseFrag {
 
     private RelativeLayout mainrlt;
     private TextView showtitletv;
@@ -47,6 +56,9 @@ public class mainFrag extends baseFrag{
     private boolean isNewFragment = false;
     private int color;
     private Context context;
+    private MyWebView myWebView;
+
+
 
     public mainFrag() {
         this.fragTag = fragConst.new_mainfrag_count + "";
@@ -54,14 +66,22 @@ public class mainFrag extends baseFrag{
         isNewFragment = true;
     }
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        //多页功能渲染的界面
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        //获取上面的数字并设置触发监听器
         mainrlt = (RelativeLayout) view.findViewById(R.id.mainrlt);
         mainrlt.setOnTouchListener(this);
+        //获取整个页面并设置触发监听器
         rootlt = (FrameLayout) view.findViewById(R.id.rootlt);
         rootlt.setOnTouchListener(this);
         delthispage = (ImageView) view.findViewById(R.id.delthispage);
@@ -72,12 +92,52 @@ public class mainFrag extends baseFrag{
         return view;
 
     }
+    public  void goBack(){
+        myWebView.goBack();
+    }
+    public void goForward(){
+        myWebView.goForward();
+    }
+    public void goHome(){
+        myWebView.goHome();
+    }
 
     private void init(View view) {
 
+
+
         dm2 = getResources().getDisplayMetrics();
-        TextView showtag = (TextView) view.findViewById(R.id.showtag);
-        showtag.setText("当前fragment " + getFragTag());
+        //TextView showtag = (TextView) view.findViewById(R.id.showtag);
+        //表示第几页
+        //showtag.setText("当前fragment " + getFragTag());
+
+        //加载WebView控件
+
+        WebView webView = (WebView) view.findViewById(R.id.current_webview);
+        //判断webview是否挂载
+        if (myWebView == null) {
+            myWebView = new MyWebView();
+            myWebView.setWebView(webView);
+            //fragConst.myWebViewList.add(myWebView);
+        }else{
+            myWebView.setWebView(webView);
+            myWebView.initWebView(myWebView.getMyurl());
+        }
+
+        //刷新按钮
+        ImageView refresh= (ImageView) view.findViewById(R.id.refresh);
+        refresh.setOnClickListener(View->{
+            myWebView.refresh();
+        });
+
+        //搜索栏
+        EditText editText = (EditText) view.findViewById(R.id.edit_text);
+        ImageView search = (ImageView) view.findViewById(R.id.search);
+        search.setOnClickListener(View-> {
+                String str = editText.getText().toString();
+                myWebView.start(str);
+            });
+
 
 
         delthispage.setOnClickListener(View -> {

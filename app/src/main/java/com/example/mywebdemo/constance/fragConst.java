@@ -1,6 +1,9 @@
 package com.example.mywebdemo.constance;
 
+import android.webkit.WebView;
+
 import com.example.mywebdemo.fragment.mainFrag;
+import com.example.mywebdemo.webview.MyWebView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +12,7 @@ public class fragConst {
 
     public static List<mainFrag>  fraglist=new ArrayList<>();  //fraglist和fraghashcode成对出现
     public static List<String> fraghashcode=new ArrayList<>(); //存储对象的hashcode
+    public static List<MyWebView>myWebViewList=new ArrayList<>();
 
     public static  int page_interval=40;  //界面之间的间隔
 

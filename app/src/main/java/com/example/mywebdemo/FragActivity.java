@@ -5,6 +5,7 @@ import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -33,6 +35,8 @@ import com.zhy.android.percent.support.PercentRelativeLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+
 import static android.widget.RelativeLayout.*;
 
 public class FragActivity extends FragmentActivity {
@@ -40,7 +44,7 @@ public class FragActivity extends FragmentActivity {
     private verticalViewPager mViewPager;
     private fragAdapter fragPagerAdapter;
     private TextView pagebt;
-    private ImageView leftbt, rightbt, setbt, homebt, delfrag, addnewpage, returnmain;
+    private ImageView leftbt, rightbt, setbt, homebt, delfrag, deleteallpage,addnewpage, returnmain;
     private LinearLayout llayoutviewpage, pagebarlt, mainbarlt;
     private DisplayMetrics dm2;
     private GestureDetectorCompat mDetector;
@@ -53,23 +57,24 @@ public class FragActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-
+        //fraglist存fragment对象，fraghashcode存对应随机哈希码
         for (int i = 0; i < fragConst.init_page_count; i++) {
             mainFrag tmp=new mainFrag();
             fragConst.fraglist.add(tmp);
             fragConst.fraghashcode.add(String.valueOf(tmp.hashCode()));
         }
+        //设置ViewPager
         mViewPager = (verticalViewPager) findViewById(R.id.mainviewpage);
         fragPagerAdapter = new fragAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(fragPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
-
+        //设置ViewPager上下滑监听器
         EventBus.getDefault().register(this);
         mainSimpleOnGestureListener = new mainActivitySimpleOnGestureListener();
         mDetector = new GestureDetectorCompat(this, mainSimpleOnGestureListener);
         mainrootrl = (PercentRelativeLayout) findViewById(R.id.mainrootrl);
 
-
+        //初始化界面
         viewInit();
 
     }
@@ -83,6 +88,7 @@ public class FragActivity extends FragmentActivity {
         homebt = (ImageView) findViewById(R.id.homebt);
         delfrag = (ImageView) findViewById(R.id.delfrag);
 
+        deleteallpage=(ImageView) findViewById(R.id.deleteallpage);
         addnewpage = (ImageView) findViewById(R.id.addnewpage);
         returnmain = (ImageView) findViewById(R.id.returnmain);
 
@@ -102,6 +108,10 @@ public class FragActivity extends FragmentActivity {
             bthander(v.getId());
         });
 
+
+        deleteallpage.setOnClickListener((View v)->{
+            bthander(v.getId());
+        });
         addnewpage.setOnClickListener((View v) -> {
             bthander(v.getId());
         });
@@ -126,19 +136,30 @@ public class FragActivity extends FragmentActivity {
     private void bthander(int id) {
         switch (id) {
             case R.id.leftbt:
+                goBack();
+                //command="goBack";
+                Log.d("gol","go");
                 break;
             case R.id.rightbt:
+                goForward();
+                //command="goforward";
                 break;
             case R.id.setbt:
 
                 break;
             case R.id.pagebt:
                 zoomchange();
+
                 break;
             case R.id.homebt:
+                //command="goHome";
+                goHome();
                 //   removePage(mViewPager.getCurrentItem());
                 break;
             /**********************************************************/
+            case R.id.deleteallpage:
+                deleteAllPage();
+                break;
             case R.id.addnewpage:
                 addNewPage();
                 break;
@@ -149,6 +170,68 @@ public class FragActivity extends FragmentActivity {
         }
 
 
+    }
+    public void goBack(){
+        //Log.d("goback","gobacksuccess");
+//        mainFrag goback=mainFrag.newInstance("goBack");
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .add(R.id.llayoutviewpage, goback)
+//                .commit();
+
+        //return "goBack";
+
+//        if(mOnTitleClickListener != null){
+//            mOnTitleClickListener.onClick("OK");
+//        }
+        mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+        m.goBack();
+
+        //getSupportFragmentManager().getFragment();
+
+    }
+    public void goForward(){
+        mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+        m.goForward();
+
+
+    }
+    public void goHome(){
+        mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+        m.goHome();
+
+    }
+//    public void goHome(){
+//        mainFrag goHome=mainFrag.newInstance("goHome");
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .add(R.id.llayoutviewpage, goHome)
+//                .commit();
+//    }
+//    public String command(){
+//
+//        return command;
+//    }
+
+    private void deleteAllPage(){
+
+        if(fragConst.fraglist.size()==1 && fragConst.fraghashcode.size()==1) {
+            return;
+
+        }else {
+            //注意size在变化
+            int length=fragConst.fraglist.size();
+                for(int i = 1; i<length;i++)
+                {
+                    fragConst.fraghashcode.remove(fragConst.fraghashcode.size()-1);
+                    fragConst.fraglist.remove(fragConst.fraglist.size()-1);
+                }
+
+
+            fragPagerAdapter.notifyDataSetChanged();
+        }
+        mainFrag m=fragConst.fraglist.get(0);
+        m.goHome();
     }
 
 
@@ -187,6 +270,7 @@ public class FragActivity extends FragmentActivity {
     private boolean currentIsFull = true;//当前是不是全屏
 
     private void zoomchange() {
+
         int thewidth = mViewPager.getWidth();
         if (dm2.widthPixels - mViewPager.getWidth() < 5) {
             mViewPager.setPageMargin(fragConst.page_interval);
@@ -306,6 +390,7 @@ public class FragActivity extends FragmentActivity {
         fragConst.fraglist.clear();
         fragConst.new_mainfrag_count = 0; //调用次数清0
     }
+
 
 
 }

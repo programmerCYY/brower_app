@@ -1,249 +1,298 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_centerInParent="true"
-    android:clipChildren="false"
-    android:layerType="software"
-    android:id="@+id/mainrootrl"
-    android:background="#b0000000">
-
-
-<LinearLayout
-    android:clickable="true"
-    android:orientation="vertical"
-    android:id="@+id/llayoutviewpage"
-    android:clipChildren="false"
-    app:layout_heightPercent="100%h"
-    app:layout_widthPercent="100%w"
-    android:layout_centerInParent="true"
-    android:layout_width="0dp"
-    android:layout_height="0dp">
-
-    <com.example.mywebdemo.customview.verticalViewPager
-        android:clipChildren="false"
-        android:id="@+id/mainviewpage"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.example.mywebdemo.customview.verticalViewPager>
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:clipChildren="false"
+        android:layerType="software"
+        android:id="@+id/mainrootrl"
+        android:background="#b0000000">
 
-</LinearLayout>
+     <!--整个界面,实现左右滑动切换页面-->
+    <LinearLayout
+            android:clickable="true"
+            android:orientation="vertical"
+            android:id="@+id/llayoutviewpage"
+            android:clipChildren="false"
+            app:layout_heightPercent="100%h"
+            app:layout_widthPercent="100%w"
+            android:layout_centerInParent="true"
+            android:layout_width="0dp"
+            android:layout_height="0dp">
+
+        <com.example.mywebdemo.customview.verticalViewPager
+                android:clipChildren="false"
+                android:id="@+id/mainviewpage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.example.mywebdemo.customview.verticalViewPager>
+
+    </LinearLayout>
 
 
     <RelativeLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <ImageView
-            android:visibility="invisible"
-            android:id="@+id/delfrag"
-            android:layout_centerHorizontal="true"
-            android:background="@mipmap/deletefrag"
-            android:layout_marginTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                android:visibility="invisible"
+                android:id="@+id/delfrag"
+                android:layout_centerHorizontal="true"
+                android:background="@mipmap/deletefrag"
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
     </RelativeLayout>
 
 
-<LinearLayout
-    android:id="@+id/mainbarlt"
-    android:orientation="vertical"
-    android:layout_alignParentBottom="true"
-    app:layout_heightPercent="8%h"
-    app:layout_widthPercent="100%w"
-    android:layout_width="0dp"
-    android:layout_height="0dp">
+<!--    &lt;!&ndash;搜索栏&ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="#FFFFFF">-->
+<!--        <EditText-->
+<!--                android:id="@+id/edit_text"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="55dp"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:hint="百度一下你就知道"-->
+<!--                android:maxLines="3"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.269" />-->
+
+<!--        <Button-->
+<!--                android:id="@+id/button"-->
+<!--                android:layout_width="120dp"-->
+<!--                android:layout_height="55dp"-->
+<!--                android:text="启动浏览器"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.0"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/edit_text"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.269" />-->
+<!--    </LinearLayout>-->
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:layout_weight="1"
-            android:background="#000000">
-
-        </View>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        android:orientation="horizontal">
-
-
-        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/mainbarlt"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            app:layout_heightPercent="10%h"
+            app:layout_widthPercent="100%w"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@mipmap/transparen2"
-            app:mrl_rippleDuration="100"
-            app:mrl_rippleColor="#A9A9A9">
-
-            <ImageView
-                android:id="@+id/leftbt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/left"
-                app:layout_marginLeftPercent="20%w" />
-
-
-        </com.balysv.materialripple.MaterialRippleLayout>
-
-
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@mipmap/transparent"
-            app:mrl_rippleDuration="100"
-            app:mrl_rippleColor="#A9A9A9">
-
-            <ImageView
-                android:id="@+id/rightbt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/right" />
-        </com.balysv.materialripple.MaterialRippleLayout>
-
-
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@mipmap/transparent"
-            app:mrl_rippleDuration="100"
-            app:mrl_rippleColor="#A9A9A9">
-
-            <ImageView
-                android:id="@+id/setbt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/set" />
-        </com.balysv.materialripple.MaterialRippleLayout>
-
-
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:id="@+id/pagemr"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@mipmap/transparent"
-            app:mrl_rippleDuration="100"
-            app:mrl_rippleColor="#A9A9A9">
-
-            <TextView
-
-                android:gravity="center"
-                android:text="1"
-                android:id="@+id/pagebt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/page" />
-        </com.balysv.materialripple.MaterialRippleLayout>
-
-
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@mipmap/transparent"
-            app:mrl_rippleDuration="100"
-            app:mrl_rippleColor="#A9A9A9">
-
-            <ImageView
-                android:id="@+id/homebt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/home" />
-        </com.balysv.materialripple.MaterialRippleLayout>
-
-
-    </LinearLayout>
-
-</LinearLayout>
-
-
-
-
-    <LinearLayout
-        android:id="@+id/pagebarlt"
-        android:visibility="invisible"
-       android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        app:layout_heightPercent="8%h"
-        app:layout_widthPercent="40%w"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
-
-
-
-
+            android:layout_height="0dp">
+         <!--线-->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1px"
+                    android:layout_weight="1"
+                    android:background="#000000">
+
+            </View>
+        </LinearLayout>
+
+         <!-- 底部栏-->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                >
 
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:mrl_rippleDuration="100"
-                app:mrl_rippleColor="#A9A9A9">
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@mipmap/transparen2"
+                    app:mrl_rippleDuration="100"
+                    app:mrl_rippleColor="#A9A9A9">
 
                 <ImageView
-                    android:id="@+id/addnewpage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@mipmap/addpage"
-                    app:layout_marginLeftPercent="20%w" />
+                        android:id="@+id/leftbt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/direction_left"
+                        app:layout_marginLeftPercent="20%w"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8" />
 
 
             </com.balysv.materialripple.MaterialRippleLayout>
 
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-
-                app:mrl_rippleDuration="100"
-                app:mrl_rippleColor="#A9A9A9">
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@mipmap/transparent"
+                    app:mrl_rippleDuration="100"
+                    app:mrl_rippleColor="#A9A9A9">
 
                 <ImageView
-                    android:id="@+id/returnmain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@mipmap/returnmain" />
+                        android:id="@+id/rightbt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/direction_right"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8" />
             </com.balysv.materialripple.MaterialRippleLayout>
 
 
 
+            <com.balysv.materialripple.MaterialRippleLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@mipmap/transparent"
+                    app:mrl_rippleDuration="100"
+                    app:mrl_rippleColor="#A9A9A9">
 
+                <ImageView
+                        android:id="@+id/homebt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/ic_home"
+                        android:scaleX="0.7"
+                        android:scaleY="0.7" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/pagemr"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@mipmap/transparent"
+                    app:mrl_rippleDuration="100"
+                    app:mrl_rippleColor="#A9A9A9">
+
+                <TextView
+
+                        android:gravity="center"
+                        android:text="1"
+                        android:textSize="23sp"
+                        android:id="@+id/pagebt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/page"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@mipmap/transparent"
+                    app:mrl_rippleDuration="100"
+                    app:mrl_rippleColor="#A9A9A9">
+
+                <ImageView
+                        android:id="@+id/setbt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/menu"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8" />
+            </com.balysv.materialripple.MaterialRippleLayout>
 
 
         </LinearLayout>
 
     </LinearLayout>
 
+    <!--预览时下图标-->
+    <LinearLayout
+            android:id="@+id/pagebarlt"
+            android:visibility="invisible"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            app:layout_heightPercent="8%h"
+            app:layout_widthPercent="65%w"
+            android:layout_width="0dp"
+            android:layout_height="0dp">
 
 
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <!--清除所有界面按钮-->
+            <com.balysv.materialripple.MaterialRippleLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:mrl_rippleDuration="100"
+                    app:mrl_rippleColor="#A9A9A9">
+
+                <ImageView
+                        android:id="@+id/deleteallpage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/ic_trash"
+                        app:layout_marginLeftPercent="20%w" />
+
+
+            </com.balysv.materialripple.MaterialRippleLayout>
+             <!--添加新页按钮-->
+            <com.balysv.materialripple.MaterialRippleLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:mrl_rippleDuration="100"
+                    app:mrl_rippleColor="#A9A9A9">
+
+                <ImageView
+                        android:id="@+id/addnewpage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/ic_round_add"
+                        app:layout_marginLeftPercent="20%w" />
+
+
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <!--新页返回按钮-->
+            <com.balysv.materialripple.MaterialRippleLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:mrl_rippleDuration="100"
+                    app:mrl_rippleColor="#A9A9A9">
+
+                <ImageView
+                        android:id="@+id/returnmain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/return_main" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </com.zhy.android.percent.support.PercentRelativeLayout>
