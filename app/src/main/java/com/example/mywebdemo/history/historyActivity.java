@@ -37,7 +37,12 @@ public class historyActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                onBackPressed();
+                Intent intent = new Intent(historyActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                MainActivity.setNameList(namelist);
+                MainActivity.setUrlList(list);
+                startActivity(intent);
+                finish();
             }
         });
         mRecyclerView = findViewById(R.id.recycle_view);
@@ -55,6 +60,14 @@ public class historyActivity extends AppCompatActivity {
         list=bundle.getStringArrayList("history");
         namelist=bundle.getStringArrayList("title");
         currenturl=bundle.getString("currenturl");
+    }
+
+    public void setList(ArrayList mylist){
+        list=mylist;
+    }
+
+    public void setNamelist(ArrayList mynamelist){
+        namelist=mynamelist;
     }
 
 }

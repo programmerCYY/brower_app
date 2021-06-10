@@ -27,13 +27,22 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity {
 
 
-    public ArrayList<String> urlList = new ArrayList<String>();
-    public ArrayList<String> nameList = new ArrayList<String>();
+    public static ArrayList<String> urlList = new ArrayList<String>();
+    public static ArrayList<String> nameList = new ArrayList<String>();
     public ArrayList<String> flagList = new ArrayList<String>();
     public String  currenturl="";
     public String  currenttitle="";
     private WebView webView;
     private String url="";
+
+    public static void setUrlList(ArrayList list){
+        urlList=list;
+    }
+
+    public static void setNameList(ArrayList title){
+        nameList=title;
+    }
+
     //注册浏览器
     private void initWebView() {
         if(webView==null) {
@@ -295,5 +304,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }

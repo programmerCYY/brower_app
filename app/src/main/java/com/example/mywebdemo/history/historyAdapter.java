@@ -22,6 +22,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     private ArrayList<String> mList;
     private ArrayList<String> mtitle;
 
+
     public historyAdapter(ArrayList<String> list,ArrayList<String> title) {
         mList = list;
         mtitle=title;
@@ -42,7 +43,9 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
                  int position = holder.getAdapterPosition();
                  mList.remove(position);
                  mtitle.remove(position);
-                 Log.d("item3", mtitle.toString());
+                 historyActivity activity=(historyActivity) v.getContext();
+                 activity.setList(mList);
+                 activity.setNamelist(mtitle);
                  notifyItemRemoved(position);
                  notifyDataSetChanged();
              }
@@ -93,4 +96,5 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
             mtitleView= itemView.findViewById(R.id.text_view);
         }
     }
+
 }
