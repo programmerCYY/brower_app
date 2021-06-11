@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.example.mywebdemo.flag.flagActivity;
 import com.example.mywebdemo.history.historyActivity;
 
 import java.util.ArrayList;
@@ -29,11 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<String> urlList = new ArrayList<String>();
     public static ArrayList<String> nameList = new ArrayList<String>();
-    public ArrayList<String> flagList = new ArrayList<String>();
-    public String  currenturl="";
+    public static ArrayList<String> flagList = new ArrayList<String>();
+    public static ArrayList<String> titleList = new ArrayList<String>();
+    public  String  currenturl="";
     public String  currenttitle="";
     private WebView webView;
-    private String url="";
+    private static String url="";
 
     public static void setUrlList(ArrayList list){
         urlList=list;
@@ -43,12 +45,22 @@ public class MainActivity extends AppCompatActivity {
         nameList=title;
     }
 
+    public static void setflagList(ArrayList list){
+        flagList=list;
+    }
+
+    public static void settitleList(ArrayList title){
+        titleList=title;
+    }
+
+    public static void setUrl(String string){
+        url=string;
+    }
     //注册浏览器
     private void initWebView() {
-        if(webView==null) {
-            webView = (WebView) findViewById(R.id.mywebview);
-            Log.d("webView", "initWebView:新建web了 ");
-        }
+        webView = (WebView) findViewById(R.id.mywebview);
+        Log.d("webView", "initWebView:新建web了 ");
+
         WebSettings webSettings = webView.getSettings();
 
 
@@ -136,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void LoadUrl(String url) {
-        Log.d("tag","运行了一次");
         webView.loadUrl(url);
     }
     //判断http
@@ -194,9 +205,6 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null && bundle.containsKey("url")) {
             url = bundle.getString("url");
-            nameList=bundle.getStringArrayList("title");
-            urlList=bundle.getStringArrayList("list");
-            Log.d("array5", nameList.toString());
             initWebView();
         }
         //按钮注册
@@ -230,12 +238,21 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 break;
                             case R.id.flag:
-                                Log.d("TAG2", "书签");
+                                Intent intent2 = new Intent(MainActivity.this, flagActivity.class);
+                                Bundle bundle2=new Bundle();
+                                //传递name参数为tinyphp
+                                bundle2.putStringArrayList("flag",flagList);
+                                bundle2.putStringArrayList("title",titleList);
+                                bundle2.putString("currenturl",currenturl);
+                                intent2.putExtras(bundle2);
+                                startActivity(intent2);
                                 break;
                             case R.id.add_flag:
                                 flagList.add(currenturl);
                                 flagList=removeDuplicate(flagList);
-                                Log.d("array3", flagList.toString());
+                                titleList.add(currenttitle);
+                                titleList=removeDuplicate(titleList);
+
                                 break;
                         }
                         return false;
@@ -305,5 +322,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(webView!=null)
+        LoadUrl(url);
+    }
 }

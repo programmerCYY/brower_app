@@ -30,9 +30,6 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     @NonNull
     @Override
     public historyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        historyAdapter.ViewHolder holder = new historyAdapter.ViewHolder(LayoutInflater.from(
-//                parent.getContext()).inflate(R.layout.item, parent,
-//                false));
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item,parent,false);
         final ViewHolder holder = new ViewHolder(view);
@@ -58,11 +55,10 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
                 int position = holder.getAdapterPosition();
                 String currenturl=mList.get(position);
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("url",currenturl);
-                bundle.putStringArrayList("title",mtitle);
-                bundle.putStringArrayList("list",mList);
-                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                MainActivity.setUrlList(mList);
+                MainActivity.setNameList(mtitle);
+                MainActivity.setUrl(currenturl);
                 v.getContext().startActivity(intent);
                 historyActivity activity=(historyActivity)v.getContext();
                 activity.finish();
@@ -76,8 +72,6 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull historyAdapter.ViewHolder holder, final int position) {
         holder.mtitleView.setText(mtitle.get(position));
-//        holder.mView.setText(mList.get(position));
-
     }
 
     @Override
@@ -86,13 +80,11 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mView;
         public TextView mtitleView;
         public Button btnDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
-//            mView = itemView.findViewById(R.id.text_url);
             mtitleView= itemView.findViewById(R.id.text_view);
         }
     }
