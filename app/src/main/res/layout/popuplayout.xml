@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+            android:id="@+id/popup_menu"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:orientation="vertical"
+            android:background="@color/day"
+            >
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1px"
+                    android:layout_weight="1"
+                    android:background="#48474D">
+
+            </View>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@mipmap/user_filling"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8">
+
+            </ImageView>
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:paddingTop="25dp"
+                    android:text="用户名"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_black">
+
+            </TextView>
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@mipmap/ic_chat"
+                    android:scaleX="0.3"
+                    android:scaleY="0.3">
+
+            </ImageView>
+
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+            <LinearLayout
+                    android:id="@+id/popup_bookmark"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/favorite"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6"
+                        >
+
+                </ImageView>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textSize="13sp"
+                        android:text="书签"
+                        android:gravity="center"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/popup_history"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/history"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6">
+
+                </ImageView>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:text="历史"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/popup_download"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/download"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6">
+
+                </ImageView>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:text="下载管理"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/popup_share"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/share"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6">
+
+                </ImageView>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:text="分享"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/popup_refresh"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/menu_refresh"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6">
+
+                </ImageView>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:text="刷新"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+            <LinearLayout
+                    android:id="@+id/popup_window"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:id="@+id/popup_window_imagine"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/electronics"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6"
+                        >
+
+                </ImageView>
+                <TextView
+                        android:id="@+id/popup_window_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textSize="13sp"
+                        android:text="电脑版"
+                        android:gravity="center"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/popup_no_history"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/no_history"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6">
+
+                </ImageView>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:text="无痕模式"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/popup_night"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:id="@+id/popup_night_imagine"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/moon"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6">
+
+                </ImageView>
+                <TextView
+                        android:id="@+id/popup_night_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:text="夜间模式"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/popup_set"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/setting"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6">
+
+                </ImageView>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:text="设置"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/popup_exit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:src="@mipmap/exit"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6">
+
+                </ImageView>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:text="退出"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="15dp"
+                    android:layout_weight="1"
+                   >
+
+            </View>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

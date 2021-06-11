@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.example.mywebdemo.FragActivity;
 import com.example.mywebdemo.R;
 import com.example.mywebdemo.event.baseEvent;
 import com.example.mywebdemo.event.delThisFrag;
@@ -59,6 +60,8 @@ public class mainFrag extends baseFrag {
     private MyWebView myWebView;
 
 
+    // data
+
 
     public mainFrag() {
         this.fragTag = fragConst.new_mainfrag_count + "";
@@ -71,6 +74,7 @@ public class mainFrag extends baseFrag {
         super.onAttach(context);
 
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +96,7 @@ public class mainFrag extends baseFrag {
         return view;
 
     }
+    //public String getmyWebView_search_id(){myWebView}
     public  void goBack(){
         myWebView.goBack();
     }
@@ -101,6 +106,11 @@ public class mainFrag extends baseFrag {
     public void goHome(){
         myWebView.goHome();
     }
+    public void refresh(){myWebView.refresh();}
+    public String geturl(){return myWebView.getMyurl();}
+    public void change_isWindows(){myWebView.change_isWindows();}
+    public boolean get_isWindows(){return myWebView.get_isWindows();}
+
 
     private void init(View view) {
 
@@ -131,6 +141,10 @@ public class mainFrag extends baseFrag {
         });
 
         //搜索栏
+        LinearLayout above_bar =(LinearLayout)view.findViewById(R.id.above_bar);
+        if(!FragActivity.getIsDay()){
+            above_bar.setBackgroundColor(getResources().getColor(R.color.night));
+        }
         EditText editText = (EditText) view.findViewById(R.id.edit_text);
         ImageView search = (ImageView) view.findViewById(R.id.search);
         search.setOnClickListener(View-> {

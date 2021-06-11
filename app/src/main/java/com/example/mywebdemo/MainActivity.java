@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setSaveFormData(false);
         webSettings.setSavePassword(false);
         //设置JS支持
-        //webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptEnabled(true);
         //设置支持缩放变焦
         webSettings.setBuiltInZoomControls(false);
         //设置是否支持缩放
