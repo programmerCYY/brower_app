@@ -2,15 +2,21 @@ package com.example.mywebdemo;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.ClipboardManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,17 +51,31 @@ public class FragActivity extends FragmentActivity {
     private fragAdapter fragPagerAdapter;
     private TextView pagebt;
     private ImageView leftbt, rightbt, setbt, homebt, delfrag, deleteallpage,addnewpage, returnmain;
-    private LinearLayout llayoutviewpage, pagebarlt, mainbarlt;
+    private LinearLayout llayoutviewpage, pagebarlt, mainbarlt,mainbar;
     private DisplayMetrics dm2;
     private GestureDetectorCompat mDetector;
     private PercentRelativeLayout mainrootrl;
     private mainActivitySimpleOnGestureListener mainSimpleOnGestureListener;
+    private static boolean isDay;
+
+    public static boolean getIsDay(){
+        return isDay;
+    }
+
+
+
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        //白天模式
+        isDay=true;
 
         //fraglist存fragment对象，fraghashcode存对应随机哈希码
         for (int i = 0; i < fragConst.init_page_count; i++) {
@@ -93,30 +113,30 @@ public class FragActivity extends FragmentActivity {
         returnmain = (ImageView) findViewById(R.id.returnmain);
 
         leftbt.setOnClickListener((View v) -> {
-            bthander(v.getId());
+            bthander(v.getId(),v);
         });
         rightbt.setOnClickListener((View v) -> {
-            bthander(v.getId());
+            bthander(v.getId(),v);
         });
         setbt.setOnClickListener((View v) -> {
-            bthander(v.getId());
+            bthander(v.getId(),v);
         });
         pagebt.setOnClickListener((View v) -> {
-            bthander(v.getId());
+            bthander(v.getId(),v);
         });
         homebt.setOnClickListener((View v) -> {
-            bthander(v.getId());
+            bthander(v.getId(),v);
         });
 
 
         deleteallpage.setOnClickListener((View v)->{
-            bthander(v.getId());
+            bthander(v.getId(),v);
         });
         addnewpage.setOnClickListener((View v) -> {
-            bthander(v.getId());
+            bthander(v.getId(),v);
         });
         returnmain.setOnClickListener((View v) -> {
-            bthander(v.getId());
+            bthander(v.getId(),v);
         });
 
 
@@ -133,7 +153,7 @@ public class FragActivity extends FragmentActivity {
     }
 
 
-    private void bthander(int id) {
+    private void bthander(int id,View v) {
         switch (id) {
             case R.id.leftbt:
                 goBack();
@@ -145,6 +165,7 @@ public class FragActivity extends FragmentActivity {
                 //command="goforward";
                 break;
             case R.id.setbt:
+                showPopupWindow(v);
 
                 break;
             case R.id.pagebt:
@@ -200,18 +221,170 @@ public class FragActivity extends FragmentActivity {
         mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
         m.goHome();
 
+
     }
-//    public void goHome(){
-//        mainFrag goHome=mainFrag.newInstance("goHome");
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .add(R.id.llayoutviewpage, goHome)
-//                .commit();
-//    }
-//    public String command(){
-//
-//        return command;
-//    }
+    private void showPopupWindow(View view){
+
+        View v ;
+        if(isDay) {
+            v = LayoutInflater.from(this).inflate(R.layout.popuplayout, null);
+        }else {
+            v=LayoutInflater.from(this).inflate(R.layout.popuplayout_night, null);
+        }
+
+        //获取弹窗尺寸
+        v.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int popupHeight=v.getMeasuredHeight();
+
+        //按钮所在底部导航栏尺寸
+        mainbarlt.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int barHeight=mainbarlt.getMeasuredHeight();
+
+        final PopupWindow window=new PopupWindow(v,getWindowManager().getDefaultDisplay().getWidth(),popupHeight,true);
+        //设置背景
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //设置能响应外部的点击事件（返回按钮后会消失）
+        window.setOutsideTouchable(true);
+        //设置能响应点击事件（弹窗能响应事件）
+        window.setTouchable(true);
+        //①创建动画资源   ②创建一个style应用动画资源（新建anim文件夹下的animation文件）    ③对当前弹窗的动画风格设置为第二部的资源索引（在style中设置）
+        window.setAnimationStyle(R.style.translate_anim);
+        //参数1(anchor)：锚
+        //参数2、3：相对于锚在x、y方向上的偏移量
+        window.showAsDropDown(view,-getWindowManager().getDefaultDisplay().getWidth(),-popupHeight-barHeight-50);
+
+
+        //切换电脑和手机模式
+        mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+
+        if(m.get_isWindows()){
+            ImageView imageView=v.findViewById(R.id.popup_window_imagine);
+            imageView.setImageResource(R.mipmap.mobile_phone);
+            TextView textView=v.findViewById(R.id.popup_window_text);
+            textView.setText("手机版");
+
+        }
+
+        //切换白天黑夜模式
+        if(isDay){
+
+        }else{
+            //mainbarlt.setBackground(getDrawable(R.color.night));
+            ImageView imageView=v.findViewById(R.id.popup_night_imagine);
+            imageView.setImageResource(R.mipmap.ic_sun);
+            TextView textView=v.findViewById(R.id.popup_night_text);
+            textView.setText("白天模式");
+        }
+
+        v.findViewById(R.id.popup_bookmark).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FragActivity.this,"您点击了书签",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+            }
+        });
+
+        v.findViewById(R.id.popup_history).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FragActivity.this,"您点击了历史",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+            }
+        });
+
+        v.findViewById(R.id.popup_download).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FragActivity.this,"您点击了下载",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+            }
+        });
+
+        v.findViewById(R.id.popup_share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+                ClipboardManager cbm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                cbm.setText(m.geturl());
+                Toast.makeText(FragActivity.this,"链接成功复制到剪贴板",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+            }
+        });
+
+        v.findViewById(R.id.popup_refresh).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               //Toast.makeText(FragActivity.this,"您点击了刷新",Toast.LENGTH_SHORT).show();
+                refresh();
+                window.dismiss();
+            }
+        });
+
+        v.findViewById(R.id.popup_window).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+                m.change_isWindows();
+
+                Toast.makeText(FragActivity.this,!m.get_isWindows()?"切换到手机版":"切换到电脑版",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+            }
+        });
+        v.findViewById(R.id.popup_no_history).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FragActivity.this,"您点击了无痕浏览",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+            }
+        });
+        v.findViewById(R.id.popup_night).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isDay=!isDay;
+                mainbar=(LinearLayout)findViewById(R.id.mainbar);
+                TextView pagebt=(TextView) findViewById(R.id.pagebt);
+                if(isDay){
+                    mainbar.setBackgroundColor(getColor(R.color.day));
+                }else{
+                    //mainbarlt.setBackground(getDrawable(R.color.night));
+                    pagebt.setTextColor(getResources().getColor(R.color.gray));
+                    mainbar.setBackground(getDrawable(R.color.night));
+                }
+                //刷新
+                fragPagerAdapter.notifyDataSetChanged();
+
+
+
+
+                Toast.makeText(FragActivity.this,!isDay?"切换到夜间模式":"切换到白天模式",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+            }
+        });
+        v.findViewById(R.id.popup_set).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FragActivity.this,"您点击了设置",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+            }
+        });
+        v.findViewById(R.id.popup_exit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(FragActivity.this,"成功退出浏览器",Toast.LENGTH_SHORT).show();
+                window.dismiss();
+                finish();
+            }
+        });
+    }
+
+    public void refresh(){
+        mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+        m.refresh();
+    }
+
+
+
+
 
     private void deleteAllPage(){
 

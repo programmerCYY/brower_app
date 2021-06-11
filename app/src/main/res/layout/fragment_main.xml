@@ -99,6 +99,8 @@
 
 
         <WebView
+
+
                 android:layout_weight="2"
                 android:id="@+id/current_webview"
                 android:layout_width="fill_parent"

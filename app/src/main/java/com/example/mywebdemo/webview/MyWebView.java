@@ -1,11 +1,13 @@
 package com.example.mywebdemo.webview;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 
 import com.example.mywebdemo.R;
 
@@ -17,15 +19,18 @@ public class MyWebView {
     //当前页面的现在的url
     private String myurl="";
     //当前页的webview
-    private android.webkit.WebView webView;
+    private WebView webView;
+    private boolean isWindows=false;
 
     public void setMyurl(String url){
         myurl=url;
     }
     public String getMyurl(){return myurl;}
-    public void setWebView(android.webkit.WebView webView) {
+    public void setWebView(WebView webView) {
         this.webView = webView;
     }
+    public void change_isWindows(){isWindows=!isWindows;}
+    public boolean get_isWindows(){return isWindows;}
 
     //注册浏览器
     public void initWebView(String url) {
@@ -33,7 +38,7 @@ public class MyWebView {
 //        LoadUrl(url);
         WebSettings webSettings = webView.getSettings();
 
-
+//        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         webView.setVerticalScrollBarEnabled(false);
         //窗口设置为手机大小
         webSettings.setUseWideViewPort(true);
@@ -42,13 +47,23 @@ public class MyWebView {
         webSettings.setSaveFormData(false);
         webSettings.setSavePassword(false);
         //设置JS支持
-        //webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptEnabled(true);
+        //这句话必须保留。。否则无法播放优酷视频网页。。其他的可以
+        webSettings.setDomStorageEnabled(true);
         //设置支持缩放变焦
         webSettings.setBuiltInZoomControls(false);
         //设置是否支持缩放
-        webSettings.setSupportZoom(false);
+        webSettings.setSupportZoom(true);
         //设置是否允许JS打开新窗口
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        webSettings.setDefaultTextEncodingName("utf-8") ;//这句话去掉也没事。。只是设置了编码格式
+        webSettings.setJavaScriptEnabled(true);  //这句话必须保留。。不解释
+        webSettings.setDomStorageEnabled(true);//这句话必须保留。。否则无法播放优酷视频网页。。其他的可以
 
 
         // 修复一些机型webview无法点击
@@ -162,8 +177,14 @@ public class MyWebView {
 
     //主页
     public void goHome(){
-        initWebView("https://m.baidu.com/");
+        if(!isWindows) {
+            initWebView("https://m.baidu.com/");
+        }else {
+            initWebView("http://www.baidu.com/");
+
+        }
     }
+
 
     //刷新
     public void refresh(){
@@ -173,14 +194,23 @@ public class MyWebView {
     //搜索按钮
     public void start(String str){
         if (str.equals("")){
-            str="https://m.baidu.com/";
+            if(!isWindows) {
+                str = "https://m.baidu.com/";
+            }else {
+                str="https://www.baidu.com/";
+            }
         }else {
             if(isUrl(str)){
                 str="http://"+str;
             }
             if(!isHttpUrl(str)){
-//                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
-                str = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + str+"&pu=sz%401321_480&t_noscript=jump";
+                if(isWindows) {
+                    str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + str;
+
+                }else {
+                    str = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + str+"&pu=sz%401321_480&t_noscript=jump";
+
+                }
             }
         }
         initWebView(str);

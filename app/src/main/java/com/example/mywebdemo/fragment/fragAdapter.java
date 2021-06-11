@@ -12,6 +12,10 @@ import com.example.mywebdemo.constance.fragConst;
 public class fragAdapter extends FragmentStatePagerAdapter {
     private Context context;
     private FragmentManager fm;
+
+    // data struct
+
+
     public fragAdapter(Context context, FragmentManager fm) {
         super(fm);
         this.context = context;
@@ -28,6 +32,10 @@ public class fragAdapter extends FragmentStatePagerAdapter {
         // Logger.v("fragConst.fraglist.size() "+fragConst.fraglist.size());
         return fragConst.fraglist.size();
     }
+
+//    adddata();
+//
+//    removedata();
 
 
     @Override
