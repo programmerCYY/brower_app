@@ -108,8 +108,12 @@ public class mainFrag extends baseFrag {
     }
     public void refresh(){myWebView.refresh();}
     public String geturl(){return myWebView.getMyurl();}
+    public String gettitle(){return myWebView.getCurrent_title();}
     public void change_isWindows(){myWebView.change_isWindows();}
     public boolean get_isWindows(){return myWebView.get_isWindows();}
+
+    public void goUrl(String s){myWebView.goUrl(s);}
+
 
 
     private void init(View view) {

@@ -3,6 +3,7 @@ package com.example.mywebdemo;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywebdemo.constance.fragConst;
 import com.example.mywebdemo.custom.mainActivitySimpleOnGestureListener;
@@ -34,8 +36,10 @@ import com.example.mywebdemo.event.fragEvent;
 import com.example.mywebdemo.event.showDelImg;
 import com.example.mywebdemo.event.slideEvent;
 import com.example.mywebdemo.event.zoomEvent;
+import com.example.mywebdemo.flag.flagActivity;
 import com.example.mywebdemo.fragment.fragAdapter;
 import com.example.mywebdemo.fragment.mainFrag;
+import com.example.mywebdemo.history.historyActivity;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,9 +61,15 @@ public class FragActivity extends FragmentActivity {
     private PercentRelativeLayout mainrootrl;
     private mainActivitySimpleOnGestureListener mainSimpleOnGestureListener;
     private static boolean isDay;
+    private static String url="";//接收跳转的url
+
+
 
     public static boolean getIsDay(){
         return isDay;
+    }
+    public static void setUrl(String s){
+        url=s;
     }
 
 
@@ -73,6 +83,7 @@ public class FragActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
 
         //白天模式
         isDay=true;
@@ -139,6 +150,15 @@ public class FragActivity extends FragmentActivity {
             bthander(v.getId(),v);
         });
 
+//        if(fromAnotherurl){
+//            //        //监听是否从其他界面跳转而来
+////        if(getIntent()!=null){
+////            String toUrl=getIntent().getStringExtra("toUrl");
+////            //Log.d("toUrl",toUrl);
+//           goUrl(url);
+//           fromAnotherurl=false;
+////        }
+//        }
 
         mainbarlt = (LinearLayout) findViewById(R.id.mainbarlt);
         pagebarlt = (LinearLayout) findViewById(R.id.pagebarlt);
@@ -150,9 +170,18 @@ public class FragActivity extends FragmentActivity {
             return true;
         });
         pagebt.setText(fragConst.fraglist.size() + "");
+
+
+
+
+
+
+
+
     }
 
 
+    //导航按钮
     private void bthander(int id,View v) {
         switch (id) {
             case R.id.leftbt:
@@ -223,6 +252,7 @@ public class FragActivity extends FragmentActivity {
 
 
     }
+
     private void showPopupWindow(View view){
 
         View v ;
@@ -280,6 +310,8 @@ public class FragActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(FragActivity.this,"您点击了书签",Toast.LENGTH_SHORT).show();
+                Intent intent2 = new Intent(FragActivity.this, flagActivity.class);
+                startActivity(intent2);
                 window.dismiss();
             }
         });
@@ -288,6 +320,9 @@ public class FragActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(FragActivity.this,"您点击了历史",Toast.LENGTH_SHORT).show();
+//                mRecyclerView = findViewById(R.id.recycler_view);
+                Intent intent = new Intent(FragActivity.this, historyActivity.class);
+                startActivity(intent);
                 window.dismiss();
             }
         });
@@ -364,6 +399,13 @@ public class FragActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(FragActivity.this,"您点击了设置",Toast.LENGTH_SHORT).show();
+                mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+                String url=m.geturl();
+                String title=m.gettitle();
+                fragConst.flag_url.add(url);
+                fragConst.flag_url=removeDuplicate(fragConst.flag_url);
+                fragConst.flag_name.add(title);
+                fragConst.flag_name=removeDuplicate(fragConst.flag_name);
                 window.dismiss();
             }
         });
@@ -382,6 +424,15 @@ public class FragActivity extends FragmentActivity {
         m.refresh();
     }
 
+    //去重
+    public static ArrayList removeDuplicate(ArrayList list){
+        ArrayList tempList = new ArrayList(list.size());
+        for(int i=0;i<list.size();i++){
+            if(!tempList.contains(list.get(i)))
+                tempList.add(list.get(i));
+        }
+        return tempList;
+    }
 
 
 
@@ -557,11 +608,26 @@ public class FragActivity extends FragmentActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(url!=""){
+            goUrl(url);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         fragConst.fraglist.clear();
         fragConst.new_mainfrag_count = 0; //调用次数清0
+    }
+
+
+
+    public void goUrl(String str){
+        mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
+        m.goUrl(str);
     }
 
 

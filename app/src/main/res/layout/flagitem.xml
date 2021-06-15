@@ -19,7 +19,6 @@
             android:layout_height="match_parent"
             android:layout_weight="4">
         <ImageView
-                android:id="@+id/history_icon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.7"/>
@@ -31,31 +30,31 @@
                 android:orientation="vertical">
 
 
-        <TextView
-                android:id="@+id/history_name"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="#c0c7c759"
-                android:gravity="left"
-                android:text="1"
-                android:maxLength="10"
-                android:singleLine="true"
-                android:layout_weight="2"
-                android:textSize="20sp" />
+            <TextView
+                    android:id="@+id/flag_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="#c0c7c759"
+                    android:gravity="left"
+                    android:text="1"
+                    android:maxLength="10"
+                    android:singleLine="true"
+                    android:layout_weight="2"
+                    android:textSize="20sp" />
 
-        <TextView
-                android:id="@+id/history_url"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:singleLine="true"/>
+            <TextView
+                    android:id="@+id/flag_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:singleLine="true"/>
 
         </LinearLayout>
 
 
     </LinearLayout>
     <Button
-            android:id="@+id/btn_delete"
+            android:id="@+id/flag_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@android:color/holo_red_light"

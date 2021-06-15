@@ -1,47 +1,66 @@
 package com.example.mywebdemo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+//import com.example.mywebdemo.flag.flagActivity;
+import com.example.mywebdemo.history.historyActivity;
+
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    public ArrayList<String> urlList = new ArrayList<String>();
-    public ArrayList<String> nameList = new ArrayList<String>();
-    public ArrayList<String> flagList = new ArrayList<String>();
-    public String currenturl="";
-    private WebView webView ;
-    //注册浏览器
-    private void initWebView(String url) {
+    public static ArrayList<String> urlList = new ArrayList<String>();
+    public static ArrayList<String> nameList = new ArrayList<String>();
+    public static ArrayList<String> flagList = new ArrayList<String>();
+    public static ArrayList<String> titleList = new ArrayList<String>();
+    public  String  currenturl="";
+    public String  currenttitle="";
+    private WebView webView;
+    private static String url="";
 
+    public static void setUrlList(ArrayList list){
+        urlList=list;
+    }
+
+    public static void setNameList(ArrayList title){
+        nameList=title;
+    }
+
+    public static void setflagList(ArrayList list){
+        flagList=list;
+    }
+
+    public static void settitleList(ArrayList title){
+        titleList=title;
+    }
+
+    public static void setUrl(String string){
+        url=string;
+    }
+    //注册浏览器
+    private void initWebView() {
         webView = (WebView) findViewById(R.id.mywebview);
-//        LoadUrl(url);
+        Log.d("webView", "initWebView:新建web了 ");
+
         WebSettings webSettings = webView.getSettings();
 
 
@@ -53,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setSaveFormData(false);
         webSettings.setSavePassword(false);
         //设置JS支持
-        webSettings.setJavaScriptEnabled(true);
+        //webSettings.setJavaScriptEnabled(true);
         //设置支持缩放变焦
         webSettings.setBuiltInZoomControls(false);
         //设置是否支持缩放
@@ -86,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
             boolean if_load;
 //            @Override
 //            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                if_load=false;
 //                return false;
 //            }
 
@@ -96,14 +114,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
-                if(if_load) {
-                    nameList.add(view.copyBackForwardList().getCurrentItem().getTitle());
-                    currenturl=view.copyBackForwardList().getCurrentItem().getTitle();
+                currenturl=view.copyBackForwardList().getCurrentItem().getUrl();
+                currenttitle=view.copyBackForwardList().getCurrentItem().getTitle();
+                if(if_load && !currenttitle.equals(" ")) {
+                    nameList.add(currenttitle);
                     urlList.add(currenturl);
                     nameList=removeDuplicate(nameList);
                     urlList=removeDuplicate(urlList);
-                    Log.d("array", nameList.toString());
+                    Log.d("array", urlList.toString());
                     if_load=false;
                 }
             }
@@ -118,15 +136,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
         LoadUrl(url);
-        //拦截跳转后执行
-//        webView.setWebViewClient(new WebViewClient() {
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                LoadUrl(url);
-//                return true;
-//            }
-//
-//       });
     }
     //去重
     public static ArrayList removeDuplicate(ArrayList list){
@@ -139,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void LoadUrl(String url) {
-        Log.d("tag","运行了一次");
         webView.loadUrl(url);
     }
     //判断http
@@ -194,6 +202,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle != null && bundle.containsKey("url")) {
+            url = bundle.getString("url");
+            initWebView();
+        }
         //按钮注册
         btn = (Button)findViewById(R.id.button);
         btn_back = (Button) findViewById(R.id.btn_back);
@@ -215,21 +228,32 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.history:
-                                Intent intent = new Intent(MainActivity.this,historyActivity.class);
+                                Intent intent = new Intent(MainActivity.this, historyActivity.class);
                                 Bundle bundle=new Bundle();
                                 //传递name参数为tinyphp
                                 bundle.putStringArrayList("history",urlList);
+                                bundle.putStringArrayList("title",nameList);
+                                bundle.putString("currenturl",currenturl);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 break;
-                            case R.id.flag:
-                                Log.d("TAG2", "书签");
-                                break;
-                            case R.id.add_flag:
-                                flagList.add(currenturl);
-                                flagList=removeDuplicate(flagList);
-                                Log.d("array3", flagList.toString());
-                                break;
+//                            case R.id.flag:
+//                                Intent intent2 = new Intent(MainActivity.this, flagActivity.class);
+//                                Bundle bundle2=new Bundle();
+//                                //传递name参数为tinyphp
+//                                bundle2.putStringArrayList("flag",flagList);
+//                                bundle2.putStringArrayList("title",titleList);
+//                                bundle2.putString("currenturl",currenturl);
+//                                intent2.putExtras(bundle2);
+//                                startActivity(intent2);
+//                                break;
+//                            case R.id.add_flag:
+//                                flagList.add(currenturl);
+//                                flagList=removeDuplicate(flagList);
+//                                titleList.add(currenttitle);
+//                                titleList=removeDuplicate(titleList);
+//
+//                                break;
                         }
                         return false;
                     }
@@ -282,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                 //url判断并且改成想要的格式
                 String str = myEditText.getText().toString();
                 if (str.equals("")){
-                    str="https://m.baidu.com/";
+                    str="https://m.baidu.com/?cip=110.64.72.187&baiduid=8155C2BBA5E753A5E061F6569491FCEB?index=&ssid=0&bd_page_type=1&from=0&logid=10052674951125970529&pu=sz%401321_480&t_noscript=jump";
                 }else {
                     if(isUrl(str)){
                         str="http://"+str;
@@ -292,9 +316,16 @@ public class MainActivity extends AppCompatActivity {
                         str = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + myEditText.getText().toString()+"&pu=sz%401321_480&t_noscript=jump";
                     }
                 }
-
-                initWebView(str);
+                url=str;
+                initWebView();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(webView!=null)
+        LoadUrl(url);
     }
 }

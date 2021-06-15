@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".history.historyActivity">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".history.historyActivity">
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.7"
             android:orientation="horizontal"
-           >
+            >
         <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -20,7 +20,7 @@
                 android:visibility="invisible"/>
 
         <Button
-                android:id="@+id/return_from_history"
+                android:id="@+id/button4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
@@ -60,12 +60,12 @@
             android:layout_margin="15dp"
             android:background="@color/gray">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="#FFFF0000"
-        android:dividerHeight="0dp"></androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycle_flag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#FFFF0000"
+                android:dividerHeight="0dp"></androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
     <LinearLayout
@@ -77,7 +77,7 @@
             android:gravity="center"
             >
         <Button
-                android:id="@+id/clear_history"
+                android:id="@+id/clear_flag"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:background="@mipmap/ic_chat"
