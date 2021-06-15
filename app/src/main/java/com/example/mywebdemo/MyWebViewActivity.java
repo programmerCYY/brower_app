@@ -1,15 +1,24 @@
 package com.example.mywebdemo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.mywebdemo.adblock.AdBlocker;
+import com.example.mywebdemo.adblock.NoAdWebviewClient;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyWebViewActivity extends AppCompatActivity {
     private WebView webView ;
@@ -89,7 +98,26 @@ public class MyWebViewActivity extends AppCompatActivity {
                     return true;
                 }
             }
+
+            //实现页面上的广告屏蔽。
+
+            private Map<String,Boolean> loadedUrls = new HashMap<>();
+
+            @Nullable
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                boolean ad;
+                if (!loadedUrls.containsKey(url)){
+                    ad = AdBlocker.isAd(url);
+                    loadedUrls.put(url,ad);
+                }else {
+                    ad = loadedUrls.get(url);
+                }return ad ? AdBlocker.createEmptyResourse() : super.shouldInterceptRequest(view, url);
+            }
         });
+
+
+
     }
 
 }
