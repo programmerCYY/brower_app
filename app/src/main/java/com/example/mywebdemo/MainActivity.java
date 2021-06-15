@@ -1,78 +1,69 @@
 package com.example.mywebdemo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.DownloadListener;
-import android.webkit.JavascriptInterface;
-import android.webkit.JsResult;
-import android.webkit.URLUtil;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.PopupMenu;
 import android.widget.Toast;
-import android.widget.VideoView;
 
-import com.example.mywebdemo.adblock.AdSorting;
-import com.example.mywebdemo.adblock.AndroidToJs;
-import com.example.mywebdemo.adblock.NoAdWebviewClient;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.lzyzsd.jsbridge.BridgeHandler;
-import com.github.lzyzsd.jsbridge.BridgeWebView;
-import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
-import com.github.lzyzsd.jsbridge.CallBackFunction;
-import com.github.lzyzsd.jsbridge.DefaultHandler;
+//import com.example.mywebdemo.flag.flagActivity;
+import com.example.mywebdemo.history.historyActivity;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    public ArrayList<String> urlList = new ArrayList<String>();
-    public ArrayList<String> nameList = new ArrayList<String>();
-    public ArrayList<String> flagList = new ArrayList<String>();
-    public String currenturl="";
-    private BridgeWebView webView ;
-    public String jsUrl;
-    private VideoView videoView;
+    public static ArrayList<String> urlList = new ArrayList<String>();
+    public static ArrayList<String> nameList = new ArrayList<String>();
+    public static ArrayList<String> flagList = new ArrayList<String>();
+    public static ArrayList<String> titleList = new ArrayList<String>();
+    public  String  currenturl="";
+    public String  currenttitle="";
+    private WebView webView;
+    private static String url="";
 
+    public static void setUrlList(ArrayList list){
+        urlList=list;
+    }
 
+    public static void setNameList(ArrayList title){
+        nameList=title;
+    }
+
+    public static void setflagList(ArrayList list){
+        flagList=list;
+    }
+
+    public static void settitleList(ArrayList title){
+        titleList=title;
+    }
+
+    public static void setUrl(String string){
+        url=string;
+    }
     //注册浏览器
+    private void initWebView() {
+        webView = (WebView) findViewById(R.id.mywebview);
+        Log.d("webView", "initWebView:新建web了 ");
 
-    @SuppressLint("JavascriptInterface")
-    private void initWebView(String url) {
-
-        webView = (BridgeWebView) findViewById(R.id.mywebview);
-//        LoadUrl(url);
         WebSettings webSettings = webView.getSettings();
 
-        Context context = webView.getContext();
+
         webView.setVerticalScrollBarEnabled(false);
         //窗口设置为手机大小
         webSettings.setUseWideViewPort(true);
@@ -81,18 +72,14 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setSaveFormData(false);
         webSettings.setSavePassword(false);
         //设置JS支持
-        webSettings.setJavaScriptEnabled(true);
-//        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        //webSettings.setJavaScriptEnabled(true);
         //设置支持缩放变焦
         webSettings.setBuiltInZoomControls(false);
         //设置是否支持缩放
         webSettings.setSupportZoom(false);
         //设置是否允许JS打开新窗口
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-//        webSettings.setDomStorageEnabled(true);
-//        webView.addJavascriptInterface(new JavascriptInterface(this), "videolistener");
-        JavascriptInterfaceAdapter javascriptInterface= new JavascriptInterfaceAdapter(this);
-        webView.addJavascriptInterface(javascriptInterface,"videolistener");
+
 
         // 修复一些机型webview无法点击
 //        webView.requestFocus(View.FOCUS_DOWN);
@@ -118,23 +105,23 @@ public class MainActivity extends AppCompatActivity {
             boolean if_load;
 //            @Override
 //            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                if_load=false;
 //                return false;
 //            }
+
 
 
             //页面完成即加入历史记录
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
-                if(if_load) {
-                    nameList.add(view.copyBackForwardList().getCurrentItem().getTitle());
-                    currenturl=view.copyBackForwardList().getCurrentItem().getTitle();
+                currenturl=view.copyBackForwardList().getCurrentItem().getUrl();
+                currenttitle=view.copyBackForwardList().getCurrentItem().getTitle();
+                if(if_load && !currenttitle.equals(" ")) {
+                    nameList.add(currenttitle);
                     urlList.add(currenturl);
                     nameList=removeDuplicate(nameList);
                     urlList=removeDuplicate(urlList);
-                    Log.d("array", nameList.toString());
+                    Log.d("array", urlList.toString());
                     if_load=false;
                 }
             }
@@ -148,142 +135,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
-        //webView.setWebViewClient(new NoAdWebviewClient(context){
-        //});
-//        webView = (BridgeWebView) findViewById(R.id.mywebview);
-
-        webView.setWebViewClient(new BridgeWebViewClient(webView) {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                view.getSettings().setJavaScriptEnabled(true);
-                Log.d("webview", "onPageFinished: ");
-                view.loadUrl("javascript:(function(){" +
-                        "var objs = document.getElementsByTagName(\"video\"); " +
-                        "for(var i=0;i<objs.length;i++)  " +
-                        "{"+
-                        "    objs[i].addEventListener('play',function()  {" +
-                        "        window.videolistener.openVideo(this.currentSrc);  " +
-                        "    });  " +
-                        "}" +
-                        "})()");
-            }
-
-            @Override
-            //重写urlloading接口，实现在打开超链接时拦截指定url，并重定向到一个本地html
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d("succeed", "shouldOverrideUrlLoading: "+url);
-                jsUrl =url;
-                //对将要打开的url进行匹配
-                AdSorting sortion = new AdSorting();
-                String result = sortion.urlSorting(context,url);
-                //高中低三种风险
-                switch (result){
-                    case "high":
-                        view.loadUrl("file:///android_asset/highRisky.html");
-                        Log.d("success1", "shouldOverrideUrlLoading: "+url);
-                        break;
-                    case "medium":
-                        view.loadUrl("file:///android_asset/mediumRisky.html");
-                        Log.d("success2", "shouldOverrideUrlLoading: "+url);
-                        break;
-                    case"low":
-                        view.loadUrl("file:///android_asset/lowRisky.html");
-                        Log.d("success3", "shouldOverrideUrlLoading: "+url);
-                        break;
-                    default:
-                        view.loadUrl(url);
-                }
-                return super.shouldOverrideUrlLoading(view,url);
-            }
-
-
-        });
-
-        Log.d("success", "initWebView: "+jsUrl);
-
-        //拦截网站后重定向到一个本地的h5作为中间页，运用jsbride进行控制
-        webView.addJavascriptInterface(this, "Android");
-        webView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                if (message.equals("1")) {
-                    Log.d("alert", "onJsAlert1: "+message);
-//                    webView.canGoBack();
-                    webView.goBack();
-                    webView.goBack();
-//                    Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
-                }else if (message.equals("0")) {
-                    Log.d("alert", "onJsAlert2: "+message);
-                    view.stopLoading();
-                    MainActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            webView.loadUrl(jsUrl);
-
-                        }
-                    });
-
-                    Log.d("alert", "onJsAlert: "+jsUrl);
-//                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-                }
-                result.confirm();
-                return true;
-            }
-        });
-
-
-////        webView.loadUrl("file:///android_asset/mainPage.html");
-////        webView.setWebChromeClient(new WebChromeClient());
-////        webView.loadUrl("file:///android_asset/mainPage.html");
-
-        //主页是一个本地的h5文件，运用jsbrid，使得在h5页面上搜索变成调用native的搜索功能。（当然直接在html里面用原生的form标签也可以，只不过就不是从头到尾webview了感觉会有问题）
-        webView.setDefaultHandler(new DefaultHandler());
-        webView.registerHandler("submitFromWeb", new BridgeHandler() {
-            @Override
-            public void handler(String data, CallBackFunction function) {
-                Log.e("TAG", "js返回 "+data);
-                if (data.equals("")){
-                    data="https://m.baidu.com/";
-                }else {
-                    if(isUrl(data)){
-                        data="http://"+data;
-                    }
-                    if(!isHttpUrl(data)){
-//                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
-                        data = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + data +"&pu=sz%401321_480&t_noscript=jump";
-                    }
-                }
-                Log.d("jsbridge", "handler: "+data);
-                initWebView(data);
-            }
-        });
         LoadUrl(url);
-        //拦截跳转后执行
-//        webView.setWebViewClient(new WebViewClient() {
-//            @Override
-//            public boolean shouldOverrideUrl(WebView view, String url) {
-//                LoadUrl(url);
-//                return true;
-//            }
-//
-//       });
-//增加下载功能，调用系统的下载管理器
-        webView.setDownloadListener(new DownloadListener() {
-            @Override
-            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-                downloadBySystem(url,contentDisposition,mimetype);
-            }
-        });
     }
-
-    @JavascriptInterface
-    public void getClient(String msg){
-        Log.d("getclient", "getclient: "+ msg );
-    }
-
-
     //去重
     public static ArrayList removeDuplicate(ArrayList list){
         ArrayList tempList = new ArrayList(list.size());
@@ -295,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void LoadUrl(String url) {
-        Log.d("tag","运行了一次");
         webView.loadUrl(url);
     }
     //判断http
@@ -328,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private Button btn_back;
     private Button btn_newwindow;
     private Button btn_forward;
@@ -351,6 +202,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle != null && bundle.containsKey("url")) {
+            url = bundle.getString("url");
+            initWebView();
+        }
         //按钮注册
         btn = (Button)findViewById(R.id.button);
         btn_back = (Button) findViewById(R.id.btn_back);
@@ -372,21 +228,32 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.history:
-                                Intent intent = new Intent(MainActivity.this,historyActivity.class);
+                                Intent intent = new Intent(MainActivity.this, historyActivity.class);
                                 Bundle bundle=new Bundle();
                                 //传递name参数为tinyphp
                                 bundle.putStringArrayList("history",urlList);
+                                bundle.putStringArrayList("title",nameList);
+                                bundle.putString("currenturl",currenturl);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 break;
-                            case R.id.flag:
-                                Log.d("TAG2", "书签");
-                                break;
-                            case R.id.add_flag:
-                                flagList.add(currenturl);
-                                flagList=removeDuplicate(flagList);
-                                Log.d("array3", flagList.toString());
-                                break;
+//                            case R.id.flag:
+//                                Intent intent2 = new Intent(MainActivity.this, flagActivity.class);
+//                                Bundle bundle2=new Bundle();
+//                                //传递name参数为tinyphp
+//                                bundle2.putStringArrayList("flag",flagList);
+//                                bundle2.putStringArrayList("title",titleList);
+//                                bundle2.putString("currenturl",currenturl);
+//                                intent2.putExtras(bundle2);
+//                                startActivity(intent2);
+//                                break;
+//                            case R.id.add_flag:
+//                                flagList.add(currenturl);
+//                                flagList=removeDuplicate(flagList);
+//                                titleList.add(currenttitle);
+//                                titleList=removeDuplicate(titleList);
+//
+//                                break;
                         }
                         return false;
                     }
@@ -428,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         btn_menu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                LoadUrl("file:///android_asset/mainPage.html");
+                LoadUrl("https://m.baidu.com/");
             }
         });
         final EditText myEditText = (EditText) findViewById(R.id.edit_text);
@@ -439,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                 //url判断并且改成想要的格式
                 String str = myEditText.getText().toString();
                 if (str.equals("")){
-                    str="https://m.baidu.com/";
+                    str="https://m.baidu.com/?cip=110.64.72.187&baiduid=8155C2BBA5E753A5E061F6569491FCEB?index=&ssid=0&bd_page_type=1&from=0&logid=10052674951125970529&pu=sz%401321_480&t_noscript=jump";
                 }else {
                     if(isUrl(str)){
                         str="http://"+str;
@@ -449,90 +316,16 @@ public class MainActivity extends AppCompatActivity {
                         str = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + myEditText.getText().toString()+"&pu=sz%401321_480&t_noscript=jump";
                     }
                 }
-
-                initWebView(str);
+                url=str;
+                initWebView();
             }
         });
-
-
-        //初始化一个加载主页的webview
-
-        initWebView("file:///android_asset/mainPage.html");
-
-        //initView();
-
-
-
     }
 
-
-    //调用系统下载管理器的函数
-    private void downloadBySystem(String url, String contentDisposition, String mimeType) {
-
-// 指定下载地址
-
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-// 允许媒体扫描，根据下载的文件类型被加入相册、音乐等媒体库
-
-        request.allowScanningByMediaScanner();
-
-// 设置通知的显示类型，下载进行时和完成后显示通知
-
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-// 设置通知栏的标题，如果不设置，默认使用文件名
-
-// request.setTitle("This is title");
-
-// 设置通知栏的描述
-
-// request.setDescription("This is description");
-
-// 允许在计费流量下下载
-
-        request.setAllowedOverMetered(false);
-
-// 允许该记录在下载管理界面可见
-
-        request.setVisibleInDownloadsUi(false);
-
-// 允许漫游时下载
-
-        request.setAllowedOverRoaming(true);
-
-// 允许下载的网路类型
-
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
-
-// 设置下载文件保存的路径和文件名
-
-        String fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
-
-        System.out.println("fileName:{}"+ fileName);
-
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
-
-// 另外可选一下方法，自定义下载路径
-
-// request.setDestinationUri()
-
-// request.setDestinationInExternalFilesDir()
-
-        final DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-
-// 添加一个下载任务
-
-        long downloadId = downloadManager.enqueue(request);
-
-        System.out.println("downloadId:{}"+ downloadId);
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(webView!=null)
+        LoadUrl(url);
     }
-
-
-
-
-
-
-
 }

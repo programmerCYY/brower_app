@@ -1,5 +1,6 @@
 package com.example.mywebdemo.webview;
 
+import com.example.mywebdemo.constance.fragConst;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
@@ -11,21 +12,32 @@ import android.webkit.WebViewClient;
 
 import com.example.mywebdemo.R;
 
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MyWebView {
 
     //当前页面的现在的url
-    private String myurl="";
+    private String current_url="";
+    //当前页面url的名字
+    private String current_title="";
+    //当前网页的图标
+    private Bitmap current_icon;
+
     //当前页的webview
     private WebView webView;
     private boolean isWindows=false;
 
     public void setMyurl(String url){
-        myurl=url;
+        current_url=url;
     }
-    public String getMyurl(){return myurl;}
+    public String getMyurl(){return current_url;}
+    public String getCurrent_title(){return current_title; }
     public void setWebView(WebView webView) {
         this.webView = webView;
     }
@@ -99,7 +111,38 @@ public class MyWebView {
             @Override
             public void onPageFinished(android.webkit.WebView view, String url) {
                 super.onPageFinished(view, url);
-                myurl=url;
+                //current_url=url;
+                current_url=view.copyBackForwardList().getCurrentItem().getUrl();//获取url
+                current_title=view.copyBackForwardList().getCurrentItem().getTitle();//获取标题
+
+                //以下代码是保存图片
+//                current_icon = view.copyBackForwardList().getCurrentItem().getFavicon();//获取网页图标
+//                File file=new File(view.getContext().getFilesDir(),fragConst.history_icon.size()+".jpg");
+//                fragConst.history_icon.add(file.getPath());
+//                //Log.d("path",""+file.getPath());
+//                if(!file.exists()) {
+//                    try {
+//                        FileOutputStream bos = new FileOutputStream(file);
+//                        current_icon.compress(Bitmap.CompressFormat.JPEG, 1, bos);
+//                        bos.flush();
+//                        bos.close();
+//                        Log.d("pic", "success");
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }else{
+//                    Log.d("pic2","unsuccess");
+//                }
+
+                if(if_load && !current_title.equals(" ")) {
+                    fragConst.history_name.add(current_title);
+                    fragConst.history_url.add(current_url);
+                    fragConst.history_name=removeDuplicate(fragConst.history_name);
+                    fragConst.history_url=removeDuplicate(fragConst.history_url);
+                    //Log.d("array", fragConst.history_url.toString());
+                    if_load=false;
+                }
+
                 //Log.d("url", url);
             }
 
@@ -107,6 +150,7 @@ public class MyWebView {
             @Override
             public void onPageStarted(android.webkit.WebView view, String url, Bitmap favicon){
                 super.onPageStarted(view, url, favicon);
+                if_load=true;
             }
 
         });
@@ -120,6 +164,15 @@ public class MyWebView {
 //            }
 //
 //       });
+    }
+    //去重
+    public static ArrayList removeDuplicate(ArrayList list){
+        ArrayList tempList = new ArrayList(list.size());
+        for(int i=0;i<list.size();i++){
+            if(!tempList.contains(list.get(i)))
+                tempList.add(list.get(i));
+        }
+        return tempList;
     }
 
     private void LoadUrl(String url) {
@@ -216,5 +269,10 @@ public class MyWebView {
         initWebView(str);
     }
 
-          //  String str = myEditText.getText().toString();
+    public void goUrl(String url) {
+        setMyurl(url);
+        initWebView(url);
+    }
+
+    //  String str = myEditText.getText().toString();
 }
