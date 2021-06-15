@@ -120,19 +120,26 @@ public class MyWebView {
 //                File file=new File(view.getContext().getFilesDir(),fragConst.history_icon.size()+".jpg");
 //                fragConst.history_icon.add(file.getPath());
 //                //Log.d("path",""+file.getPath());
-//                if(!file.exists()) {
-//                    try {
-//                        FileOutputStream bos = new FileOutputStream(file);
-//                        current_icon.compress(Bitmap.CompressFormat.JPEG, 1, bos);
-//                        bos.flush();
-//                        bos.close();
-//                        Log.d("pic", "success");
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
+//                Thread thread=new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if(!file.exists()) {
+//                            try {
+//                                FileOutputStream bos = new FileOutputStream(file);
+//                                current_icon.compress(Bitmap.CompressFormat.JPEG, 1, bos);
+//                                bos.flush();
+//                                bos.close();
+//                                Log.d("pic", "success");
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }else{
+//                            Log.d("pic2","unsuccess");
+//                        }
 //                    }
-//                }else{
-//                    Log.d("pic2","unsuccess");
-//                }
+//                });
+//                thread.start();
+
 
                 if(if_load && !current_title.equals(" ")) {
                     fragConst.history_name.add(current_title);
