@@ -53,8 +53,8 @@ public class historyActivity extends AppCompatActivity {
         historyRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         //?
-//        historyRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-//                DividerItemDecoration.VERTICAL));
+        historyRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
 
         //返回按钮
         btn=(Button) findViewById(R.id.return_from_history);
@@ -80,10 +80,19 @@ public class historyActivity extends AppCompatActivity {
                     fragConst.history_name.remove(fragConst.history_name.size()-1);
                     //Log.d("clear",""+ fragConst.history_url.size());
                 }
+                historyAdapter.notifyDataSetChanged();
+
             }
+
         });
     }
 
+    //public void refresh() { onCreate(null); }
+
+//    protected void onResume() {
+//        super.onResume();
+//        onCreate(null);
+//    }
 
 
 //    private void initData() {

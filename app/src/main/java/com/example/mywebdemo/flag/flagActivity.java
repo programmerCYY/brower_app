@@ -70,6 +70,7 @@ public class flagActivity extends AppCompatActivity {
                     fragConst.flag_name.remove(fragConst.flag_name.size()-1);
                     //Log.d("clear",""+ fragConst.history_url.size());
                 }
+                flagAdapter.notifyDataSetChanged();
             }
         });
 

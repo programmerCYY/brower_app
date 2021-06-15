@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".history.historyActivity">
+    tools:context=".history.historyActivity"
+    android:background="@color/light_gray">
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.7"
+            android:background="#ffffff"
             android:orientation="horizontal"
            >
         <ImageView
@@ -25,8 +27,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:background="@mipmap/direction_left"
-                android:scaleX="0.6"
-                android:scaleY="0.7"
+                android:scaleX="0.5"
+                android:scaleY="0.6"
                 />
 
         <TextView
@@ -34,7 +36,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="20"
                 android:text="主界面"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:gravity="center_vertical">
 
         </TextView>
@@ -43,8 +45,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:src="@mipmap/search"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
                 />
         <ImageView
                 android:layout_width="0dp"
@@ -57,8 +59,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="9"
-            android:layout_margin="15dp"
-            android:background="@color/gray">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@mipmap/list_background"
+            android:padding="8dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view"
@@ -75,13 +80,15 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
+            android:paddingTop="5dp"
             >
         <Button
                 android:id="@+id/clear_history"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:background="@mipmap/ic_chat"
-                android:scaleX="0.5"
+                android:background="@mipmap/clear"
+                android:scaleX="0.15"
+                android:scaleY="0.7"
                 android:layout_weight="2"
 
                 />
