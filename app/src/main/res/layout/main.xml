@@ -127,8 +127,8 @@
                         android:layout_gravity="center"
                         android:background="@mipmap/ic_arrow_left"
                         app:layout_marginLeftPercent="20%w"
-                        android:scaleX="0.25"
-                        android:scaleY="0.25" />
+                        android:scaleX="0.3"
+                        android:scaleY="0.3" />
 
 
             </com.balysv.materialripple.MaterialRippleLayout>

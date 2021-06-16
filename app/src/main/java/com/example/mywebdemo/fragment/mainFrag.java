@@ -6,6 +6,7 @@ import com.example.mywebdemo.constance.fragConst;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -109,6 +110,7 @@ public class mainFrag extends baseFrag {
     public void refresh(){myWebView.refresh();}
     public String geturl(){return myWebView.getMyurl();}
     public String gettitle(){return myWebView.getCurrent_title();}
+    public Bitmap geticon(){return  myWebView.getCurrent_icon();}
     public void change_isWindows(){myWebView.change_isWindows();}
     public boolean get_isWindows(){return myWebView.get_isWindows();}
 
@@ -166,6 +168,7 @@ public class mainFrag extends baseFrag {
         });
 
 
+        //新页面
         if ((fragConst.new_mainfrag_count > 1) && isNewFragment) {
             //缩小
             PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat("scaleX", 0.1f, 1f);
@@ -174,6 +177,7 @@ public class mainFrag extends baseFrag {
             scale.setDuration(50);
             scale.start();
 
+            //下面的随机颜色
             Random random = new Random();
             color = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
 
@@ -222,7 +226,9 @@ public class mainFrag extends baseFrag {
                 positionlist.add(position);
                 // Logger.v("left " + position[0] + " top " + position[1] + " right " + position[2] + "  bottom " + position[3] );
 
-                if (Math.abs(position[1]) > mainrlt.getWidth() / 2) {
+
+                //默认保留一个页面
+                if (fragConst.fraglist.size()>1&&(Math.abs(position[1]) > mainrlt.getWidth() / 2)) {
                     //  Logger.v("-    显示  删除 按钮     -");
                     EventBus.getDefault().post(new showDelImg(true));   //  发送消息
                 } else {
