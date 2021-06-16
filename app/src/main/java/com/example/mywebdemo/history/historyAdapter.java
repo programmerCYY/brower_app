@@ -2,11 +2,13 @@ package com.example.mywebdemo.history;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,12 +25,14 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
 
     private ArrayList<String> mList;
     private ArrayList<String> mtitle;
+    private ArrayList<Bitmap> micon;
     private Context mContext;
     private RecyclerView mRv;
 
     public historyAdapter(Context context, RecyclerView recyclerView) {
         mList =fragConst.history_url;
         mtitle=fragConst.history_name;
+        micon=fragConst.history_icon;
         this.mContext = context;
         this.mRv = recyclerView;
     }
@@ -49,6 +53,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
                  int position = holder.getAdapterPosition();
                  fragConst.history_url.remove(position);
                  fragConst.history_name.remove(position);
+                 fragConst.history_icon.remove(position);
 //                 historyActivity activity=(historyActivity) v.getContext();
 //                 activity.setList(mList);
 //                 activity.setNamelist(mtitle);
@@ -86,6 +91,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.mtitleView.setText(mtitle.get(position));
         holder.murlView.setText(mList.get(position));
+        holder.miconView.setImageBitmap(micon.get(position));
     }
 
     @Override
@@ -98,12 +104,14 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mtitleView;
         public TextView murlView;
+        public ImageView miconView;
         public Button btnDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mtitleView= itemView.findViewById(R.id.history_name);
             murlView=itemView.findViewById(R.id.history_url);
+            miconView=itemView.findViewById(R.id.history_icon);
         }
     }
 

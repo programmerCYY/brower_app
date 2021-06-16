@@ -5,9 +5,11 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
 
 import com.example.mywebdemo.R;
@@ -38,6 +40,7 @@ public class MyWebView {
     }
     public String getMyurl(){return current_url;}
     public String getCurrent_title(){return current_title; }
+    public Bitmap getCurrent_icon(){return current_icon;}
     public void setWebView(WebView webView) {
         this.webView = webView;
     }
@@ -98,6 +101,7 @@ public class MyWebView {
 //
 //        });
 
+
         webView.setWebViewClient(new WebViewClient(){
             boolean if_load;
 //            @Override
@@ -105,6 +109,7 @@ public class MyWebView {
 //                if_load=false;
 //                return false;
 //            }
+
 
 
             //页面完成即加入历史记录
@@ -115,30 +120,18 @@ public class MyWebView {
                 current_url=view.copyBackForwardList().getCurrentItem().getUrl();//获取url
                 current_title=view.copyBackForwardList().getCurrentItem().getTitle();//获取标题
 
-                //以下代码是保存图片
-//                current_icon = view.copyBackForwardList().getCurrentItem().getFavicon();//获取网页图标
-//                File file=new File(view.getContext().getFilesDir(),fragConst.history_icon.size()+".jpg");
-//                fragConst.history_icon.add(file.getPath());
-//                //Log.d("path",""+file.getPath());
-//                Thread thread=new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if(!file.exists()) {
-//                            try {
-//                                FileOutputStream bos = new FileOutputStream(file);
-//                                current_icon.compress(Bitmap.CompressFormat.JPEG, 1, bos);
-//                                bos.flush();
-//                                bos.close();
-//                                Log.d("pic", "success");
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }else{
-//                            Log.d("pic2","unsuccess");
-//                        }
-//                    }
-//                });
-//                thread.start();
+                //获取页面图标
+                webView.setWebChromeClient(new WebChromeClient(){
+                    @Override
+                    public void onReceivedIcon(WebView view, Bitmap icon) {
+                        super.onReceivedIcon(view, icon);
+                        current_icon=icon;
+                        fragConst.history_icon.add(icon);
+
+                    }
+
+                });
+
 
 
                 if(if_load && !current_title.equals(" ")) {

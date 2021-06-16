@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -402,10 +403,12 @@ public class FragActivity extends FragmentActivity {
                 mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
                 String url=m.geturl();
                 String title=m.gettitle();
+                Bitmap icon=m.geticon();
                 fragConst.flag_url.add(url);
                 fragConst.flag_url=removeDuplicate(fragConst.flag_url);
                 fragConst.flag_name.add(title);
                 fragConst.flag_name=removeDuplicate(fragConst.flag_name);
+                fragConst.flag_icon.add(icon);
                 window.dismiss();
             }
         });

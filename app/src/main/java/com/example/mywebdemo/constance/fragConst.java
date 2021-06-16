@@ -1,5 +1,6 @@
 package com.example.mywebdemo.constance;
 
+import android.graphics.Bitmap;
 import android.webkit.WebView;
 
 import com.example.mywebdemo.fragment.mainFrag;
@@ -15,13 +16,14 @@ public class fragConst {
     public static List<MyWebView>myWebViewList=new ArrayList<>();
     public static ArrayList<String>history_url=new ArrayList<>();
     public static ArrayList<String>history_name=new ArrayList<>();
-    public static ArrayList<String>history_icon=new ArrayList<>();
+    public static ArrayList<Bitmap>history_icon=new ArrayList<>();
     public static ArrayList<String>flag_url=new ArrayList<>();
     public static ArrayList<String>flag_name=new ArrayList<>();
+    public static ArrayList<Bitmap>flag_icon=new ArrayList<>();
 
 
 
-    public static  int page_interval=40;  //界面之间的间隔
+    public static  int page_interval=1;  //界面之间的间隔
 
     public static  int init_page_count=1;  //初始化的界面个数
 

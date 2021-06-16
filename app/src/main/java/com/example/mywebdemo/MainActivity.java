@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
 
 
-
+//webView.setWebViewClient(NoAdWebview webview
+//                )
             //页面完成即加入历史记录
             @Override
             public void onPageFinished(WebView view, String url) {
