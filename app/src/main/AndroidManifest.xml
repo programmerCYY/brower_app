@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".history.historyActivity"></activity>
-        <activity android:name=".flag.flagActivity"></activity>
-        <activity android:name=".FragActivity"/>
+        <activity android:name=".history.historyActivity" />
+        <activity android:name=".flag.flagActivity" />
+        <activity android:name=".FragActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

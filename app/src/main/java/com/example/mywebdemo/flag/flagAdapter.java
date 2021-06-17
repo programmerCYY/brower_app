@@ -1,5 +1,6 @@
 package com.example.mywebdemo.flag;
 
+import android.app.assist.AssistStructure;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +38,7 @@ public class flagAdapter extends RecyclerView.Adapter<flagAdapter.ViewHolder> {
                 .inflate(R.layout.flagitem,parent,false);
        final ViewHolder holder=new ViewHolder(view);
         holder.btnDelete =(Button) view.findViewById(R.id.flag_delete);
+        holder.select=(CheckBox) view.findViewById(R.id.flag_choose);
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +67,17 @@ public class flagAdapter extends RecyclerView.Adapter<flagAdapter.ViewHolder> {
                 activity.finish();
             }
         });
+        holder.select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int position = holder.getAdapterPosition();
+                if(isChecked){
+                    flagActivity.setlistcheck(position,true);
+                }else{
+                    flagActivity.setlistcheck(position,false);
+                }
+            }
+        });
 
         return holder;
     }
@@ -80,6 +95,7 @@ public class flagAdapter extends RecyclerView.Adapter<flagAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mflagView;
         public Button btnDelete;
+        public CheckBox select;
 
         public ViewHolder(View itemView) {
             super(itemView);

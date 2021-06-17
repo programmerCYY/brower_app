@@ -6,19 +6,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".flag.flagActivity">
-
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <Button
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="返回" />
 
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="批量删除" />
+        </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_flag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="#FFFF0000"
         android:dividerHeight="0dp"></androidx.recyclerview.widget.RecyclerView>
+
 
 
 </LinearLayout>
