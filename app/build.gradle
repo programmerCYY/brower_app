@@ -34,5 +34,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.zhy:percent-support-extends:1.1.1'
     implementation 'com.balysv:material-ripple:1.0.2'
-    implementation 'com.google.android.material:material:1.0.0'
+
+    implementation "androidx.room:room-runtime:2.1.0-alpha07"
+    annotationProcessor "androidx.room:room-compiler:2.1.0-alpha07"
 }
