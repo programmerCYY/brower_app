@@ -1,11 +1,16 @@
 package com.example.mywebdemo.adblock;
 import android.content.Context;
+import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import com.example.mywebdemo.MainActivity;
+import com.example.mywebdemo.MyWebViewActivity;
 
 
 //写个webview.setWebviewClient(NoAdWebviewClient webclient)即可屏蔽指定广告
@@ -15,33 +20,74 @@ import androidx.annotation.Nullable;
 //如果web想要得到方法的返回值就只能用loadUrl去执行JS方法把返回值传递回去
 //currently useless
 
-public class NoAdWebviewClient extends WebViewClient{
+public class NoAdWebviewClient extends WebViewClient {
     private String homeurl;
     private Context context;
 
-    public NoAdWebviewClient(Context context,String homeurl){
+    public NoAdWebviewClient(Context context) {
         this.context = context;
-        this.homeurl = homeurl;
     }
-
-
-
-//  api24版本以下
     @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view,String url) {
-        url = url.toLowerCase();
-        if (!url.contains(homeurl)){
-            if (!ADFilterTool.hasAd(context,url)){
-                return super.shouldInterceptRequest(view, url);
-            }else {
-                return new WebResourceResponse(null,null,null );
-            }
-        }else {
-            return super.shouldInterceptRequest(view,url);
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//        Log.d("succeed", "shouldOverrideUrlLoading: "+url);
+        AdSorting sortion = new AdSorting();
+        String result = sortion.urlSorting(context,url);
+        switch (result){
+            case "high":
+                view.loadUrl("file:///android_asset/demo1.html");
+                Log.d("success1", "shouldOverrideUrlLoading: "+url);
+                break;
+            case "medium":
+                view.loadUrl("yy");
+                Log.d("success2", "shouldOverrideUrlLoading: "+url);
+                break;
+            case"low":
+                view.loadUrl("zz");
+                Log.d("success3", "shouldOverrideUrlLoading: "+url);
+                break;
+            default:
+                view.loadUrl(url);
         }
+//        Log.d("init success", "shouldOverrideUrlLoading: ");
+//        boolean ad;
+//        ad = AdBlocker.isAd(url);
+////        Log.d("ad isAd", "shouldOverrideUrlLoading: ");
+//        if (!ad){
+////            Log.d("success", "shouldOverrideUrlLoading: "+url);
+//            view.loadUrl("https://www.baidu.com");
+//        }else {
+//            view.loadUrl(url);
+//        }
+        return false;
     }
 
-//    api24版本以上
+    //    //  api24版本以下
+//    @Override
+//    public WebResourceResponse shouldInterceptRequest(WebView view,String url) {
+//        url = url.toLowerCase();
+//        if (!url.contains(homeurl)){
+//            if (!ADFilterTool.hasAd(context,url)){
+//                return super.shouldInterceptRequest(view, url);
+//            }else {
+//                return new WebResourceResponse(null,null,null );
+//            }
+//        }else {
+//            return super.shouldInterceptRequest(view,url);
+//        }
+//    }
+
+//    @Override
+//    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//        if (AdBlocker.isAd(url)) {
+//            view.loadUrl("www.baidu.com");
+//            Toast.makeText(context.getApplicationContext(), "abaaba", Toast.LENGTH_SHORT);
+//
+//            view.getSettings().setJavaScriptEnabled(true);
+//        }
+//        return super.shouldOverrideUrlLoading(view, url);
+//    }
+
+    //    api24版本以上
 //    @Nullable
 //    @Override
 //    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
@@ -56,4 +102,8 @@ public class NoAdWebviewClient extends WebViewClient{
 //            return super.shouldInterceptRequest(view, request);
 //        }
 //    }
+
+
+
+
 }

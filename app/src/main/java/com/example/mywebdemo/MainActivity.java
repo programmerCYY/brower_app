@@ -3,6 +3,7 @@ package com.example.mywebdemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,6 +26,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+
+import com.example.mywebdemo.adblock.NoAdWebviewClient;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -124,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+        Context context = webView.getContext();
+        webView.setWebViewClient(new NoAdWebviewClient(context));
         LoadUrl(url);
         //拦截跳转后执行
 //        webView.setWebViewClient(new WebViewClient() {

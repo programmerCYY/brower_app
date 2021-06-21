@@ -1,5 +1,5 @@
 package com.example.mywebdemo.adblock;
-//currently useless
+
 import android.content.Context;
 import android.content.res.Resources;
 

@@ -99,21 +99,21 @@ public class MyWebViewActivity extends AppCompatActivity {
                 }
             }
 
-            //实现页面上的广告屏蔽。
-
-            private Map<String,Boolean> loadedUrls = new HashMap<>();
-
-            @Nullable
-            @Override
-            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-                boolean ad;
-                if (!loadedUrls.containsKey(url)){
-                    ad = AdBlocker.isAd(url);
-                    loadedUrls.put(url,ad);
-                }else {
-                    ad = loadedUrls.get(url);
-                }return ad ? AdBlocker.createEmptyResourse() : super.shouldInterceptRequest(view, url);
-            }
+//            //实现页面上的广告屏蔽。
+//
+//            private Map<String,Boolean> loadedUrls = new HashMap<>();
+//
+//            @Nullable
+//            @Override
+//            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+//                boolean ad;
+//                if (!loadedUrls.containsKey(url)){
+//                    ad = AdBlocker.isAd(url);
+//                    loadedUrls.put(url,ad);
+//                }else {
+//                    ad = loadedUrls.get(url);
+//                }return ad ? AdBlocker.createEmptyResourse() : super.shouldInterceptRequest(view, url);
+//            }
         });
 
 
