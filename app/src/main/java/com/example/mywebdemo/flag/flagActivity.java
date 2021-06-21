@@ -2,9 +2,15 @@ package com.example.mywebdemo.flag;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -22,11 +28,19 @@ public class flagActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private flagAdapter mMyAdapter;
     private LinearLayoutManager mLayoutManager;
-    private ArrayList<String> flaglist;
-    private ArrayList<String> titlelist;
+    private static ArrayList<String> flaglist;
+    private static ArrayList<String> titlelist;
     private static ArrayList<Boolean> listCheck;
     private String currenturl;
     private Button btn;
+
+    public static void setxTitle(int position,String title){
+        titlelist.set(position,title);
+    }
+
+    public static void setxurl(int position,String title){
+        flaglist.set(position,title);
+    }
 
     public static void setlistcheck(int position,boolean value){
         listCheck.set(position,value);
@@ -39,6 +53,46 @@ public class flagActivity extends AppCompatActivity {
         initData();
         btn=(Button)findViewById(R.id.button4);
         Button btn_delete = (Button) findViewById(R.id.button5);
+//        TextView mTextView = (TextView) findViewById(R.id.textview);
+//        EditText mEditText = (EditText) findViewById(R.id.edittext);
+//        ImageView mImageView = (ImageView) findViewById(R.id.imageview);
+//
+//        mImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //把EditText内容设置为空
+//                mEditText.setText("");
+//            }
+//        });
+//
+//        mEditText.addTextChangedListener(new TextWatcher() {
+//
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}//文本改变之前执行
+//
+//            @Override
+//            //文本改变的时候执行
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                //如果长度为0
+//                if (s.length() == 0) {
+//                    //隐藏“删除”图片
+//                    mImageView.setVisibility(View.GONE);
+//                } else {//长度不为0
+//                    //显示“删除图片”
+//                    mImageView.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            public void afterTextChanged(Editable s) { }//文本改变之后执行
+//        });
+//
+//        mTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("search", "onClick: 搜索字段");
+//            }
+//        });
+
+
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -93,5 +147,11 @@ public class flagActivity extends AppCompatActivity {
 
     public void setNamelist(ArrayList mynamelist){
         titlelist=mynamelist;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMyAdapter.notifyDataSetChanged();
     }
 }

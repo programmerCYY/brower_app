@@ -38,6 +38,7 @@ public class flagAdapter extends RecyclerView.Adapter<flagAdapter.ViewHolder> {
                 .inflate(R.layout.flagitem,parent,false);
        final ViewHolder holder=new ViewHolder(view);
         holder.btnDelete =(Button) view.findViewById(R.id.flag_delete);
+        holder.btnEdit = (Button) view.findViewById(R.id.flag_edit);
         holder.select=(CheckBox) view.findViewById(R.id.flag_choose);
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +53,24 @@ public class flagAdapter extends RecyclerView.Adapter<flagAdapter.ViewHolder> {
                 notifyDataSetChanged();
             }
         });
+
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                String currenturl=flaglist.get(position);
+                String currenttitle=titlelist.get(position);
+                Intent intent = new Intent(v.getContext(), EditActivity.class);
+                Bundle bundle=new Bundle();
+                //传递name参数为tinyphp
+                bundle.putString("editurl",currenturl);
+                bundle.putString("edittitle",currenttitle);
+                bundle.putInt("position",position);
+                intent.putExtras(bundle);
+                v.getContext().startActivity(intent);
+            }
+        });
+
         //编写点击事件
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +80,8 @@ public class flagAdapter extends RecyclerView.Adapter<flagAdapter.ViewHolder> {
                 String currenturl=flaglist.get(position);
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                MainActivity.setflagList(flaglist);
+                MainActivity.settitleList(titlelist);
                 MainActivity.setUrl(currenturl);
                 v.getContext().startActivity(intent);
                 flagActivity activity=(flagActivity) v.getContext();
@@ -96,6 +117,7 @@ public class flagAdapter extends RecyclerView.Adapter<flagAdapter.ViewHolder> {
         public TextView mflagView;
         public Button btnDelete;
         public CheckBox select;
+        public Button btnEdit;
 
         public ViewHolder(View itemView) {
             super(itemView);
