@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.backend.mapper.RoleDao">
+  <resultMap id="BaseResultMap" type="com.example.backend.pojo.Role">
+    <id column="flag_url" jdbcType="VARCHAR" property="flagUrl" />
+    <result column="flag_icon" jdbcType="VARCHAR" property="flagIcon" />
+    <result column="flag_name" jdbcType="VARCHAR" property="flagName" />
+    <result column="flag_user" jdbcType="VARCHAR" property="flagUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    flag_url, flag_icon, flag_name, flag_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flag
+    where flag_url = #{flagUrl,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from flag
+    where flag_url = #{flagUrl,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.backend.pojo.Role">
+    insert into flag (flag_url, flag_icon, flag_name, 
+      flag_user)
+    values (#{flagUrl,jdbcType=VARCHAR}, #{flagIcon,jdbcType=VARCHAR}, #{flagName,jdbcType=VARCHAR}, 
+      #{flagUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.backend.pojo.Role">
+    insert into flag
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="flagUrl != null">
+        flag_url,
+      </if>
+      <if test="flagIcon != null">
+        flag_icon,
+      </if>
+      <if test="flagName != null">
+        flag_name,
+      </if>
+      <if test="flagUser != null">
+        flag_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="flagUrl != null">
+        #{flagUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flagIcon != null">
+        #{flagIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="flagName != null">
+        #{flagName,jdbcType=VARCHAR},
+      </if>
+      <if test="flagUser != null">
+        #{flagUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.backend.pojo.Role">
+    update flag
+    <set>
+      <if test="flagIcon != null">
+        flag_icon = #{flagIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="flagName != null">
+        flag_name = #{flagName,jdbcType=VARCHAR},
+      </if>
+      <if test="flagUser != null">
+        flag_user = #{flagUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where flag_url = #{flagUrl,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.backend.pojo.Role">
+    update flag
+    set flag_icon = #{flagIcon,jdbcType=VARCHAR},
+      flag_name = #{flagName,jdbcType=VARCHAR},
+      flag_user = #{flagUser,jdbcType=VARCHAR}
+    where flag_url = #{flagUrl,jdbcType=VARCHAR}
+  </update>
+</mapper>

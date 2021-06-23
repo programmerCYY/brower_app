@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.backend.mapper.HistoryDao">
+  <resultMap id="BaseResultMap" type="com.example.backend.pojo.History">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="history_url" jdbcType="VARCHAR" property="historyUrl" />
+    <result column="history_name" jdbcType="VARCHAR" property="historyName" />
+    <result column="history_icon" jdbcType="VARCHAR" property="historyIcon" />
+    <result column="history_time" jdbcType="TIMESTAMP" property="historyTime" />
+    <result column="history_user" jdbcType="VARCHAR" property="historyUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, history_url, history_name, history_icon, history_time, history_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.backend.pojo.History" useGeneratedKeys="true">
+    insert into history (history_url, history_name, history_icon, 
+      history_time, history_user)
+    values (#{historyUrl,jdbcType=VARCHAR}, #{historyName,jdbcType=VARCHAR}, #{historyIcon,jdbcType=VARCHAR}, 
+      #{historyTime,jdbcType=TIME}, #{historyUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.backend.pojo.History" useGeneratedKeys="true">
+    insert into history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="historyUrl != null">
+        history_url,
+      </if>
+      <if test="historyName != null">
+        history_name,
+      </if>
+      <if test="historyIcon != null">
+        history_icon,
+      </if>
+      <if test="historyTime != null">
+        history_time,
+      </if>
+      <if test="historyUser != null">
+        history_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="historyUrl != null">
+        #{historyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="historyName != null">
+        #{historyName,jdbcType=VARCHAR},
+      </if>
+      <if test="historyIcon != null">
+        #{historyIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="historyTime != null">
+        #{historyTime,jdbcType=TIME},
+      </if>
+      <if test="historyUser != null">
+        #{historyUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.backend.pojo.History">
+    update history
+    <set>
+      <if test="historyUrl != null">
+        history_url = #{historyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="historyName != null">
+        history_name = #{historyName,jdbcType=VARCHAR},
+      </if>
+      <if test="historyIcon != null">
+        history_icon = #{historyIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="historyTime != null">
+        history_time = #{historyTime,jdbcType=TIME},
+      </if>
+      <if test="historyUser != null">
+        history_user = #{historyUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.backend.pojo.History">
+    update history
+    set history_url = #{historyUrl,jdbcType=VARCHAR},
+      history_name = #{historyName,jdbcType=VARCHAR},
+      history_icon = #{historyIcon,jdbcType=VARCHAR},
+      history_time = #{historyTime,jdbcType=TIME},
+      history_user = #{historyUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select * from history where history_user = #{phone};
+  </select>
+  <update id="updateBytwo">
+    update history set history_time = #{time,jdbcType = TIMESTAMP} where history_url = #{history_url} and history_user = #{history_user};
+  </update>
+  <delete id="deleteBytwo">
+    delete from history where history_url = #{history_url} and history_user = #{history_user};
+  </delete>
+</mapper>
