@@ -1,6 +1,7 @@
 package com.example.mywebdemo.adblock;
 import android.content.Context;
 import android.util.Log;
+import android.webkit.JsResult;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -58,7 +59,7 @@ public class NoAdWebviewClient extends WebViewClient {
 //        }else {
 //            view.loadUrl(url);
 //        }
-        return false;
+        return super.shouldOverrideUrlLoading(view,url);
     }
 
     //    //  api24版本以下
@@ -102,6 +103,69 @@ public class NoAdWebviewClient extends WebViewClient {
 //            return super.shouldInterceptRequest(view, request);
 //        }
 //    }
+
+
+
+
+//    Context context = webView.getContext();
+//
+//    //webView.setWebViewClient(new NoAdWebviewClient(context){
+//    //});
+//
+//        webView.setWebViewClient(new WebViewClient(){
+//        @Override
+//        //重写urlloading接口，实现在打开超链接时拦截指定url，并重定向到一个本地html
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+////        Log.d("succeed", "shouldOverrideUrlLoading: "+url);
+//            jsUrl =url;
+//            AdSorting sortion = new AdSorting();
+//            String result = sortion.urlSorting(context,url);
+//
+//            switch (result){
+//                case "high":
+//                    view.loadUrl("file:///android_asset/demo1.html");
+//                    Log.d("success1", "shouldOverrideUrlLoading: "+url);
+//                    break;
+//                case "medium":
+//                    view.loadUrl("yy");
+//                    Log.d("success2", "shouldOverrideUrlLoading: "+url);
+//                    break;
+//                case"low":
+//                    view.loadUrl("zz");
+//                    Log.d("success3", "shouldOverrideUrlLoading: "+url);
+//                    break;
+//                default:
+//                    view.loadUrl(url);
+//            }return super.shouldOverrideUrlLoading(view,url);
+//        }
+//    });
+//        webView.addJavascriptInterface(this, "Android");
+//        webView.setWebChromeClient(new WebChromeClient(){
+//        @Override
+//        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+//            if (message.equals("1")) {
+//                Log.d("alert", "onJsAlert1: "+message);
+////                    webView.canGoBack();
+//                webView.goBack();
+//                webView.goBack();
+//                Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
+//            }else if (message.equals("0")) {
+//                Log.d("alert", "onJsAlert2: "+message);
+//                view.stopLoading();
+//                MainActivity.this.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        webView.loadUrl(jsUrl);
+//
+//                    }
+//                });
+//
+//                Log.d("alert", "onJsAlert: "+jsUrl);
+//                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+//            }
+//            result.confirm();
+//            return true;
+//        }
 
 
 
