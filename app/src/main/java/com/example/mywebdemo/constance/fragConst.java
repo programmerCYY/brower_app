@@ -5,6 +5,7 @@ import android.webkit.WebView;
 
 import com.example.mywebdemo.fragment.mainFrag;
 import com.example.mywebdemo.webview.MyWebView;
+import com.example.mywebdemo.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class fragConst {
     public static ArrayList<String>flag_url=new ArrayList<>();
     public static ArrayList<String>flag_name=new ArrayList<>();
     public static ArrayList<Bitmap>flag_icon=new ArrayList<>();
+    public static ArrayList<User>user=new ArrayList<>();
 
 
 

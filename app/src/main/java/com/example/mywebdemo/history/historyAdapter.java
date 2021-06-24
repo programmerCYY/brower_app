@@ -3,7 +3,6 @@ package com.example.mywebdemo.history;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywebdemo.FragActivity;
-import com.example.mywebdemo.MainActivity;
 import com.example.mywebdemo.constance.fragConst;
 import com.example.mywebdemo.R;
 
@@ -41,7 +39,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //挂载item视图
         final View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item,parent,false);
+                .inflate(R.layout.history_item,parent,false);
         final ViewHolder holder = new ViewHolder(view);
 
 

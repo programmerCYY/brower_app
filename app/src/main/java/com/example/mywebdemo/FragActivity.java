@@ -41,6 +41,7 @@ import com.example.mywebdemo.flag.flagActivity;
 import com.example.mywebdemo.fragment.fragAdapter;
 import com.example.mywebdemo.fragment.mainFrag;
 import com.example.mywebdemo.history.historyActivity;
+import com.example.mywebdemo.user.LoginActivity;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -306,6 +307,15 @@ public class FragActivity extends FragmentActivity {
             TextView textView=v.findViewById(R.id.popup_night_text);
             textView.setText("白天模式");
         }
+
+        v.findViewById(R.id.to_user).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(FragActivity.this, LoginActivity.class);
+                startActivity(intent2);
+                window.dismiss();
+            }
+        });
 
         v.findViewById(R.id.popup_bookmark).setOnClickListener(new View.OnClickListener() {
             @Override

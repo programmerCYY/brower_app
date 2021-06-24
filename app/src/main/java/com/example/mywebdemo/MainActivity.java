@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 //import com.example.mywebdemo.flag.flagActivity;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public  String  currenturl="";
     public String  currenttitle="";
     private WebView webView;
-    private static String url="";
+    private static String Surl="";
 
     public static void setUrlList(ArrayList list){
         urlList=list;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void setUrl(String string){
-        url=string;
+        Surl=string;
     }
     //注册浏览器
     private void initWebView() {
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        });
 
+
         webView.setWebViewClient(new WebViewClient(){
             boolean if_load;
 //            @Override
@@ -109,7 +112,36 @@ public class MainActivity extends AppCompatActivity {
 //            }
 
 
-//webView.setWebViewClient(NoAdWebview webview
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d("url__",url);
+                if (("https://www.soho.com/").equals(url)){
+                    //Surl="https://www.soho.com";
+                    //view.loadUrl("https://www.baidu.com/");
+                    Toast.makeText(MainActivity.this,"有风险",Toast.LENGTH_LONG).show();
+                    Log.d("reload","success");
+                    return true;
+                }
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+
+//            @Nullable
+//            @Override
+//            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+//                //Log.d("url__",url);
+//                if ("https://www.soho.com/".equals(url)){
+//                   //Surl="https://www.baidu.com/";
+////                    Log.d("Surl",Surl);
+//                    //LoadUrl(Surl);
+//                    //view.loadUrl("https://www.baidu.com/");
+//                    Log.d("reload","success");
+//                    return new WebResourceResponse("text/html","utf-8",null);
+//
+//                }
+//                return super.shouldInterceptRequest(view, url);
+//            }
+
+            //webView.setWebViewClient(NoAdWebview webview
 //                )
             //页面完成即加入历史记录
             @Override
@@ -136,7 +168,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        LoadUrl(url);
+        LoadUrl(Surl);
+
     }
     //去重
     public static ArrayList removeDuplicate(ArrayList list){
@@ -205,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null && bundle.containsKey("url")) {
-            url = bundle.getString("url");
+            Surl = bundle.getString("url");
             initWebView();
         }
         //按钮注册
@@ -317,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
                         str = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + myEditText.getText().toString()+"&pu=sz%401321_480&t_noscript=jump";
                     }
                 }
-                url=str;
+                Surl=str;
                 initWebView();
             }
         });
@@ -327,6 +360,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(webView!=null)
-        LoadUrl(url);
+        LoadUrl(Surl);
     }
 }

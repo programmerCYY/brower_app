@@ -50,7 +50,7 @@
                     android:layout_height="35dp"
                     android:layout_weight="6"
                     android:orientation="horizontal"
-                    android:background="@mipmap/rectangle"
+                    android:background="@drawable/search_background"
                     android:layout_marginTop="10dp">
                 <ImageView
                         android:layout_width="10dp"
