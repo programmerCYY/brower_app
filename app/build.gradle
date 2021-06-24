@@ -34,9 +34,5 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.zhy:percent-support-extends:1.1.1'
     implementation 'com.balysv:material-ripple:1.0.2'
-    implementation 'com.github.lzyzsd:jsbridge:1.0.4'
-}
-repositories {
-    // ...
-    maven { url "https://jitpack.io" }
+    implementation 'com.google.android.material:material:1.0.0'
 }

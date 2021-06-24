@@ -9,7 +9,7 @@
         android:background="@color/light_gray">
 
     <LinearLayout
-            android:id="@+id/flag_above_bar"
+            android:id="@+id/flag_above_bar_edit"
             app:layout_heightPercent="7%h"
             app:layout_widthPercent="100%w"
             android:layout_height="0dp"
@@ -25,7 +25,7 @@
                 android:visibility="invisible"/>
 
         <Button
-                android:id="@+id/button4"
+                android:id="@+id/button4_edit"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
@@ -64,8 +64,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="9"
-            android:layout_below="@id/above_bar"
-            android:layout_above="@+id/flag_below_bar"
+            android:layout_below="@id/flag_above_bar_edit"
+            android:layout_above="@+id/flag_below_bar_edit"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="15dp"
@@ -73,7 +73,7 @@
             android:padding="8dp">
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycle_flag"
+                android:id="@+id/recycle_flag_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="#FFFF0000"
@@ -81,38 +81,38 @@
 
     </LinearLayout>
 
-<!--    <LinearLayout-->
+    <!--    <LinearLayout-->
 
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:orientation="vertical"-->
-<!--            android:gravity="center"-->
-<!--            android:paddingTop="5dp">-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="0dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:orientation="vertical"-->
+    <!--            android:gravity="center"-->
+    <!--            android:paddingTop="5dp">-->
 
-<!--        <Button-->
-<!--                android:id="@+id/clear_flag"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:background="@mipmap/clear"-->
-<!--                android:scaleX="0.15"-->
-<!--                android:scaleY="0.7"-->
-<!--                android:layout_weight="2"-->
+    <!--        <Button-->
+    <!--                android:id="@+id/clear_flag"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="0dp"-->
+    <!--                android:background="@mipmap/clear"-->
+    <!--                android:scaleX="0.15"-->
+    <!--                android:scaleY="0.7"-->
+    <!--                android:layout_weight="2"-->
 
-<!--                />-->
+    <!--                />-->
 
-<!--        <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="清空"-->
-<!--                android:gravity="center">-->
+    <!--        <TextView-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="0dp"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="清空"-->
+    <!--                android:gravity="center">-->
 
-<!--        </TextView>-->
-<!--    </LinearLayout>-->
+    <!--        </TextView>-->
+    <!--    </LinearLayout>-->
 
     <LinearLayout
-            android:id="@+id/flag_below_bar"
+            android:id="@+id/flag_below_bar_edit"
             app:layout_heightPercent="11%h"
             app:layout_widthPercent="100%w"
             android:layout_width="0dp"
@@ -121,22 +121,56 @@
             android:orientation="horizontal"
             android:layout_weight="1">
 
+        <!--        <LinearLayout-->
+
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:orientation="vertical"-->
+        <!--                android:gravity="center"-->
+        <!--                android:paddingTop="5dp">-->
+
+        <!--            <Button-->
+        <!--                    android:id="@+id/edit_flag"-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="0dp"-->
+        <!--                    android:background="@mipmap/clear"-->
+        <!--                    android:scaleX="0.15"-->
+        <!--                    android:scaleY="0.7"-->
+        <!--                    android:layout_weight="2"-->
+
+        <!--                    />-->
+
+        <!--            <TextView-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="0dp"-->
+        <!--                    android:layout_weight="1"-->
+        <!--                    android:text="编辑"-->
+        <!--                    android:gravity="center">-->
+
+        <!--            </TextView>-->
+        <!--        </LinearLayout>-->
+
 <!--        <LinearLayout-->
 
+
+<!--                android:id="@+id/edit_box"-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="match_parent"-->
 <!--                android:layout_weight="1"-->
 <!--                android:orientation="vertical"-->
 <!--                android:gravity="center"-->
-<!--                android:paddingTop="5dp">-->
+<!--                android:paddingTop="5dp"-->
+<!--                >-->
 
 <!--            <Button-->
 <!--                    android:id="@+id/edit_flag"-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="0dp"-->
-<!--                    android:background="@mipmap/clear"-->
-<!--                    android:scaleX="0.15"-->
-<!--                    android:scaleY="0.7"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:background="@mipmap/ic_edit_round"-->
+<!--                    android:scaleX="0.16"-->
+<!--                    android:scaleY="0.64"-->
 <!--                    android:layout_weight="2"-->
 
 <!--                    />-->
@@ -150,11 +184,8 @@
 
 <!--            </TextView>-->
 <!--        </LinearLayout>-->
-
         <LinearLayout
-
-
-                android:id="@+id/edit_box"
+                android:id="@+id/all_select_box_edit"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -164,12 +195,12 @@
                 >
 
             <Button
-                    android:id="@+id/edit_flag"
+                    android:id="@+id/edit_all_select_edit"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="5dp"
-                    android:background="@mipmap/ic_edit_round"
-                    android:scaleX="0.16"
+                    android:background="@mipmap/all_select"
+                    android:scaleX="0.18"
                     android:scaleY="0.64"
                     android:layout_weight="2"
 
@@ -179,74 +210,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="编辑"
+                    android:text="全选"
                     android:gravity="center">
 
             </TextView>
         </LinearLayout>
-<!--        <LinearLayout-->
-<!--                android:id="@+id/all_select_box"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:orientation="vertical"-->
-<!--                android:gravity="center"-->
-<!--                android:paddingTop="5dp"-->
-<!--                >-->
+        <LinearLayout
 
-<!--            <Button-->
-<!--                    android:id="@+id/edit_all_select"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:background="@mipmap/all_select"-->
-<!--                    android:scaleX="0.18"-->
-<!--                    android:scaleY="0.64"-->
-<!--                    android:layout_weight="2"-->
+                android:id="@+id/select_delete_box_edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                >
 
-<!--                    />-->
+            <Button
+                    android:id="@+id/edit_delete_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@mipmap/ic_trash_grey"
+                    android:scaleX="0.18"
+                    android:scaleY="0.50"
+                    android:layout_weight="2"
 
-<!--            <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:text="全选"-->
-<!--                    android:gravity="center">-->
+                    />
 
-<!--            </TextView>-->
-<!--        </LinearLayout>-->
-<!--        <LinearLayout-->
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="删除"
+                    android:gravity="center">
 
-<!--                android:id="@+id/select_delete_box"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:orientation="vertical"-->
-<!--                android:gravity="center"-->
-<!--                android:paddingTop="5dp"-->
-<!--                >-->
-
-<!--            <Button-->
-<!--                    android:id="@+id/edit_delete"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:background="@mipmap/ic_trash_grey"-->
-<!--                    android:scaleX="0.18"-->
-<!--                    android:scaleY="0.50"-->
-<!--                    android:layout_weight="2"-->
-
-<!--                    />-->
-
-<!--            <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:text="删除"-->
-<!--                    android:gravity="center">-->
-
-<!--            </TextView>-->
-<!--        </LinearLayout>-->
+            </TextView>
+        </LinearLayout>
         <LinearLayout
 
                 android:layout_width="0dp"
@@ -257,7 +257,7 @@
                 android:paddingTop="5dp">
 
             <Button
-                    android:id="@+id/clear_flag"
+                    android:id="@+id/clear_flag_edit"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="5dp"
@@ -302,12 +302,12 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:layout_weight="1">
-            <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@mipmap/ic_trash"
-                     />
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/ic_trash"
+                        />
             </LinearLayout>
             <LinearLayout
                     android:layout_width="0dp"
@@ -340,3 +340,4 @@
     </LinearLayout>
 
 </com.zhy.android.percent.support.PercentRelativeLayout>
+

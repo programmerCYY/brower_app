@@ -27,34 +27,57 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-            <ImageView
+            <View
+                    android:layout_weight="0.1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@mipmap/user_filling"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8">
-
-            </ImageView>
-            <TextView
+                    />
+            <LinearLayout
+                    android:id="@+id/to_user"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:paddingTop="25dp"
-                    android:text="用户名"
-                    android:textSize="20sp"
-                    android:textColor="@color/text_black">
+                    android:orientation="horizontal">
 
-            </TextView>
+
+                <ImageView
+                        android:id="@+id/user_pic"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@mipmap/user_filling"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8">
+
+                </ImageView>
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingTop="25dp"
+                        android:text="用户名"
+                        android:textSize="20sp"
+                        android:textColor="@color/text_black">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <View
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    />
             <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:src="@mipmap/ic_chat"
-                    android:scaleX="0.3"
-                    android:scaleY="0.3">
+                    android:scaleX="0.32"
+                    android:scaleY="0.32">
 
             </ImageView>
+
 
         </LinearLayout>
         <LinearLayout
