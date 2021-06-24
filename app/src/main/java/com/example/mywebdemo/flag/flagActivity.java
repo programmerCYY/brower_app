@@ -182,6 +182,8 @@ public class flagActivity extends AppCompatActivity {
                 while (fragConst.flag_url.size()!=0){
                     fragConst.flag_url.remove(fragConst.flag_url.size()-1);
                     fragConst.flag_name.remove(fragConst.flag_name.size()-1);
+
+
                     //Log.d("clear",""+ fragConst.history_url.size());
                 }
                 flagAdapter.notifyDataSetChanged();
