@@ -6,6 +6,19 @@
     <title>自定义主页</title>
     <link rel="stylesheet" href="beginPageCss1.css" type="text/css">
     <meta name="viewport" content="width=device-width,initial-scale=0.7">
+    <script>
+
+        function testClick(){
+            var searchInput = document.getElementById("searchInput").value;
+            window.WebViewJavascriptBridge.callHandler(
+                'submitFromWeb'
+                , searchInput
+                , function(responseData){
+                    alert(responseData)
+                }
+            );
+        }
+    </script>
 </head>
 
 <body>
@@ -16,11 +29,11 @@
                 <img src="./logo_google_text.png" alt="大图">
             </a>
             <div id="backgroundFormStyle">
-                <form action="https://www.baidu.com.cn/s" method="GET" target="_parent" id="searchForm">
+                <div id="searchForm">
                     <input type="hidden" name="hiddenInput" value="3" />
                     <input type="text" name="wd" placeholder="搜索框" id="searchInput" autocomplete="off" />
-                    <input type="submit" value="" id="confirmInput" />
-                </form>
+                    <input type="submit" value="" id="confirmInput" onclick="testClick()"/>
+                </div>
             </div>
             <div class="iconBackBoxAll">
                 <a class="iconBackBox" href="https://www.bilibili.com">

@@ -34,6 +34,10 @@ import android.widget.Toast;
 import com.example.mywebdemo.adblock.AdSorting;
 import com.example.mywebdemo.adblock.AndroidToJs;
 import com.example.mywebdemo.adblock.NoAdWebviewClient;
+import com.github.lzyzsd.jsbridge.BridgeHandler;
+import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.CallBackFunction;
+import com.github.lzyzsd.jsbridge.DefaultHandler;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> nameList = new ArrayList<String>();
     public ArrayList<String> flagList = new ArrayList<String>();
     public String currenturl="";
-    private WebView webView ;
+    private BridgeWebView webView ;
     public String jsUrl;
 
 
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("JavascriptInterface")
     private void initWebView(String url) {
 
-        webView = (WebView) findViewById(R.id.mywebview);
+        webView = (BridgeWebView) findViewById(R.id.mywebview);
 //        LoadUrl(url);
         WebSettings webSettings = webView.getSettings();
 
@@ -198,8 +202,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        webView.loadUrl("file:///android_asset/demo001.html");
-        //LoadUrl(url);
+//        webView.loadUrl("file:///android_asset/demo001.html");
+        LoadUrl(url);
         //拦截跳转后执行
 //        webView.setWebViewClient(new WebViewClient() {
 //            @Override
@@ -393,6 +397,34 @@ public class MainActivity extends AppCompatActivity {
                 initWebView(str);
             }
         });
+
+        webView = (BridgeWebView) findViewById(R.id.mywebview);
+        webView.setDefaultHandler(new DefaultHandler());
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.loadUrl("file:///android_asset/demo001.html");
+        webView.registerHandler("submitFromWeb", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                Log.e("TAG", "js返回 "+data);
+                if (data.equals("")){
+                    data="https://m.baidu.com/";
+                }else {
+                    if(isUrl(data)){
+                        data="http://"+data;
+                    }
+                    if(!isHttpUrl(data)){
+//                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
+                        data = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + data+"&pu=sz%401321_480&t_noscript=jump";
+                    }
+                }
+                Log.d("jsbridge", "handler: "+data);
+                initWebView(data);
+            }
+        });
+
+
+
+
     }
 
 

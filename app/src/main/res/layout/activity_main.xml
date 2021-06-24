@@ -36,7 +36,7 @@
         app:layout_constraintVertical_bias="0.269" />
     </LinearLayout>
 
-    <WebView
+    <com.github.lzyzsd.jsbridge.BridgeWebView
         android:layout_weight="2"
         android:id="@+id/mywebview"
         android:layout_width="fill_parent"
