@@ -29,4 +29,8 @@ public class fragConst {
 
     public static  int new_mainfrag_count=0;  // mainFrag类构造函数被调用的次数
 
+    public static String user_account = ""; //当前登录用户
+
+    public static String http_msg = ""; // 后台链接失败返回信息
+
 }
