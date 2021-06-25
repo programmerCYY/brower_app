@@ -36,6 +36,7 @@ import com.example.mywebdemo.adblock.AndroidToJs;
 import com.example.mywebdemo.adblock.NoAdWebviewClient;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
 
@@ -145,16 +146,18 @@ public class MainActivity extends AppCompatActivity {
 
         //webView.setWebViewClient(new NoAdWebviewClient(context){
         //});
+//        webView = (BridgeWebView) findViewById(R.id.mywebview);
 
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new BridgeWebViewClient(webView) {
             @Override
             //重写urlloading接口，实现在打开超链接时拦截指定url，并重定向到一个本地html
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//        Log.d("succeed", "shouldOverrideUrlLoading: "+url);
+        Log.d("succeed", "shouldOverrideUrlLoading: "+url);
                 jsUrl =url;
+                //对将要打开的url进行匹配
                 AdSorting sortion = new AdSorting();
                 String result = sortion.urlSorting(context,url);
-
+                //高中低三种风险
                 switch (result){
                     case "high":
                         view.loadUrl("file:///android_asset/demo1.html");
@@ -174,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Log.d("success", "initWebView: "+jsUrl);
+
+        //拦截网站后重定向到一个本地的h5作为中间页，运用jsbride进行控制
         webView.addJavascriptInterface(this, "Android");
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
@@ -183,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 //                    webView.canGoBack();
                     webView.goBack();
                     webView.goBack();
-                    Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
                 }else if (message.equals("0")) {
                     Log.d("alert", "onJsAlert2: "+message);
                     view.stopLoading();
@@ -196,13 +202,39 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     Log.d("alert", "onJsAlert: "+jsUrl);
-                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
                 }
                 result.confirm();
                 return true;
             }
         });
-//        webView.loadUrl("file:///android_asset/demo001.html");
+
+
+////        webView.loadUrl("file:///android_asset/demo001.html");
+////        webView.setWebChromeClient(new WebChromeClient());
+////        webView.loadUrl("file:///android_asset/demo001.html");
+
+        //主页是一个本地的h5文件，运用jsbrid，使得在h5页面上搜索变成调用native的搜索功能。（当然直接在html里面用原生的form标签也可以，只不过就不是从头到尾webview了感觉会有问题）
+        webView.setDefaultHandler(new DefaultHandler());
+        webView.registerHandler("submitFromWeb", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                Log.e("TAG", "js返回 "+data);
+                if (data.equals("")){
+                    data="https://m.baidu.com/";
+                }else {
+                    if(isUrl(data)){
+                        data="http://"+data;
+                    }
+                    if(!isHttpUrl(data)){
+//                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
+                        data = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + data +"&pu=sz%401321_480&t_noscript=jump";
+                    }
+                }
+                Log.d("jsbridge", "handler: "+data);
+                initWebView(data);
+            }
+        });
         LoadUrl(url);
         //拦截跳转后执行
 //        webView.setWebViewClient(new WebViewClient() {
@@ -372,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
         btn_menu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                LoadUrl("https://m.baidu.com/");
+                LoadUrl("file:///android_asset/demo001.html");
             }
         });
         final EditText myEditText = (EditText) findViewById(R.id.edit_text);
@@ -398,29 +430,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        webView = (BridgeWebView) findViewById(R.id.mywebview);
-        webView.setDefaultHandler(new DefaultHandler());
-        webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("file:///android_asset/demo001.html");
-        webView.registerHandler("submitFromWeb", new BridgeHandler() {
-            @Override
-            public void handler(String data, CallBackFunction function) {
-                Log.e("TAG", "js返回 "+data);
-                if (data.equals("")){
-                    data="https://m.baidu.com/";
-                }else {
-                    if(isUrl(data)){
-                        data="http://"+data;
-                    }
-                    if(!isHttpUrl(data)){
-//                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
-                        data = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + data+"&pu=sz%401321_480&t_noscript=jump";
-                    }
-                }
-                Log.d("jsbridge", "handler: "+data);
-                initWebView(data);
-            }
-        });
+//        WebSettings webSettings = webView.getSettings();
+//        webSettings.setDisplayZoomControls(true);
+//        webView.setInitialScale(100);
+
+        //初始化一个加载主页的webview
+        initWebView("file:///android_asset/demo001.html");
+
+//        webView = (BridgeWebView) findViewById(R.id.mywebview);
+//        webView.setDefaultHandler(new DefaultHandler());
+//        webView.setWebChromeClient(new WebChromeClient());
+//
+//
+////        webView.loadUrl("file:///android_asset/demo001.html");
+//        webView.registerHandler("submitFromWeb", new BridgeHandler() {
+//            @Override
+//            public void handler(String data, CallBackFunction function) {
+//                Log.e("TAG", "js返回 "+data);
+//                if (data.equals("")){
+//                    data="https://m.baidu.com/";
+//                }else {
+//                    if(isUrl(data)){
+//                        data="http://"+data;
+//                    }
+//                    if(!isHttpUrl(data)){
+////                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
+//                        data = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + data +"&pu=sz%401321_480&t_noscript=jump";
+//                    }
+//                }
+//                Log.d("jsbridge", "handler: "+data);
+//                initWebView(data);
+//            }
+//        });
 
 
 
