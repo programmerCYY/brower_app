@@ -66,4 +66,15 @@ public class FlagController {
         return Result.BAD().build();
     }
 
+    @GetMapping("/search")
+    @ResponseBody
+    public Result searchFlags(@RequestParam String flag_user,
+                              @RequestParam String flag_name) {
+        List<Flag> list = flagService.getFlagsByKey(flag_user, flag_name);
+        if (list!=null) {
+            return Result.OK().data(list).build();
+        }
+        return Result.BAD().build();
+    }
+
 }

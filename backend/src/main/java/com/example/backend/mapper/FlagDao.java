@@ -24,4 +24,6 @@ public interface FlagDao {
     int deleteBytwo(String flag_user,String flag_url);
 
     Flag selectBytwo(String flag_user,String flag_url);
+
+    List<Flag> selectByKey(String flag_user,String point);
 }

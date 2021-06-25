@@ -31,13 +31,9 @@
   </delete>
   <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.example.backend.pojo.User" useGeneratedKeys="true">
     insert into user (nickname, username, avatar, 
-      `password`, email, phone, 
-      unionid, `role`, last_access_at, 
-      is_mute, is_valid)
+      `password`, email, phone)
     values (#{nickname,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{unionid,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{lastAccessAt,jdbcType=TIMESTAMP}, 
-      #{isMute,jdbcType=BOOLEAN}, #{isValid,jdbcType=BOOLEAN})
+      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.example.backend.pojo.User" useGeneratedKeys="true">
     insert into user

@@ -20,3 +20,13 @@ server:
 
 jwt:
   token-secret: hellowork
+
+
+news:
+  sohu:
+    Newsurl: http://news.sohu.com/
+    Sporturl: http://sports.sohu.com/
+    Carurl: http://auto.sohu.com/
+    Houseurl: http://gz.focus.cn/
+    Iturl: http://it.sohu.com/
+    Entertainurl: http://yule.sohu.com/
