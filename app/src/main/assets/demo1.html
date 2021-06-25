@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="blockPage.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function callBackClient(){
+            alert("1");
+            Android.getClient("后退");
+        }
+
+        function callBackClient2(){
+            alert("0");
+            Android.getClient("前进");
+        }
+</script>
+</head>
+<body>
+    <div>
+    <button id="button" onclick="callBackClient()" type="button">alert</button>
+
+    <button id="button2"onclick="callBackClient2()" type="button">alert2</button>
+    </div>
+</body>
+
+</html>

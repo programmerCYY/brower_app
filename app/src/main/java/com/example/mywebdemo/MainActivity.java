@@ -2,6 +2,7 @@ package com.example.mywebdemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +18,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.DownloadListener;
+import android.webkit.JavascriptInterface;
+import android.webkit.JsResult;
 import android.webkit.URLUtil;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,7 +31,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.example.mywebdemo.adblock.AdSorting;
+import com.example.mywebdemo.adblock.AndroidToJs;
 import com.example.mywebdemo.adblock.NoAdWebviewClient;
+import com.github.lzyzsd.jsbridge.BridgeHandler;
+import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.CallBackFunction;
+import com.github.lzyzsd.jsbridge.DefaultHandler;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -43,15 +53,17 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> nameList = new ArrayList<String>();
     public ArrayList<String> flagList = new ArrayList<String>();
     public String currenturl="";
-    private WebView webView ;
-
+    private BridgeWebView webView ;
+    public String jsUrl;
 
 
 
     //注册浏览器
+
+    @SuppressLint("JavascriptInterface")
     private void initWebView(String url) {
 
-        webView = (WebView) findViewById(R.id.mywebview);
+        webView = (BridgeWebView) findViewById(R.id.mywebview);
 //        LoadUrl(url);
         WebSettings webSettings = webView.getSettings();
 
@@ -64,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setSaveFormData(false);
         webSettings.setSavePassword(false);
         //设置JS支持
-        //webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         //设置支持缩放变焦
         webSettings.setBuiltInZoomControls(false);
         //设置是否支持缩放
@@ -127,20 +140,80 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
         Context context = webView.getContext();
-        webView.setWebViewClient(new NoAdWebviewClient(context));
+
+        //webView.setWebViewClient(new NoAdWebviewClient(context){
+        //});
+
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            //重写urlloading接口，实现在打开超链接时拦截指定url，并重定向到一个本地html
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//        Log.d("succeed", "shouldOverrideUrlLoading: "+url);
+                jsUrl =url;
+                AdSorting sortion = new AdSorting();
+                String result = sortion.urlSorting(context,url);
+
+                switch (result){
+                    case "high":
+                        view.loadUrl("file:///android_asset/demo1.html");
+                        Log.d("success1", "shouldOverrideUrlLoading: "+url);
+                        break;
+                    case "medium":
+                        view.loadUrl("yy");
+                        Log.d("success2", "shouldOverrideUrlLoading: "+url);
+                        break;
+                    case"low":
+                        view.loadUrl("zz");
+                        Log.d("success3", "shouldOverrideUrlLoading: "+url);
+                        break;
+                    default:
+                        view.loadUrl(url);
+                }return super.shouldOverrideUrlLoading(view,url);
+            }
+        });
+
+        webView.addJavascriptInterface(this, "Android");
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                if (message.equals("1")) {
+                    Log.d("alert", "onJsAlert1: "+message);
+//                    webView.canGoBack();
+                    webView.goBack();
+                    webView.goBack();
+                    Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
+                }else if (message.equals("0")) {
+                    Log.d("alert", "onJsAlert2: "+message);
+                    view.stopLoading();
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.loadUrl(jsUrl);
+
+                        }
+                    });
+
+                    Log.d("alert", "onJsAlert: "+jsUrl);
+                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+                result.confirm();
+                return true;
+            }
+        });
+//        webView.loadUrl("file:///android_asset/demo001.html");
         LoadUrl(url);
         //拦截跳转后执行
 //        webView.setWebViewClient(new WebViewClient() {
 //            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//            public boolean shouldOverrideUrl(WebView view, String url) {
 //                LoadUrl(url);
 //                return true;
 //            }
 //
 //       });
-
-        //增加下载功能，调用系统的下载管理器
+//增加下载功能，调用系统的下载管理器
         webView.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
@@ -149,6 +222,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @JavascriptInterface
+    public void getClient(String msg){
+        Log.d("getclient", "getclient: "+ msg );
+    }
 
 
     //去重
@@ -320,6 +397,34 @@ public class MainActivity extends AppCompatActivity {
                 initWebView(str);
             }
         });
+
+        webView = (BridgeWebView) findViewById(R.id.mywebview);
+        webView.setDefaultHandler(new DefaultHandler());
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.loadUrl("file:///android_asset/demo001.html");
+        webView.registerHandler("submitFromWeb", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                Log.e("TAG", "js返回 "+data);
+                if (data.equals("")){
+                    data="https://m.baidu.com/";
+                }else {
+                    if(isUrl(data)){
+                        data="http://"+data;
+                    }
+                    if(!isHttpUrl(data)){
+//                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
+                        data = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + data+"&pu=sz%401321_480&t_noscript=jump";
+                    }
+                }
+                Log.d("jsbridge", "handler: "+data);
+                initWebView(data);
+            }
+        });
+
+
+
+
     }
 
 
@@ -385,4 +490,5 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("downloadId:{}"+ downloadId);
 
     }
+
 }
