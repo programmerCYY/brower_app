@@ -33,12 +33,15 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class ShowWebImageActivity extends Activity {
     private static final String SAVE_REAL_PATH = Environment.getExternalStorageDirectory()+"/Download";//保存的确切位置
+    private ArrayList<String> list_imgs=null;
     private String imagePath = null;
     private static int times=0;
     private ImageView imageView;
+    private static int i=0;
 
     // 縮放控制
     private Matrix matrix = new Matrix();
@@ -65,7 +68,9 @@ public class ShowWebImageActivity extends Activity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        this.imagePath = getIntent().getStringExtra("img");
+        Bundle bundle = this.getIntent().getExtras();
+        list_imgs=bundle.getStringArrayList("img");
+        imagePath = list_imgs.get(i);
          imageView  = (ImageView) findViewById(R.id.show_webimage_imageview);
 
         imageView.setImageBitmap(returnBitMap(imagePath));
@@ -141,7 +146,38 @@ public class ShowWebImageActivity extends Activity {
             }
         });
 
-        Button btn_cut=(Button) findViewById(R.id.btn_cut);
+        Button btn_next=(Button) findViewById(R.id.btn_next);
+        btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(i<list_imgs.size()-1) {
+                    i = i + 1;
+                    imagePath = list_imgs.get(i);
+                    imageView.setImageBitmap(returnBitMap(imagePath));
+                }else {
+                    i=0;
+                    imagePath = list_imgs.get(i);
+                    imageView.setImageBitmap(returnBitMap(imagePath));
+                }
+            }
+        });
+
+        Button btn_back=(Button) findViewById(R.id.btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(i>0){
+                    i=i-1;
+                    imagePath = list_imgs.get(i);
+                    imageView.setImageBitmap(returnBitMap(imagePath));
+                }
+                else {
+                   i=list_imgs.size()-1;
+                    imagePath = list_imgs.get(i);
+                    imageView.setImageBitmap(returnBitMap(imagePath));
+                }
+            }
+        });
     }
 
     private void saveBitmap(Bitmap bitmap) {

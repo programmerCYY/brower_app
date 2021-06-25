@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     //注册浏览器
     private void initWebView() {
         webView = (WebView) findViewById(R.id.mywebview);
-        webView.addJavascriptInterface(new JavascriptInterface(this), "imagelistner");
+        webView.addJavascriptInterface(new JavascriptInterface(this), "imagelistener");
         WebSettings webSettings = webView.getSettings();
 
 
@@ -123,12 +123,25 @@ public class MainActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String Url) {
                 view.getSettings().setJavaScriptEnabled(true);
                 super.onPageFinished(view, Url);
-                webView.loadUrl("javascript:(function(){"
-                        + "var objs = document.getElementsByTagName(\"img\"); "
-                        + "for(var i=0;i<objs.length;i++)  " + "{"
-                        + "    objs[i].onclick=function()  " + "    {  "
-                        + "        window.imagelistner.openImage(this.src);  "
-                        + "    }  " + "}" + "})()");
+//                webView.loadUrl("javascript:(function(){"
+//                        + "var objs = document.getElementsByTagName(\"img\"); "
+//                        + "for(var i=0;i<objs.length;i++)  " + "{"
+//                        + "    objs[i].onclick=function()  " + "    {  "
+//                        + "        window.imagelistner.openImage(this.src);  "
+//                        + "    }  " + "}" + "})()");
+
+                webView.loadUrl("javascript:(function(){" +
+                        "var objs = document.getElementsByTagName(\"img\"); " +
+                        " var array=new Array(); " +
+                        " for(var j=0;j<objs.length;j++){ array[j]=objs[j].src; }"+
+                        "for(var i=0;i<objs.length;i++)  " +
+                        "{"
+                        + "    objs[i].onclick=function()  " +
+                        "    {  "
+                        + "        window.imagelistener.openImage(this.src,array);  " +
+                        "    }  " +
+                        "}" +
+                        "})()");
 
                 currenturl=view.copyBackForwardList().getCurrentItem().getUrl();
                 url=currenturl;
