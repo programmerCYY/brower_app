@@ -85,7 +85,7 @@ public class MyWebView {
             public void onPageFinished(android.webkit.WebView view, String url) {
                 super.onPageFinished(view, url);
                 myurl=url;
-                //Log.d("url", url);
+
             }
 
             //页面开始

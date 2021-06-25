@@ -2,6 +2,8 @@ package com.example.mywebdemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -20,11 +22,17 @@ import android.widget.Toast;
 
 import com.example.mywebdemo.flag.flagActivity;
 import com.example.mywebdemo.history.historyActivity;
+import com.example.mywebdemo.webview.JavascriptInterface;
+import com.example.mywebdemo.webview.ShowWebImageActivity;
+import com.example.mywebdemo.webview.StringUtil;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+
+@SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends AppCompatActivity {
 
 
@@ -36,19 +44,20 @@ public class MainActivity extends AppCompatActivity {
     public String  currenttitle="";
     private WebView webView;
     private static String url="";
-
+    private String[] imageUrls = StringUtil.returnImageUrlsFromHtml();
+    //历史列表
     public static void setUrlList(ArrayList list){
         urlList=list;
     }
-
+    //名字列表
     public static void setNameList(ArrayList title){
         nameList=title;
     }
-
+    //书签列表
     public static void setflagList(ArrayList list){
         flagList=list;
     }
-
+    //书签名字列表
     public static void settitleList(ArrayList title){
         titleList=title;
     }
@@ -56,11 +65,12 @@ public class MainActivity extends AppCompatActivity {
     public static void setUrl(String string){
         url=string;
     }
+
+
     //注册浏览器
     private void initWebView() {
         webView = (WebView) findViewById(R.id.mywebview);
-        Log.d("webView", "initWebView:新建web了 ");
-
+        webView.addJavascriptInterface(new JavascriptInterface(this), "imagelistner");
         WebSettings webSettings = webView.getSettings();
 
 
@@ -71,15 +81,12 @@ public class MainActivity extends AppCompatActivity {
         //设置缓存
         webSettings.setSaveFormData(false);
         webSettings.setSavePassword(false);
-        //设置JS支持
-        //webSettings.setJavaScriptEnabled(true);
         //设置支持缩放变焦
         webSettings.setBuiltInZoomControls(false);
         //设置是否支持缩放
         webSettings.setSupportZoom(false);
         //设置是否允许JS打开新窗口
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-
 
         // 修复一些机型webview无法点击
 //        webView.requestFocus(View.FOCUS_DOWN);
@@ -101,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
 //
 //        });
 
+
+
+
         webView.setWebViewClient(new WebViewClient(){
             boolean if_load;
 //            @Override
@@ -108,20 +118,26 @@ public class MainActivity extends AppCompatActivity {
 //                return false;
 //            }
 
-
-
             //页面完成即加入历史记录
             @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
+            public void onPageFinished(WebView view, String Url) {
+                view.getSettings().setJavaScriptEnabled(true);
+                super.onPageFinished(view, Url);
+                webView.loadUrl("javascript:(function(){"
+                        + "var objs = document.getElementsByTagName(\"img\"); "
+                        + "for(var i=0;i<objs.length;i++)  " + "{"
+                        + "    objs[i].onclick=function()  " + "    {  "
+                        + "        window.imagelistner.openImage(this.src);  "
+                        + "    }  " + "}" + "})()");
+
                 currenturl=view.copyBackForwardList().getCurrentItem().getUrl();
+                url=currenturl;
                 currenttitle=view.copyBackForwardList().getCurrentItem().getTitle();
                 if(if_load && !currenttitle.equals(" ")) {
                     nameList.add(currenttitle);
                     urlList.add(currenturl);
                     nameList=removeDuplicate(nameList);
                     urlList=removeDuplicate(urlList);
-                    Log.d("array", urlList.toString());
                     if_load=false;
                 }
             }
@@ -129,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
             //页面开始
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon){
+                view.getSettings().setJavaScriptEnabled(true);
                 super.onPageStarted(view, url, favicon);
-
                 if_load=true;
             }
 
