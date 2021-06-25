@@ -96,4 +96,7 @@
   <select id="selectBytwo" resultMap="BaseResultMap">
     select * from flag where flag_url = #{flag_url} and flag_user = #{flag_user};
   </select>
+  <select id="selectByKey" resultMap="BaseResultMap">
+    select * from flag where flag_url = #{flag_url} and flag_name = #{point};
+  </select>
 </mapper>

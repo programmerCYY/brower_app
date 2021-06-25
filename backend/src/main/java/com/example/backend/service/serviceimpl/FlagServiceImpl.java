@@ -57,4 +57,11 @@ public class FlagServiceImpl implements FlagService {
         }
         return flagDao.updateBytwo(flag_user,flag_url,flag_name);
     }
+
+    @Override
+    public List<Flag> getFlagsByKey(String flag_user,String point) {
+
+        String point1 = "%"+point+"%";
+        return flagDao.selectByKey(flag_user,point1);
+    }
 }

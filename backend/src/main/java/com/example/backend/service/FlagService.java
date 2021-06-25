@@ -21,4 +21,6 @@ public interface FlagService {
 
     int UpdateFlags(String flag_user,String flag_url, String flag_name);
 
+    List<Flag> getFlagsByKey(String flag_user,String point);
+
 }
