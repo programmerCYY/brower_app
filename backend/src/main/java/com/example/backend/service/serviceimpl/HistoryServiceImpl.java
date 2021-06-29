@@ -1,6 +1,7 @@
 package com.example.backend.service.serviceimpl;
 
 
+import com.example.backend.BO.DeleteBO;
 import com.example.backend.BO.HistoryBO;
 import com.example.backend.mapper.HistoryDao;
 import com.example.backend.pojo.Flag;
@@ -33,17 +34,19 @@ public class HistoryServiceImpl implements HistoryService {
     public int AddHistory(HistoryBO historyBO) {
         History history = new History();
 
-        history.setHistoryIcon(historyBO.getFlagIcon());
-        history.setHistoryName(historyBO.getFlagName());
-        history.setHistoryUser(historyBO.getFlagUser());
-        history.setHistoryUrl(historyBO.getFlagUrl());
+        history.setHistoryIcon(historyBO.getHistoryIcon());
+        history.setHistoryName(historyBO.getHistoryName());
+        history.setHistoryUser(historyBO.getHistoryUser());
+        history.setHistoryUrl(historyBO.getHistoryUrl());
         history.setHistoryTime(new Date());
 
         return historyDao.insert(history);
     }
 
     @Override
-    public int DeleteHistory(String history_user, String history_url) {
+    public int DeleteHistory(DeleteBO deleteBO) {
+        String history_user = deleteBO.getUser();
+        String history_url = deleteBO.getUrl();
         return historyDao.deleteBytwo(history_user, history_url);
     }
 

@@ -62,4 +62,28 @@ public class UserServiceImpl implements UserService {
         return userDao.insert(user);
     }
 
+    @Override
+    public User getUser(String phone) {
+        return userDao.selectByphone(phone);
+    }
+
+    @Override
+    public int verifyUser(User user) {
+
+
+        User user1 = userDao.selectByphone(user.getPhone());
+        System.out.println(user1);
+        if (user1 == null) {
+            return 0;
+        }
+        user1.setUserId(user.getUserId());
+        user1.setUsername(user.getUsername());
+        user1.setPhone(user.getPhone());
+        user1.setPassword(user.getPassword());
+        user1.setEmail(user.getEmail());
+        user1.setAvatar(user.getAvatar());
+        user1.setNickname(user.getNickname());
+        return userDao.updateByPrimaryKeySelective(user1);
+    }
+
 }

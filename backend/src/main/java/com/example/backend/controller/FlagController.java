@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.BO.DeleteBO;
 import com.example.backend.BO.FlagBO;
 import com.example.backend.VO.Result;
 import com.example.backend.pojo.Flag;
@@ -42,11 +43,10 @@ public class FlagController {
         return Result.BAD().build();
     }
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     @ResponseBody
-    public Result deleteFlags(@RequestParam String phone,
-                                @RequestParam String flag_url) {
-        int delete = flagService.DeleteFlags(phone, flag_url);
+    public Result deleteFlags(@RequestBody DeleteBO deleteBO) {
+        int delete = flagService.DeleteFlags(deleteBO);
         if (delete > 0) {
             return Result.OK().build();
         }
@@ -57,9 +57,10 @@ public class FlagController {
     @PutMapping("/update")
     @ResponseBody
     public Result updateFlags(@RequestParam String phone,
-                              @RequestParam String flag_url,
-                              @RequestParam String flag_name) {
-        int update = flagService.UpdateFlags(phone, flag_url,flag_name);
+                              @RequestParam String old_url,
+                              @RequestParam String flag_name,
+                              @RequestParam String new_url) {
+        int update = flagService.UpdateFlags(phone, old_url,flag_name,new_url);
         if (update>0) {
             return Result.OK().build();
         }

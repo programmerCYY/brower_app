@@ -16,4 +16,6 @@ public interface UserDao {
     int updateByPrimaryKey(User record);
 
     String selectPasswordByPhone(String phone);
+
+    User selectByphone(String phone);
 }

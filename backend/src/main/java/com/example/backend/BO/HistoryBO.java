@@ -14,23 +14,23 @@ public class HistoryBO {
      * 书签url
      */
     @ApiModelProperty(value="书签url")
-    private String flagUrl;
+    private String historyUrl;
 
     /**
      * 书签网页图片
      */
     @ApiModelProperty(value="书签网页图片")
-    private String flagIcon;
+    private String historyIcon;
 
     /**
      * 书签网页名称
      */
     @ApiModelProperty(value="书签网页名称")
-    private String flagName;
+    private String historyName;
 
     /**
      * 书签用户名
      */
     @ApiModelProperty(value="书签用户名")
-    private String flagUser;
+    private String historyUser;
 }

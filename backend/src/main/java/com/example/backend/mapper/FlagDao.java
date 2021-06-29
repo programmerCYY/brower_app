@@ -19,7 +19,7 @@ public interface FlagDao {
 
     List<Flag> selectByUserId(String phone);
 
-    int updateBytwo(String flag_user,String flag_url,String flag_name);
+    int updateBytwo(String flag_user,String old_url,String flag_name,String new_url);
 
     int deleteBytwo(String flag_user,String flag_url);
 

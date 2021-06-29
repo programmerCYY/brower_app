@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.BO.DeleteBO;
 import com.example.backend.BO.FlagBO;
 import com.example.backend.dto.FlagDTO;
 import com.example.backend.pojo.Flag;
@@ -17,9 +18,9 @@ public interface FlagService {
 
     int AddFlags(Flag Flag);
 
-    int DeleteFlags(String flag_user,String flag_url);
+    int DeleteFlags(DeleteBO deleteBO);
 
-    int UpdateFlags(String flag_user,String flag_url, String flag_name);
+    int UpdateFlags(String flag_user,String flag_url, String flag_name,String new_url);
 
     List<Flag> getFlagsByKey(String flag_user,String point);
 

@@ -16,4 +16,8 @@ public interface UserService {
 
     int register(RegisterBO register);
 
+    User getUser(String phone);
+
+    int verifyUser(User user);
+
 }

@@ -30,17 +30,6 @@ public class UserController {
         return userService.userLogin(params);
     }
 
-/*    *//**//**
-     *//**//*
-    @PutMapping("/user")
-    @ResponseBody
-    public Result userUpdate(@RequestBody Map<String, Object> params) {
-*//**//*        int update = userService.updateUserRole(params);
-        if (update > 0) {
-            return Result.OK().build();
-        }*//**//*
-        return Result.BAD().build();
-    }*/
 
     @PostMapping("/register")
     @ResponseBody
@@ -48,19 +37,34 @@ public class UserController {
         int insert = userService.register(register);
         if (insert > 0) {
             return Result.OK().build();
+        }else if (insert == 0){
+            Result.BAD().data("用户已存在").build();
         }
         return Result.BAD().build();
     }
 
 
-/*    @PutMapping("/verify")
+    @PostMapping("/verify")
     @ResponseBody
-    public Result verifyUser(@RequestBody Map<String, Object> params) {
-        int update = userService.verifyUser(params);
+    public Result verifyUser(@RequestBody User user) {
+        int update = userService.verifyUser(user);
         if (update > 0) {
             return Result.OK().build();
+        }else if (update == 0){
+            Result.BAD().data("用户不存在").build();
         }
         return Result.BAD().build();
-    }*/
+    }
+
+    @GetMapping("/getuser")
+    @ResponseBody
+    public Result getUser(@RequestParam String phone){
+        User user = userService.getUser(phone);
+        if(user!=null){
+            return Result.OK().data(user).build();
+        }
+
+        return Result.BAD().build();
+    }
 
 }
