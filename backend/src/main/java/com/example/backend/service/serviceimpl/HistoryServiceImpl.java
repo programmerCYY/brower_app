@@ -32,9 +32,14 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public int AddHistory(HistoryBO historyBO) {
-        History history = new History();
-
+        History history = historyDao.selectByTwo(historyBO.getHistoryUser(),historyBO.getHistoryUrl());
+        if(history!=null){
+            history.setHistoryTime(new Date());
+            return historyDao.updateByPrimaryKeySelective(history);
+        }
+        history = new History();
         history.setHistoryIcon(historyBO.getHistoryIcon());
+
         history.setHistoryName(historyBO.getHistoryName());
         history.setHistoryUser(historyBO.getHistoryUser());
         history.setHistoryUrl(historyBO.getHistoryUrl());

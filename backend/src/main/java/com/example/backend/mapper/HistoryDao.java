@@ -23,4 +23,6 @@ public interface HistoryDao {
     int updateBytwo(String history_user, String history_url, Date time);
 
     int deleteBytwo(String history_user, String history_url);
+
+    History selectByTwo(String history_user, String history_url);
 }
