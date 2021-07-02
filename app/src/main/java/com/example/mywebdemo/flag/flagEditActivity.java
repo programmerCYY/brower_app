@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywebdemo.R;
 import com.example.mywebdemo.constance.fragConst;
+import com.example.mywebdemo.httputils.HttpUtils;
 
 import java.util.ArrayList;
 
@@ -103,30 +104,6 @@ public class flagEditActivity extends AppCompatActivity {
         all_select_flag=(Button)findViewById(R.id.edit_all_select_edit);
 
 
-//        //编辑按钮
-//        edit_flag=(Button)findViewById(R.id.edit_flag);
-//        edit_box=(LinearLayout)findViewById(R.id.edit_box);
-//        edit_flag.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                flagAdapter.setEdit(isEdit);
-////                isEdit=true;
-//                flagAdapter.notifyItemRangeChanged(0,flagAdapter.getItemCount());
-//
-//                //出现全选和删除按钮
-//                all_select_box.setVisibility(View.VISIBLE);
-//                select_delete_box.setVisibility(View.VISIBLE);
-//                edit_box.setVisibility(View.GONE);
-//
-//
-//
-//
-//
-//
-//
-//
-//            }
-//        });
 
         //全选按钮
         all_select_flag.setOnClickListener(new View.OnClickListener() {
@@ -152,9 +129,16 @@ public class flagEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 for (int i = listCheck.size()-1; i >=0 ; i--) {
                     if(listCheck.get(i)){
+
+                        String temp=fragConst.flag_url.get(i);
+                        HttpUtils httpUtils=new HttpUtils();
+                        httpUtils.DeleteFlag(temp);
+
                         fragConst.flag_url.remove(i);
                         fragConst.flag_name.remove(i);
+                        if(fragConst.user_account=="") {
                         fragConst.flag_icon.remove(i);
+                        }
                         listCheck.remove(i);
                         flagEditAdapter.notifyItemRemoved(i);
                         //Log.d("isEdit",isEdit+"");
@@ -175,32 +159,30 @@ public class flagEditActivity extends AppCompatActivity {
 
 
         //清空按钮
+        HttpUtils httpUtils1=new HttpUtils();
         clear_flag =(Button)findViewById(R.id.clear_flag_edit);
         clear_flag.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 while (fragConst.flag_url.size()!=0){
+                    httpUtils1.DeleteFlag(fragConst.flag_url.get(fragConst.flag_url.size()-1));
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
                     fragConst.flag_url.remove(fragConst.flag_url.size()-1);
                     fragConst.flag_name.remove(fragConst.flag_name.size()-1);
-                    //Log.d("clear",""+ fragConst.history_url.size());
+                    if(fragConst.user_account=="") {
+                        fragConst.flag_icon.remove(fragConst.flag_icon.size() - 1);
+                    }//Log.d("clear",""+ fragConst.history_url.size());
                 }
                 flagEditAdapter.notifyDataSetChanged();
             }
         });
 
-//        //全选按钮
-//        all_select_flag=(Button)findViewById(R.id.edit_all_select);
-//        all_select_flag.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                for (int i = 0; i <listCheck.size() ; i++) {
-//                    listCheck.set(i,true);
-//                }
-//                flagAdapter.notifyItemChanged(0,flagAdapter.getItemCount());
-//
-//                Log.d("all_select_flag","success");
-//            }
-//        });
 
 
 

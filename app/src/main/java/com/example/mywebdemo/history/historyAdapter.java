@@ -3,6 +3,7 @@ package com.example.mywebdemo.history;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mywebdemo.FragActivity;
 import com.example.mywebdemo.constance.fragConst;
 import com.example.mywebdemo.R;
+import com.example.mywebdemo.httputils.HttpUtils;
 
 import java.util.ArrayList;
 
@@ -49,9 +51,28 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
              @Override
              public void onClick(View v) {
                  int position = holder.getAdapterPosition();
+
+//                 if (fragConst.user_account!="") {
+//                     HttpUtils httpUtils = new HttpUtils();
+//                     httpUtils.(current_url, current_title, fragConst.bitmapToString(current_icon));
+//                     try {
+//                         Thread.sleep(1000);
+//                     } catch (InterruptedException e) {
+//                         e.printStackTrace();
+//                     }
+//                 }    }
+                 //Log.d("position",position+"");
+                 String temp=fragConst.history_url.get(position);
+                 //Log.d("history_url.get(position)",temp);
+                 HttpUtils httpUtils = new HttpUtils();
+                 httpUtils.DeleteHistory(temp);
                  fragConst.history_url.remove(position);
                  fragConst.history_name.remove(position);
-                 fragConst.history_icon.remove(position);
+                 if(fragConst.user_account=="") {
+                     fragConst.history_icon.remove(position);
+                 }
+
+
 //                 historyActivity activity=(historyActivity) v.getContext();
 //                 activity.setList(mList);
 //                 activity.setNamelist(mtitle);
@@ -87,9 +108,15 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        Log.d("size",mList.size()+" "+fragConst.history_url.size());
+        Log.d("position",""+position);
         holder.mtitleView.setText(mtitle.get(position));
         holder.murlView.setText(mList.get(position));
-        holder.miconView.setImageBitmap(micon.get(position));
+        if(fragConst.user_account!=""){
+            holder.miconView.setImageResource(R.mipmap.earth);
+        }else {
+            holder.miconView.setImageBitmap(micon.get(position));
+        }
     }
 
     @Override
