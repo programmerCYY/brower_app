@@ -29,16 +29,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:background="@mipmap/direction_left"
+                android:background="@mipmap/ic_cancel"
                 android:scaleX="0.5"
-                android:scaleY="0.6"
-                />
+                android:scaleY="0.6" />
 
         <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="20"
-                android:text="主界面"
+                android:text="退出编辑"
                 android:textSize="20sp"
                 android:gravity="center_vertical">
 

@@ -34,13 +34,11 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.zhy:percent-support-extends:1.1.1'
     implementation 'com.balysv:material-ripple:1.0.2'
-<<<<<<< HEAD
+
     implementation 'com.google.android.material:material:1.0.0'
-}
-=======
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation "androidx.room:room-runtime:2.1.0-alpha07"
     annotationProcessor "androidx.room:room-compiler:2.1.0-alpha07"
 }
->>>>>>> a8c555c68f44b865be06c2924007897946e2d2c7
+

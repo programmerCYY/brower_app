@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mywebdemo.FragActivity;
 import com.example.mywebdemo.R;
 import com.example.mywebdemo.constance.fragConst;
+import com.example.mywebdemo.httputils.HttpUtils;
 
 import java.util.ArrayList;
 
@@ -89,9 +90,15 @@ public class flagEditAdapter extends RecyclerView.Adapter<flagEditAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
+
+                    String temp=fragConst.flag_url.get(position);
+                    HttpUtils httpUtils = new HttpUtils();
+                    httpUtils.DeleteFlag(temp);
                     fragConst.flag_url.remove(position);
                     fragConst.flag_name.remove(position);
-                    fragConst.flag_icon.remove(position);
+                    if(fragConst.user_account=="") {
+                        fragConst.flag_icon.remove(position);
+                    }
 //                flagActivity activity=(flagActivity) v.getContext();
 //                MainActivity.setflagList(flaglist);
 //                MainActivity.settitleList(titlelist);
@@ -149,7 +156,11 @@ public class flagEditAdapter extends RecyclerView.Adapter<flagEditAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mflagnameView.setText(title_list.get(position));
         holder.mflagurlView.setText(url_list.get(position));
-        holder.mflagiconView.setImageBitmap(icon_list.get(position));
+        if(fragConst.user_account=="") {
+            holder.mflagiconView.setImageBitmap(icon_list.get(position));
+        }else {
+            holder.mflagiconView.setImageResource(R.mipmap.bookmark_color);
+        }
 //        if(isAllSelect){
 //            holder.boxselect.setChecked(flagActivity.getListCheck().get(position));
 //        }

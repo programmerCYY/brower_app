@@ -25,7 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mywebdemo.FragActivity;
 import com.example.mywebdemo.R;
@@ -61,6 +64,12 @@ public class mainFrag extends baseFrag {
     private MyWebView myWebView;
 
 
+    public static class ViewModel extends androidx.lifecycle.ViewModel {
+        Bundle bundle;
+        public ViewModel() {
+            bundle = new Bundle();
+        }
+    }
     // data
 
 
@@ -76,11 +85,16 @@ public class mainFrag extends baseFrag {
 
     }
 
+//    @Override
+//    public void onSaveInstanceState(@NonNull @org.jetbrains.annotations.NotNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
+//        new ViewModelProvider(this).get(ViewModel.class);
         //多页功能渲染的界面
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         //获取上面的数字并设置触发监听器

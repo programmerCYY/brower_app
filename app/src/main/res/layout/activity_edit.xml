@@ -6,21 +6,71 @@
     android:layout_height="match_parent"
     tools:context=".flag.EditActivity"
     android:orientation="vertical">
-    <include layout="@layout/common_toolbar"/>
+
     <LinearLayout
-        android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:background="#ffffff"
+            android:orientation="horizontal">
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+
+        <Button
+                android:id="@+id/edit_cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:background="@mipmap/ic_cancel"
+                android:scaleX="0.5"
+                android:scaleY="0.6" />
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:textSize="20sp"
+                android:text="编辑书签"
+                android:gravity="center_vertical">
+
+        </TextView>
+
+        <Button
+                android:id="@+id/edit_commit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="@mipmap/ic_hook"
+                android:scaleX="0.5"
+                android:scaleY="0.6" />
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingHorizontal="20dp"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_weight="1"
+        android:layout_height="0dp">
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="55dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:text="标题"
             ></TextView>
     <EditText
         android:id="@+id/edit_title"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="match_parent"
         android:maxLines="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,40 +79,47 @@
     </LinearLayout>
 
     <LinearLayout
+        android:paddingHorizontal="20dp"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="match_parent"
             android:text="链接"
+            android:gravity="center_vertical"
+
             ></TextView>
         <EditText
             android:singleLine="true"
             android:id="@+id/edit_url"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:maxLines="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.004" />
+            android:layout_height="match_parent"
+            android:maxLines="1" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:gravity="center_horizontal"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1">
         >
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edit_commit"
-        android:text="提交"></Button>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edit_cancel"
-        android:text="取消"></Button>
+<!--    <Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/edit_commit"-->
+<!--        android:text="提交"></Button>-->
+<!--    <Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/edit_cancel"-->
+<!--        android:text="取消"></Button>-->
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7">
+
     </LinearLayout>
 </LinearLayout>

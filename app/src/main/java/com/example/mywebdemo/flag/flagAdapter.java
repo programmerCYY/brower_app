@@ -150,7 +150,11 @@ public class flagAdapter extends RecyclerView.Adapter<flagAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mflagnameView.setText(title_list.get(position));
         holder.mflagurlView.setText(url_list.get(position));
-        holder.mflagiconView.setImageBitmap(icon_list.get(position));
+        if(fragConst.user_account=="") {
+            holder.mflagiconView.setImageBitmap(icon_list.get(position));
+        }else {
+            holder.mflagiconView.setImageResource(R.mipmap.bookmark_color);
+        }
 //        if(isAllSelect){
 //            holder.boxselect.setChecked(flagActivity.getListCheck().get(position));
 //        }

@@ -41,7 +41,9 @@ import com.example.mywebdemo.flag.flagActivity;
 import com.example.mywebdemo.fragment.fragAdapter;
 import com.example.mywebdemo.fragment.mainFrag;
 import com.example.mywebdemo.history.historyActivity;
+import com.example.mywebdemo.httputils.HttpUtils;
 import com.example.mywebdemo.user.LoginActivity;
+import com.example.mywebdemo.user.MeActivity;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -99,6 +101,7 @@ public class FragActivity extends FragmentActivity {
         //设置ViewPager
         mViewPager = (verticalViewPager) findViewById(R.id.mainviewpage);
         fragPagerAdapter = new fragAdapter(this, getSupportFragmentManager());
+//        getSupportFragmentManager().getFragment();
         mViewPager.setAdapter(fragPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
         //设置ViewPager上下滑监听器
@@ -308,11 +311,21 @@ public class FragActivity extends FragmentActivity {
             textView.setText("白天模式");
         }
 
+        if(fragConst.user_account!=""){
+            TextView textView=(TextView)v.findViewById(R.id.user_name);
+            textView.setText(""+fragConst.user_account);
+
+        }
         v.findViewById(R.id.to_user).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(FragActivity.this, LoginActivity.class);
-                startActivity(intent2);
+                if(fragConst.user_account=="") {
+                    Intent intent2 = new Intent(FragActivity.this, LoginActivity.class);
+                    startActivity(intent2);
+                }else {
+                    Intent intent3 = new Intent(FragActivity.this, MeActivity.class);
+                    startActivity(intent3);
+                }
                 window.dismiss();
             }
         });
@@ -406,6 +419,7 @@ public class FragActivity extends FragmentActivity {
                 window.dismiss();
             }
         });
+        HttpUtils httpUtils=new HttpUtils();
         v.findViewById(R.id.popup_set).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -414,11 +428,45 @@ public class FragActivity extends FragmentActivity {
                 String url=m.geturl();
                 String title=m.gettitle();
                 Bitmap icon=m.geticon();
-                fragConst.flag_url.add(url);
-                fragConst.flag_url=removeDuplicate(fragConst.flag_url);
-                fragConst.flag_name.add(title);
-                fragConst.flag_name=removeDuplicate(fragConst.flag_name);
-                fragConst.flag_icon.add(icon);
+
+
+
+                if (fragConst.user_account!="") {
+                    HttpUtils httpUtils = new HttpUtils();
+                    httpUtils.AddFlag(url, title);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    fragConst.flag_url.add(url);
+                    int sizeBefore=fragConst.flag_url.size();
+                    Log.d("flag_url_1",""+fragConst.flag_url.size()+" "+fragConst.flag_url);
+//                           fragConst.history_name=removeDuplicate(fragConst.history_name);
+                    fragConst.flag_url=removeDuplicate(fragConst.flag_url);
+                    int sizeAfter=fragConst.flag_url.size();
+                    if(sizeBefore==sizeAfter) {
+                        fragConst.flag_icon.add(icon);
+                        fragConst.flag_name.add(title);
+                    }
+                    Log.d("flag_url",""+fragConst.history_url.size()+" "+fragConst.history_name.size()+" "+fragConst.history_icon.size());
+//                           fragConst.history_icon=removeDuplicate(fragConst.flag_icon);
+                }
+
+//                fragConst.flag_url.add(url);
+//                fragConst.flag_url=removeDuplicate(fragConst.flag_url);
+//                fragConst.flag_name.add(title);
+//                fragConst.flag_name=removeDuplicate(fragConst.flag_name);
+//                if (fragConst.user_account=="") {
+//                    fragConst.flag_icon.add(icon);
+//                }
+//                httpUtils.AddFlag(url,title);
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 window.dismiss();
             }
         });

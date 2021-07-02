@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.example.mywebdemo.FragActivity;
 import com.example.mywebdemo.R;
+import com.example.mywebdemo.constance.fragConst;
+import com.example.mywebdemo.httputils.HttpUtils;
+
 //import com.imooc.res.UserInfoHolder;
 //import com.imooc.res.bean.User;
 //import com.imooc.res.biz.UserBiz;
@@ -27,6 +30,7 @@ public class LoginActivity extends BaseActivity {
     private EditText mEtPassword;
     private Button mBtnLogin;
     private TextView mBtnRegister;
+
 
     private static final String KEY_USERNAME = "key_username";
     private static final String KEY_PASSWORD = "key_password";
@@ -65,8 +69,32 @@ public class LoginActivity extends BaseActivity {
                 if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                     Toast.makeText(LoginActivity.this,"账号或者密码不能为空",Toast.LENGTH_SHORT).show();
                     return;
-                }
+                }else {
                 startLoadingProgress();
+                HttpUtils httpUtils=new HttpUtils();
+                httpUtils.Login(username,password);
+
+                try {
+                    startLoadingProgress();
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                stopLoadingProgress();
+                if(fragConst.http_msg!="succ"){
+                    Toast.makeText(LoginActivity.this,"登录失败，请重试",Toast.LENGTH_SHORT).show();
+                }else{
+
+                    Toast.makeText(LoginActivity.this,"登录成功，用户id为："+fragConst.user_account,Toast.LENGTH_SHORT).show();
+                    fragConst.http_msg="";
+                    Intent intent = new Intent(LoginActivity.this, FragActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intent);
+
+                }
+
+            }
+
 //                mUserBiz.login(username, password, new CommonCallback<User>() {
 //                    @Override
 //                    public void onError(Exception e) {

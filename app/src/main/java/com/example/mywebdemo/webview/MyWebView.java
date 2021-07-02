@@ -3,6 +3,7 @@ package com.example.mywebdemo.webview;
 import com.example.mywebdemo.constance.fragConst;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -13,12 +14,15 @@ import android.widget.ImageView;
 
 
 import com.example.mywebdemo.R;
+import com.example.mywebdemo.httputils.HttpUtils;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,7 +53,8 @@ public class MyWebView {
 
     //注册浏览器
     public void initWebView(String url) {
-
+//        webView.restoreState();
+//        webView.saveState()
 //        LoadUrl(url);
         WebSettings webSettings = webView.getSettings();
 
@@ -126,7 +131,41 @@ public class MyWebView {
                     public void onReceivedIcon(WebView view, Bitmap icon) {
                         super.onReceivedIcon(view, icon);
                         current_icon=icon;
-                        fragConst.history_icon.add(icon);
+                        //fragConst.history_icon.add(icon);
+
+//                        Log.d("bitmap",""+current_icon);
+//                        Log.d("bitmaplist",""+fragConst.history_icon);
+
+
+                       if (fragConst.user_account!="") {
+                           Log.d("if","success");
+                           HttpUtils httpUtils = new HttpUtils();
+                           httpUtils.AddHistory(current_url, current_title, null);
+                           try {
+                               Thread.sleep(1000);
+                           } catch (InterruptedException e) {
+                               e.printStackTrace();
+                           }
+                           Log.d("history_add", "" + fragConst.http_msg);
+                           if (fragConst.http_msg != "succ") {
+                               Log.d("unsuccess", "" + fragConst.http_msg);
+                               fragConst.http_msg = "";
+                           }
+                       }else {
+                           Log.d("else","success");
+                           fragConst.history_url.add(current_url);
+                           int sizeBefore=fragConst.history_url.size();
+                           Log.d("history_url_1",""+fragConst.history_url.size()+" "+fragConst.history_url);
+//                           fragConst.history_name=removeDuplicate(fragConst.history_name);
+                           fragConst.history_url=removeDuplicate(fragConst.history_url);
+                           int sizeAfter=fragConst.history_url.size();
+                           if(sizeBefore==sizeAfter) {
+                               fragConst.history_icon.add(current_icon);
+                               fragConst.history_name.add(current_title);
+                           }
+                           Log.d("history_url",""+fragConst.history_url.size()+" "+fragConst.history_name.size()+" "+fragConst.history_icon.size());
+//                           fragConst.history_icon=removeDuplicate(fragConst.flag_icon);
+                       }
 
                     }
 
@@ -134,14 +173,20 @@ public class MyWebView {
 
 
 
-                if(if_load && !current_title.equals(" ")) {
-                    fragConst.history_name.add(current_title);
-                    fragConst.history_url.add(current_url);
-                    fragConst.history_name=removeDuplicate(fragConst.history_name);
-                    fragConst.history_url=removeDuplicate(fragConst.history_url);
-                    //Log.d("array", fragConst.history_url.toString());
-                    if_load=false;
-                }
+//                if(if_load && !current_title.equals(" ")) {
+//                    fragConst.history_name.add(current_title);
+//                    fragConst.history_url.add(current_url);
+//                    fragConst.history_name=removeDuplicate(fragConst.history_name);
+//                    fragConst.history_url=removeDuplicate(fragConst.history_url);
+//                    Log.d("current_icon",""+current_icon);
+//                    //Log.d("array", fragConst.history_url.toString());
+//                    if_load=false;
+//                }
+
+//                if (fragConst.user_account!="") {
+ //                   HttpUtils httpUtils = new HttpUtils();
+                   //Log.d("bitmap",""+current_icon);
+//                }
 
                 //Log.d("url", url);
             }
@@ -164,6 +209,21 @@ public class MyWebView {
 //            }
 //
 //       });
+    }
+//判断是否有重复
+    public static boolean isDuplicate(ArrayList <String>list){
+        HashSet<String> temp = new HashSet<String>();
+        for(int i=0;i<list.size();i++){
+            Log.d("index:"+i,list.get(i)+"");
+            temp.add(list.get(i));
+        }
+        if(temp.size()==list.size()){
+            return false;
+        }else {
+            return true;
+        }
+
+
     }
     //去重
     public static ArrayList removeDuplicate(ArrayList list){
@@ -273,6 +333,15 @@ public class MyWebView {
         setMyurl(url);
         initWebView(url);
     }
+//    public String bitmapToString(Bitmap bitmap){
+//        //将Bitmap转换成字符串
+//        String string=null;
+//        ByteArrayOutputStream bStream=new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG,10,bStream);
+//        byte[]bytes=bStream.toByteArray();
+//        string= Base64.encodeToString(bytes, Base64.DEFAULT);
+//        return string;
+//    }
 
     //  String str = myEditText.getText().toString();
 }
