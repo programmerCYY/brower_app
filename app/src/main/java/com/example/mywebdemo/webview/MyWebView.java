@@ -1,11 +1,22 @@
 package com.example.mywebdemo.webview;
 
+import com.example.mywebdemo.FragActivity;
 import com.example.mywebdemo.constance.fragConst;
+
+import android.annotation.SuppressLint;
+import android.app.DownloadManager;
+import android.webkit.DownloadListener;
+import android.webkit.URLUtil;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.webkit.ConsoleMessage;
+import android.webkit.URLUtil;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -19,12 +30,15 @@ import com.example.mywebdemo.httputils.HttpUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class MyWebView {
 
@@ -56,6 +70,8 @@ public class MyWebView {
 //        webView.restoreState();
 //        webView.saveState()
 //        LoadUrl(url);
+        webView.addJavascriptInterface(new JavascriptInterface(webView.getContext()), "imagelistener");
+        Log.d("webView.getContext()",""+webView.getContext());
         WebSettings webSettings = webView.getSettings();
 
 //        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -118,15 +134,41 @@ public class MyWebView {
 
 
             //页面完成即加入历史记录
+            @SuppressLint("SetJavaScriptEnabled")
             @Override
             public void onPageFinished(android.webkit.WebView view, String url) {
+                view.getSettings().setJavaScriptEnabled(true);
                 super.onPageFinished(view, url);
+
+                webView.loadUrl("javascript:(function(){" +
+                        "var objs = document.getElementsByTagName(\"img\"); " +
+                        " var array=new Array(); " +
+                        " for(var j=0;j<objs.length;j++){ array[j]=objs[j].src; }"+
+                        "for(var i=0;i<objs.length;i++)  " +
+                        "{"
+                        + "    objs[i].onclick=function()  " +
+                        "    {  "
+//                        +" console.log('picture_____')"
+                        + "        imagelistener.openImage(this.src,array);  " +
+                        "    }  " +
+                        "}" +
+                        "})()");
+
+
+
                 //current_url=url;
                 current_url=view.copyBackForwardList().getCurrentItem().getUrl();//获取url
                 current_title=view.copyBackForwardList().getCurrentItem().getTitle();//获取标题
 
                 //获取页面图标
                 webView.setWebChromeClient(new WebChromeClient(){
+                    @Override
+                    public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                        Log.d("onConsoleMessage: " ,consoleMessage.message());
+                        return super.onConsoleMessage(consoleMessage);
+
+                    }
+
                     @Override
                     public void onReceivedIcon(WebView view, Bitmap icon) {
                         super.onReceivedIcon(view, icon);
@@ -138,33 +180,44 @@ public class MyWebView {
 
 
                        if (fragConst.user_account!="") {
-                           Log.d("if","success");
+                           //Log.d("if","success");
                            HttpUtils httpUtils = new HttpUtils();
-                           httpUtils.AddHistory(current_url, current_title, null);
+                           //上传图片拿到url
+                           File f=httpUtils.bitmapChangeFile(current_icon);
+                           try {
+                               httpUtils.UploadPic(f);
+                           } catch (FileNotFoundException e) {
+                               e.printStackTrace();
+                           }
+
                            try {
                                Thread.sleep(1000);
                            } catch (InterruptedException e) {
                                e.printStackTrace();
                            }
-                           Log.d("history_add", "" + fragConst.http_msg);
-                           if (fragConst.http_msg != "succ") {
-                               Log.d("unsuccess", "" + fragConst.http_msg);
-                               fragConst.http_msg = "";
+                           //添加到数据库文件
+                           httpUtils.AddHistory(current_url, current_title, httpUtils.appendUrl(fragConst.icon_temp_string));
+                           try {
+                               Thread.sleep(1000);
+                           } catch (InterruptedException e) {
+                               e.printStackTrace();
                            }
+                           fragConst.icon_temp_string="";
+                          // Log.d("icon_temp_string",""+fragConst.icon_temp_string);
+//                           Log.d("history_add", "" + fragConst.http_msg);
+//                           if (fragConst.http_msg != "succ") {
+//                               Log.d("unsuccess", "" + fragConst.http_msg);
+//                               fragConst.http_msg = "";
+//                           }
                        }else {
-                           Log.d("else","success");
                            fragConst.history_url.add(current_url);
                            int sizeBefore=fragConst.history_url.size();
-                           Log.d("history_url_1",""+fragConst.history_url.size()+" "+fragConst.history_url);
-//                           fragConst.history_name=removeDuplicate(fragConst.history_name);
                            fragConst.history_url=removeDuplicate(fragConst.history_url);
                            int sizeAfter=fragConst.history_url.size();
                            if(sizeBefore==sizeAfter) {
                                fragConst.history_icon.add(current_icon);
                                fragConst.history_name.add(current_title);
                            }
-                           Log.d("history_url",""+fragConst.history_url.size()+" "+fragConst.history_name.size()+" "+fragConst.history_icon.size());
-//                           fragConst.history_icon=removeDuplicate(fragConst.flag_icon);
                        }
 
                     }
@@ -195,6 +248,26 @@ public class MyWebView {
             @Override
             public void onPageStarted(android.webkit.WebView view, String url, Bitmap favicon){
                 super.onPageStarted(view, url, favicon);
+
+//                String jsStr="javascript:(function(){" +
+//                        "var objs = document.getElementsByTagName(\"img\"); " +
+//                        " var array=new Array(); " +
+//                        " for(var j=0;j<objs.length;j++){ array[j]=objs[j].src; }"+
+//                        "for(var i=0;i<objs.length;i++)  " +
+//                        "{"
+//                        + "    objs[i].onclick=function()  " +
+//                        "    {  "
+//                        + "        window.imagelistener.openImage(this.src,array);  " +
+//                        "    }  " +
+//                        "}" +
+//                        "})()";
+
+//                if (Build.VERSION.SDK_INT >= 19) {
+//                webView.evaluateJavascript(jsStr, new ValueCallback<String>() {
+//                    @Override public void onReceiveValue(String value) {//js与native交互的回调函数
+//                        Log.d("TAG", "value=" + value);
+//                    }
+//                });
                 if_load=true;
             }
 
@@ -209,7 +282,87 @@ public class MyWebView {
 //            }
 //
 //       });
+
+        //增加下载功能，调用系统的下载管理器
+        webView.setDownloadListener(new DownloadListener() {
+            @Override
+            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+                downloadBySystem(url,contentDisposition,mimetype);
+            }
+        });
     }
+
+    //调用系统下载管理器的函数
+    public void downloadBySystem(String url, String contentDisposition, String mimeType) {
+
+// 指定下载地址
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+// 允许媒体扫描，根据下载的文件类型被加入相册、音乐等媒体库
+
+        request.allowScanningByMediaScanner();
+
+// 设置通知的显示类型，下载进行时和完成后显示通知
+
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+// 设置通知栏的标题，如果不设置，默认使用文件名
+
+// request.setTitle("This is title");
+
+// 设置通知栏的描述
+
+// request.setDescription("This is description");
+
+// 允许在计费流量下下载
+
+        request.setAllowedOverMetered(false);
+
+// 允许该记录在下载管理界面可见
+
+        request.setVisibleInDownloadsUi(false);
+
+// 允许漫游时下载
+
+        request.setAllowedOverRoaming(true);
+
+// 允许下载的网路类型
+
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+
+// 设置下载文件保存的路径和文件名
+
+        String fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
+
+        System.out.println("fileName:{}"+ fileName);
+
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+// 另外可选一下方法，自定义下载路径
+
+// request.setDestinationUri()
+
+// request.setDestinationInExternalFilesDir()
+
+        final DownloadManager downloadManager = (DownloadManager) webView.getContext().getSystemService(DOWNLOAD_SERVICE);
+
+// 添加一个下载任务
+
+        long downloadId = downloadManager.enqueue(request);
+
+        System.out.println("downloadId:{}"+ downloadId);
+
+    }
+
+
+
+
+
+
+
+
+
 //判断是否有重复
     public static boolean isDuplicate(ArrayList <String>list){
         HashSet<String> temp = new HashSet<String>();

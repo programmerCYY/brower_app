@@ -148,6 +148,7 @@ public class mainFrag extends baseFrag {
         if (myWebView == null) {
             myWebView = new MyWebView();
             myWebView.setWebView(webView);
+            myWebView.initWebView(myWebView.getMyurl());
             //fragConst.myWebViewList.add(myWebView);
         }else{
             myWebView.setWebView(webView);

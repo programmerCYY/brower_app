@@ -29,9 +29,14 @@ public class fragConst {
     public static ArrayList<String>history_url=new ArrayList<>();
     public static ArrayList<String>history_name=new ArrayList<>();
     public static ArrayList<Bitmap>history_icon=new ArrayList<>();
+    public static ArrayList<String>history_icon_string=new ArrayList<>();
+
     public static ArrayList<String>flag_url=new ArrayList<>();
     public static ArrayList<String>flag_name=new ArrayList<>();
     public static ArrayList<Bitmap>flag_icon=new ArrayList<>();
+    public static ArrayList<String>flag_icon_string=new ArrayList<>();
+
+    public static String icon_temp_string;
     public static User user;
 
 
@@ -42,7 +47,7 @@ public class fragConst {
 
     public static  int new_mainfrag_count=0;  // mainFrag类构造函数被调用的次数
 
-    public static String user_account = ""; //当前登录用户
+    public static String user_account = "12345678912"; //当前登录用户
 
     public static String http_msg = ""; // 后台链接失败返回信息
 
