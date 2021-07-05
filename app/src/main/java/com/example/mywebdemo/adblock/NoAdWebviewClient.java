@@ -35,7 +35,7 @@ public class NoAdWebviewClient extends WebViewClient {
         String result = sortion.urlSorting(context,url);
         switch (result){
             case "high":
-                view.loadUrl("file:///android_asset/demo1.html");
+                view.loadUrl("file:///android_asset/highRisky.html");
                 Log.d("success1", "shouldOverrideUrlLoading: "+url);
                 break;
             case "medium":
@@ -123,7 +123,7 @@ public class NoAdWebviewClient extends WebViewClient {
 //
 //            switch (result){
 //                case "high":
-//                    view.loadUrl("file:///android_asset/demo1.html");
+//                    view.loadUrl("file:///android_asset/highRisky.html");
 //                    Log.d("success1", "shouldOverrideUrlLoading: "+url);
 //                    break;
 //                case "medium":

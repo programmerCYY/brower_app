@@ -30,7 +30,7 @@ import java.util.Set;
 //        }
 
 
-        private static final String AD_HOSTS_FILE = "host.txt";
+        private static final String AD_HOSTS_FILE = "host_high.txt";
         private static final Set<String> AD_HOSTS = new HashSet<>();
 
         public static void init(final Context context) {

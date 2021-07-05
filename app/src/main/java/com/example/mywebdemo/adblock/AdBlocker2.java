@@ -25,7 +25,7 @@ public class AdBlocker2 {
 
 
 
-    private static final String AD_HOSTS_FILE_2 = "host2.txt";
+    private static final String AD_HOSTS_FILE_2 = "host_medium.txt";
     private static final Set<String> AD_HOSTS_2 = new HashSet<>();
 
     public static void init(final Context context) {

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button type="submit" id="btn" onclick="btn()">btn</button>
+        <img src="img1.jpg" width="100%"></img>
+        <img src="img2.jpg" width="100%" style="margin-top: 10px;"></img>
+        <video width="100%" height="auto" controls style="margin-top: 10px;" onclick="btn()">
+            <source src="test.mp4" type="video/mp4">
+        </video>
+        <video id="video" width="100%" height="auto" controls style="margin-top: 10px;">
+            <source src="https://cn-gdgz-fx-bcache-06.bilivideo.com/upgcxcode/40/67/360536740/360536740_nb2-1-16.mp4?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1625221223&gen=playurlv2&os=bcache&oi=1849706652&trid=0000cb5363fbb0a34c97bbba562de949988bh&platform=html5&upsig=d1b8315fce3d5c73422d6cd7c90cf7cc&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&cdnid=3806&mid=0&logo=80000000" type="video/mp4">
+        </video>
+    </div>
+</body>
+<script>
+<!--    function btn() {-->
+<!--        let objs = document.getElementsByTagName("img");-->
+<!--        let srcArray = [];-->
+<!--        for (let i = 0; i < objs.length; i++) {-->
+<!--            srcArray.push(objs[i].outerHTML.split("src=")[1].split("\"")[1]);-->
+<!--        }-->
+<!--        console.log(srcArray);-->
+<!--    }-->
+<!--    function AddImgClickEvent() {-->
+<!--        var objs = document.getElementsByTagName("img");-->
+<!--        for (var i = 0; i < objs.length; i++) {-->
+<!--            objs[i].onclick = function () {-->
+<!--                alert('111')-->
+<!--                console.log(this.src);-->
+<!--            }-->
+<!--        }-->
+<!--    }-->
+<!--    AddImgClickEvent();-->
+<!--    function AddVideoClickEvent() {-->
+<!--        var objs = document.getElementsByTagName("video");-->
+<!--        console.log(objs);-->
+<!--        for (var i = 0; i < objs.length; i++) {-->
+<!--            // objs[i].play();-->
+<!--            // objs[i].onclick=function()-->
+<!--            // {-->
+<!--            //     alert('222')-->
+<!--            //   console.log(this.src);-->
+<!--            // }-->
+<!--            objs[i].addEventListener('play', function () { //播放开始执行的函数-->
+<!--                console.log("开始播放");-->
+<!--                console.log(this.currentSrc);-->
+<!--            });-->
+<!--        }-->
+<!--    }-->
+<!--    AddVideoClickEvent();-->
+</script>
+
+</html>

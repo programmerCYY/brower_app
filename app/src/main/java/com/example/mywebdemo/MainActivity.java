@@ -7,6 +7,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,12 +29,15 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.mywebdemo.adblock.AdSorting;
 import com.example.mywebdemo.adblock.AndroidToJs;
 import com.example.mywebdemo.adblock.NoAdWebviewClient;
+
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public String currenturl="";
     private BridgeWebView webView ;
     public String jsUrl;
-
+    private VideoView videoView;
 
 
     //注册浏览器
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 //        LoadUrl(url);
         WebSettings webSettings = webView.getSettings();
 
-
+        Context context = webView.getContext();
         webView.setVerticalScrollBarEnabled(false);
         //窗口设置为手机大小
         webSettings.setUseWideViewPort(true);
@@ -78,14 +82,17 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setSavePassword(false);
         //设置JS支持
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+//        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         //设置支持缩放变焦
         webSettings.setBuiltInZoomControls(false);
         //设置是否支持缩放
         webSettings.setSupportZoom(false);
         //设置是否允许JS打开新窗口
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-
+//        webSettings.setDomStorageEnabled(true);
+//        webView.addJavascriptInterface(new JavascriptInterface(this), "videolistener");
+        JavascriptInterfaceAdapter javascriptInterface= new JavascriptInterfaceAdapter(this);
+        webView.addJavascriptInterface(javascriptInterface,"videolistener");
 
         // 修复一些机型webview无法点击
 //        webView.requestFocus(View.FOCUS_DOWN);
@@ -142,17 +149,31 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        Context context = webView.getContext();
-
         //webView.setWebViewClient(new NoAdWebviewClient(context){
         //});
 //        webView = (BridgeWebView) findViewById(R.id.mywebview);
 
         webView.setWebViewClient(new BridgeWebViewClient(webView) {
             @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                view.getSettings().setJavaScriptEnabled(true);
+                Log.d("webview", "onPageFinished: ");
+                view.loadUrl("javascript:(function(){" +
+                        "var objs = document.getElementsByTagName(\"video\"); " +
+                        "for(var i=0;i<objs.length;i++)  " +
+                        "{"+
+                        "    objs[i].addEventListener('play',function()  {" +
+                        "        window.videolistener.openVideo(this.currentSrc);  " +
+                        "    });  " +
+                        "}" +
+                        "})()");
+            }
+
+            @Override
             //重写urlloading接口，实现在打开超链接时拦截指定url，并重定向到一个本地html
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        Log.d("succeed", "shouldOverrideUrlLoading: "+url);
+                Log.d("succeed", "shouldOverrideUrlLoading: "+url);
                 jsUrl =url;
                 //对将要打开的url进行匹配
                 AdSorting sortion = new AdSorting();
@@ -160,21 +181,24 @@ public class MainActivity extends AppCompatActivity {
                 //高中低三种风险
                 switch (result){
                     case "high":
-                        view.loadUrl("file:///android_asset/demo1.html");
+                        view.loadUrl("file:///android_asset/highRisky.html");
                         Log.d("success1", "shouldOverrideUrlLoading: "+url);
                         break;
                     case "medium":
-                        view.loadUrl("yy");
+                        view.loadUrl("file:///android_asset/mediumRisky.html");
                         Log.d("success2", "shouldOverrideUrlLoading: "+url);
                         break;
                     case"low":
-                        view.loadUrl("zz");
+                        view.loadUrl("file:///android_asset/lowRisky.html");
                         Log.d("success3", "shouldOverrideUrlLoading: "+url);
                         break;
                     default:
                         view.loadUrl(url);
-                }return super.shouldOverrideUrlLoading(view,url);
+                }
+                return super.shouldOverrideUrlLoading(view,url);
             }
+
+
         });
 
         Log.d("success", "initWebView: "+jsUrl);
@@ -210,9 +234,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-////        webView.loadUrl("file:///android_asset/demo001.html");
+////        webView.loadUrl("file:///android_asset/mainPage.html");
 ////        webView.setWebChromeClient(new WebChromeClient());
-////        webView.loadUrl("file:///android_asset/demo001.html");
+////        webView.loadUrl("file:///android_asset/mainPage.html");
 
         //主页是一个本地的h5文件，运用jsbrid，使得在h5页面上搜索变成调用native的搜索功能。（当然直接在html里面用原生的form标签也可以，只不过就不是从头到尾webview了感觉会有问题）
         webView.setDefaultHandler(new DefaultHandler());
@@ -404,7 +428,7 @@ public class MainActivity extends AppCompatActivity {
         btn_menu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                LoadUrl("file:///android_asset/demo001.html");
+                LoadUrl("file:///android_asset/mainPage.html");
             }
         });
         final EditText myEditText = (EditText) findViewById(R.id.edit_text);
@@ -430,39 +454,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        WebSettings webSettings = webView.getSettings();
-//        webSettings.setDisplayZoomControls(true);
-//        webView.setInitialScale(100);
 
         //初始化一个加载主页的webview
-        initWebView("file:///android_asset/demo001.html");
 
-//        webView = (BridgeWebView) findViewById(R.id.mywebview);
-//        webView.setDefaultHandler(new DefaultHandler());
-//        webView.setWebChromeClient(new WebChromeClient());
-//
-//
-////        webView.loadUrl("file:///android_asset/demo001.html");
-//        webView.registerHandler("submitFromWeb", new BridgeHandler() {
-//            @Override
-//            public void handler(String data, CallBackFunction function) {
-//                Log.e("TAG", "js返回 "+data);
-//                if (data.equals("")){
-//                    data="https://m.baidu.com/";
-//                }else {
-//                    if(isUrl(data)){
-//                        data="http://"+data;
-//                    }
-//                    if(!isHttpUrl(data)){
-////                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
-//                        data = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + data +"&pu=sz%401321_480&t_noscript=jump";
-//                    }
-//                }
-//                Log.d("jsbridge", "handler: "+data);
-//                initWebView(data);
-//            }
-//        });
+        initWebView("file:///android_asset/mainPage.html");
 
+        //initView();
 
 
 
@@ -531,5 +528,11 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("downloadId:{}"+ downloadId);
 
     }
+
+
+
+
+
+
 
 }

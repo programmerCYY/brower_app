@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="blockPage.css" type="text/css">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <title>Document</title>
+    <script>
+        function callBackClient() {
+            alert("1");
+            Android.getClient("后退");
+        }
+
+        function callBackClient2() {
+            alert("0");
+            Android.getClient("前进");
+        }
+    </script>
+</head>
+
+<body>
+<div class="backgroundBox">
+    <h1>
+        当前页面为高风险网站
+    </h1>
+    <p>
+        确定要继续访问吗
+    </p>
+    <div class="mainbackground">
+        <div class='button -return' onclick="callBackClient()">确定返回</div>
+        <div class='button -continue' onclick="callBackClient2()">仍要访问</div>
+
+    </div>
+</div>
+</body>
+
+</html>
