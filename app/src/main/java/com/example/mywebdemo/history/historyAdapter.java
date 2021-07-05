@@ -3,6 +3,8 @@ package com.example.mywebdemo.history;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,11 @@ import com.example.mywebdemo.constance.fragConst;
 import com.example.mywebdemo.R;
 import com.example.mywebdemo.httputils.HttpUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHolder> {
@@ -26,6 +33,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     private ArrayList<String> mList;
     private ArrayList<String> mtitle;
     private ArrayList<Bitmap> micon;
+    private ArrayList<String> micon_string;
     private Context mContext;
     private RecyclerView mRv;
 
@@ -33,6 +41,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
         mList =fragConst.history_url;
         mtitle=fragConst.history_name;
         micon=fragConst.history_icon;
+        micon_string=fragConst.history_icon_string;
         this.mContext = context;
         this.mRv = recyclerView;
     }
@@ -44,6 +53,11 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
                 .inflate(R.layout.history_item,parent,false);
         final ViewHolder holder = new ViewHolder(view);
 
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         //删除按钮
         holder.btnDelete =(Button) view.findViewById(R.id.btn_delete);
@@ -70,6 +84,8 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
                  fragConst.history_name.remove(position);
                  if(fragConst.user_account=="") {
                      fragConst.history_icon.remove(position);
+                 }else {
+                     fragConst.history_icon_string.remove(position);
                  }
 
 
@@ -113,12 +129,33 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
         holder.mtitleView.setText(mtitle.get(position));
         holder.murlView.setText(mList.get(position));
         if(fragConst.user_account!=""){
-            holder.miconView.setImageResource(R.mipmap.earth);
+            //holder.miconView.setImageResource(R.mipmap.earth);
+            holder.miconView.setImageBitmap(returnBitMap(micon_string.get(position)));
         }else {
             holder.miconView.setImageBitmap(micon.get(position));
         }
     }
 
+    public Bitmap returnBitMap(String url) {
+        URL myFileUrl = null;
+        Bitmap bitmap = null;
+        try {
+            myFileUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
     @Override
     public int getItemCount() {
         return fragConst.history_url.size() ;

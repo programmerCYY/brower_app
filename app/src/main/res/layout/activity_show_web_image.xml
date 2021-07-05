@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="400dp">
+
+        <ImageView
+                android:id="@+id/show_webimage_imageview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="matrix"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_weight="7.5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal"
+            android:background="#000000">
+
+        <Button
+                android:id="@+id/btn_rotate"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="旋转" />
+
+        <Button
+                android:id="@+id/btn_save"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="保存" />
+
+        <Button
+                android:id="@+id/btn_back"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="上一张" />
+
+        <Button
+                android:id="@+id/btn_next"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="下一张" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,14 +1,31 @@
 package com.example.mywebdemo;
 
+//import com.nostra13.universalimageloader;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.DownloadManager;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -23,6 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +68,17 @@ import com.zhy.android.percent.support.PercentRelativeLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static android.widget.RelativeLayout.*;
 
@@ -58,7 +87,7 @@ public class FragActivity extends FragmentActivity {
     private verticalViewPager mViewPager;
     private fragAdapter fragPagerAdapter;
     private TextView pagebt;
-    private ImageView leftbt, rightbt, setbt, homebt, delfrag, deleteallpage,addnewpage, returnmain;
+    private ImageView leftbt, rightbt, setbt, homebt, delfrag, deleteallpage,addnewpage, returnmain,img1;
     private LinearLayout llayoutviewpage, pagebarlt, mainbarlt,mainbar;
     private DisplayMetrics dm2;
     private GestureDetectorCompat mDetector;
@@ -83,11 +112,17 @@ public class FragActivity extends FragmentActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         //白天模式
         isDay=true;
@@ -116,6 +151,8 @@ public class FragActivity extends FragmentActivity {
     }
 
     private void viewInit() {
+
+
 
         leftbt = (ImageView) findViewById(R.id.leftbt);
         rightbt = (ImageView) findViewById(R.id.rightbt);
@@ -311,11 +348,37 @@ public class FragActivity extends FragmentActivity {
             textView.setText("白天模式");
         }
 
+        img1=v.findViewById(R.id.user_pic);
         if(fragConst.user_account!=""){
             TextView textView=(TextView)v.findViewById(R.id.user_name);
             textView.setText(""+fragConst.user_account);
+            HttpUtils httpUtils=new HttpUtils();
+            httpUtils.GetUser();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            img1.setImageBitmap(returnBitMap(fragConst.user.getAvatar()));
+
 
         }
+        v.findViewById(R.id.popup_message).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//                showImagePickDialog();
+//                HttpUtils httpUtils=new HttpUtils();
+//                try {
+//                    httpUtils.UploadPic();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+            }
+        });
+
+
+
         v.findViewById(R.id.to_user).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -355,6 +418,33 @@ public class FragActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(FragActivity.this,"您点击了下载",Toast.LENGTH_SHORT).show();
+                PackageInfo pi = null;
+                try {
+                    pi = getPackageManager().getPackageInfo("com.amaze.filemanager", 0);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+                resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                resolveIntent.setPackage(pi.packageName);
+
+
+                List<ResolveInfo> apps = getPackageManager().queryIntentActivities(resolveIntent, 0);
+
+                ResolveInfo ri = apps.iterator().next();
+                if (ri != null ) {
+                    String packageName = ri.activityInfo.packageName;
+                    String className = ri.activityInfo.name;
+
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+                    ComponentName cn = new ComponentName(packageName, className);
+
+                    intent.setComponent(cn);
+                    startActivity(intent);
+                }
                 window.dismiss();
             }
         });
@@ -433,12 +523,27 @@ public class FragActivity extends FragmentActivity {
 
                 if (fragConst.user_account!="") {
                     HttpUtils httpUtils = new HttpUtils();
-                    httpUtils.AddFlag(url, title);
+
+                    //上传图片拿到url
+                    File f=httpUtils.bitmapChangeFile(icon);
+                    try {
+                        httpUtils.UploadPic(f);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    //添加到数据库
+                    httpUtils.AddFlag(url, title, httpUtils.appendUrl(fragConst.icon_temp_string));
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    fragConst.icon_temp_string="";
                 }else {
                     fragConst.flag_url.add(url);
                     int sizeBefore=fragConst.flag_url.size();
@@ -690,6 +795,29 @@ public class FragActivity extends FragmentActivity {
         mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
         m.goUrl(str);
     }
+
+
+    public Bitmap returnBitMap(String url) {
+        URL myFileUrl = null;
+        Bitmap bitmap = null;
+        try {
+            myFileUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
 
 
 

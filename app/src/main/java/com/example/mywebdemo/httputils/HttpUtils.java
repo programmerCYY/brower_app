@@ -1,5 +1,8 @@
 package com.example.mywebdemo.httputils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.util.Log;
 
 import com.example.mywebdemo.constance.fragConst;
@@ -12,7 +15,11 @@ import com.google.gson.JsonParser;
 import org.json.JSONArray;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +35,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpUtils {
+    private static final String SAVE_REAL_PATH = Environment.getExternalStorageDirectory()+"/Download";//保存的确切位置
+
+
     private static final String sUrl = "http://47.111.12.192:11100";
     private static final String sLogin = "/user/login";
     private static final String sRegister = "/user/register";
@@ -49,6 +59,7 @@ public class HttpUtils {
     Gson gson = new Gson();
     OkHttpClient okHttpClient = new OkHttpClient();
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType IPEG =MediaType.parse("text/jpeg");
 
     /*---------------------User----------------------*/
     public void Login(String sAccount, String sPassword)
@@ -252,26 +263,27 @@ public class HttpUtils {
                 fragConst.history_url=new ArrayList<>();
                 fragConst.history_name=new ArrayList<>();
                 fragConst.history_icon=new ArrayList<>();
+                fragConst.history_icon_string=new ArrayList<>();
                 for(int i = 0;i<Jarray.size();++i)
                 {
                     JsonObject oJson = (JsonObject) Jarray.get(i);
                     //json字符串记得删掉“ ”
                     fragConst.history_url.add( String.valueOf(oJson.get("historyUrl")).replace("\"","") );
                     fragConst.history_name.add( String.valueOf(oJson.get("historyName")).replace("\"","") );
-                    //fragConst.history_icon.add(fragConst.stringToBitmap( String.valueOf(oJson.get("historyIcon"))));
+                    fragConst.history_icon_string.add( String.valueOf(oJson.get("historyIcon")).replace("\"",""));
                 }
             }
         });
     }
 
     /*--------------------Flag-------------------------*/
-    public void AddFlag(String sFlagUrl, String sTitle)
+    public void AddFlag(String sFlagUrl, String sTitle,String sFlagIcon)
     {
         Map map = new HashMap<>();
         map.put("flagUser",fragConst.user_account);
         map.put("flagUrl",sFlagUrl);
         map.put("flagName",sTitle);
-        map.put("flagIcon","111");
+        map.put("flagIcon",sFlagIcon);
         String param = gson.toJson(map);
 
         RequestBody requestBody = RequestBody.create(JSON, param);
@@ -351,11 +363,13 @@ public class HttpUtils {
                 fragConst.flag_url=new ArrayList<>();
                 fragConst.flag_name=new ArrayList<>();
                 fragConst.flag_icon=new ArrayList<>();
+                fragConst.flag_icon_string=new ArrayList<>();
                 for(int i = 0;i<Jarray.size();++i)
                 {
                     JsonObject oJson = (JsonObject) Jarray.get(i);
                     fragConst.flag_url.add( String.valueOf(oJson.get("flagUrl")).replace("\"","") );
                     fragConst.flag_name.add( String.valueOf(oJson.get("flagName")).replace("\"","") );
+                    fragConst.flag_icon_string.add(String.valueOf(oJson.get("flagIcon")).replace("\"",""));
                 }
             }
         });
@@ -392,21 +406,81 @@ public class HttpUtils {
 
     //    上传图片
 
-    public void UploadPic(File file){
+    /**
+     * 将bitmap转换为file存储起来
+     * @param bitmap
+     * @return
+     */
+    public static File bitmapChangeFile(Bitmap bitmap) {
+        FileOutputStream fileOutStream = null;
+        File file = null;
+        try {
+            //通过相关方法生成一个Bitmap类型的对象,生产文件选择用当前事件的long型作为文件路径
+            file = new File(SAVE_REAL_PATH, System.currentTimeMillis()+".jpeg");
+            fileOutStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutStream); // 把位图输出到指定的文件中
+            fileOutStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                fileOutStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
+    }
 
-        //创建RequestBody封装参数
-        RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);// MediaType.parse("image/jpeg")//application/octet-stream
-        //创建MultipartBody,给RequestBody进行设置
-        MultipartBody multipartBody = new MultipartBody.Builder()
+    public String appendUrl(String str){
+        return sPicUrl+"/"+str;
+    }
+
+
+
+    public void UploadPic(File file1) throws FileNotFoundException {
+
+//        //创建RequestBody封装参数
+//        RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);// MediaType.parse("image/jpeg")//application/octet-stream
+//        //创建MultipartBody,给RequestBody进行设置
+//        MultipartBody multipartBody = new MultipartBody.Builder()
+//                .setType(MultipartBody.FORM)
+//                .addFormDataPart("file",file.getName(), fileBody)
+//                .build();
+//
+//        //创建Request
+//        Request request = new Request.Builder()
+//                .url(sPicUrl+sUploadPic)//"ip:1111/Api/App/ImgUpload?UId=7"
+//                .post(multipartBody)
+//                .build();
+
+//        File file1=new File(SAVE_REAL_PATH+"/o&gp=0.jpg.jpg");
+
+
+
+
+
+        //2.创建RequestBody
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file1);
+
+        //3.构建MultipartBody
+        RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("file",file.getName(), fileBody)
+                .addFormDataPart("file", "testImage.png", fileBody)
                 .build();
 
-        //创建Request
         Request request = new Request.Builder()
-                .url(sPicUrl+sUploadPic)//"ip:1111/Api/App/ImgUpload?UId=7"
-                .post(multipartBody)
+                .url(sPicUrl+sUploadPic)
+                .post(requestBody)
+                .addHeader("Content-Type","image/jpeg")
                 .build();
+//        Request request = new Request.Builder()
+//                .url(sPicUrl+sUploadPic)
+//                .post(fileBody)
+//                .addHeader("Content-Type","jpeg")
+//                .build();
+
+//        Log.d("reuqest",""+requestBody);
 
 
         //上传完图片,得到服务器反馈数据
@@ -417,9 +491,27 @@ public class HttpUtils {
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i("ff", "uploadMultiFile() response=" + response.body().string());
+                fragConst.icon_temp_string=getMd5(response.body().string());
+//                Log.i("ff", "uploadMultiFile() response=" + response.body().string());
+                Log.d("md5",fragConst.icon_temp_string);
             }
         });
+    }
+
+    public String getMd5(String s){
+        StringBuilder res=new StringBuilder();
+        int i = 0,j = 0,n = s.length();
+        while(i<n&&j<n){
+            if(s.charAt(i)=='M'){
+                j = i+5;
+            }
+
+            if(s.substring(i,i+4).equals("</h1")){
+                break;
+            }
+            i++;
+        }
+        return s.substring(j,i);
     }
 
     //接收图片
@@ -439,7 +531,10 @@ public class HttpUtils {
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i("ff", "uploadMultiFile() response=" + response.body().string());
+                InputStream inputStream = response.body().byteStream();//得到图片的流
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//                fragConst.bitmap_temp=bitmap;
+                //Log.i("ff", "uploadMultiFile() response=" + response.body().string());
             }
         });
     }

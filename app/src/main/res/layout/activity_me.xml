@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--头部-->
     <LinearLayout
             android:id="@+id/me_above_bar"
             android:layout_height="0dp"
@@ -10,13 +11,13 @@
             android:layout_weight="0.7"
             android:layout_alignParentTop="true"
             android:orientation="horizontal"
-            android:background="#ffffff"
-            >
+            android:background="#ffffff">
+
         <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
         <Button
                 android:id="@+id/me_exit"
@@ -25,8 +26,7 @@
                 android:layout_weight="5"
                 android:background="@mipmap/direction_left"
                 android:scaleX="0.5"
-                android:scaleY="0.6"
-                />
+                android:scaleY="0.6" />
 
         <TextView
                 android:layout_width="0dp"
@@ -37,123 +37,137 @@
                 android:gravity="center_vertical">
 
         </TextView>
+
         <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
 
                 />
+
         <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
     </LinearLayout>
-    <!--头部-->
+
     <LinearLayout
+            android:id="@+id/layout_me_header1"
             android:layout_height="0dp"
             android:layout_width="match_parent"
-            android:layout_weight="2.6"
+            android:layout_weight="3"
             android:layout_alignParentTop="true"
             android:orientation="horizontal"
             android:background="#ffffff"
             >
-    <RelativeLayout
-        android:id="@+id/layout_me_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/gray">
 
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@mipmap/ic_me"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"/>
+        <RelativeLayout
+                android:id="@+id/layout_me_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/btn_login"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/me_pic"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    app:civ_border_width="3dp"
+                    app:civ_border_color="@color/day" />
 
-            <!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_weight="1">-->
-<!--                <ImageView-->
-<!--                    android:layout_width="24dp"-->
-<!--                    android:layout_height="24dp"-->
-<!--                    android:src="@mipmap/me_menu_yh"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="折扣券"-->
-<!--                    android:textColor="@color/day"/>-->
-<!--            </LinearLayout>-->
-
-            <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5">
-
-            </View>
             <LinearLayout
-                    android:id="@+id/me_edit"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_weight="1">
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/me_pic"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp">
 
-                <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@mipmap/ic_me" />
+                <!--            <LinearLayout-->
+                <!--                android:layout_width="wrap_content"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:orientation="vertical"-->
+                <!--                android:gravity="center"-->
+                <!--                android:layout_weight="1">-->
+                <!--                <ImageView-->
+                <!--                    android:layout_width="24dp"-->
+                <!--                    android:layout_height="24dp"-->
+                <!--                    android:src="@mipmap/me_menu_yh"/>-->
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="折扣券"-->
+                <!--                    android:textColor="@color/day"/>-->
+                <!--            </LinearLayout>-->
 
-                <TextView
+                <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5">
+
+                </View>
+
+                <LinearLayout
+                        android:id="@+id/me_edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="编辑信息"
-                        android:textColor="@color/day" />
-            </LinearLayout>
-            <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_weight="1">
 
-            </View>
-            <LinearLayout
-                android:id="@+id/me_exit_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_weight="1">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@mipmap/ic_me"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="退出登录"
-                    android:textColor="@color/day"/>
-                />
-            </LinearLayout>
-            <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5">
+                    <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@mipmap/edit" />
 
-            </View>
-        </LinearLayout>
-    </RelativeLayout>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="编辑信息"
+                            android:textColor="@color/day" />
+                </LinearLayout>
+
+                <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                </View>
+
+                <LinearLayout
+                        android:id="@+id/me_exit_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                    <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@mipmap/export" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="退出登录"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/day" />
+                    />
+                </LinearLayout>
+
+                <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5">
+
+                </View>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
     <!--滚动列表-->
@@ -183,7 +197,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@mipmap/me_phone"
+                    android:src="@mipmap/edit_phone"
                     android:layout_marginLeft="10dp"
                     android:scaleX="0.8"
                     android:scaleY="0.8"/>
@@ -245,7 +259,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@mipmap/me_personal"
+                    android:src="@mipmap/edit_nickname"
                     android:layout_marginLeft="10dp"
                     android:scaleX="0.8"
                     android:scaleY="0.8"/>
@@ -291,7 +305,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@mipmap/me_card"
+                    android:src="@mipmap/edit_username"
                     android:layout_marginLeft="10dp"
                     android:scaleX="0.8"
                     android:scaleY="0.8"/>
@@ -336,10 +350,10 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@mipmap/me_email"
+                    android:src="@mipmap/edit_email"
                     android:layout_marginLeft="10dp"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"/>
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -382,7 +396,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@mipmap/me_lock"
+                    android:src="@mipmap/edit_lock"
                     android:layout_marginLeft="10dp"
                     android:scaleX="0.8"
                     android:scaleY="0.8"/>
@@ -419,7 +433,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@mipmap/me_shebei"
+                    android:src="@mipmap/edit_shebei"
                     android:layout_marginLeft="10dp"
                     android:scaleX="0.8"
                     android:scaleY="0.8"/>
@@ -463,8 +477,10 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@mipmap/me_setting"
+                    android:src="@mipmap/edit_s"
                     android:layout_marginLeft="10dp"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
                         />
 
                 <RelativeLayout

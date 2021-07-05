@@ -19,12 +19,15 @@
                 android:layout_weight="1"/>
 
 
-    <ImageView
-            android:id="@+id/user_pic_big"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/browser_logo" />
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_pic_big"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_launcher_background"
+                app:civ_border_width="3dp"
+                app:civ_border_color="@color/day"/>
+
         <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -66,17 +69,17 @@
             android:paddingLeft="8dp"
             android:textColorHint="#000000"
             />
-    <EditText
-            android:id="@+id/id_re_userpic"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="4dp"
-            android:inputType="text"
-            android:hint="请输入头像地址"
-            android:background="#ffffff"
-            android:paddingLeft="8dp"
-            android:textColorHint="#000000"
-            />
+<!--    <EditText-->
+<!--            android:id="@+id/id_re_userpic"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="56dp"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:inputType="text"-->
+<!--            android:hint="请输入头像地址"-->
+<!--            android:background="#ffffff"-->
+<!--            android:paddingLeft="8dp"-->
+<!--            android:textColorHint="#000000"-->
+<!--            />-->
 
     <EditText
         android:id="@+id/id_re_password"
@@ -97,17 +100,17 @@
 <!--            android:layout_centerHorizontal="true"-->
 <!--            android:background="@drawable/login_background"/>-->
 
-    <EditText
-        android:id="@+id/id_re_repassword"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:inputType="textWebPassword"
-        android:layout_marginTop="4dp"
-        android:background="#ffffff"
-        android:hint="重复输入密码"
-        android:paddingLeft="8dp"
-        android:textColorHint="#000000" />
 
+    <EditText
+            android:id="@+id/id_re_repassword"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:inputType="textWebPassword"
+            android:layout_marginTop="4dp"
+            android:background="#ffffff"
+            android:hint="重复输入密码"
+            android:paddingLeft="8dp"
+            android:textColorHint="#000000" />
 
     <Button
         android:background="@drawable/login_button"

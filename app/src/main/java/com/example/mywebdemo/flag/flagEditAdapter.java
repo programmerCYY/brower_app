@@ -3,7 +3,9 @@ package com.example.mywebdemo.flag;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +24,18 @@ import com.example.mywebdemo.R;
 import com.example.mywebdemo.constance.fragConst;
 import com.example.mywebdemo.httputils.HttpUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class flagEditAdapter extends RecyclerView.Adapter<flagEditAdapter.ViewHolder> {
     private ArrayList<String> url_list;
     private ArrayList<String> title_list;
     private ArrayList<Bitmap> icon_list;
+    private ArrayList<String> icon_list_string;
     private Context mContext;
     private RecyclerView mRv;
     //    private boolean isEdit;
@@ -48,6 +56,8 @@ public class flagEditAdapter extends RecyclerView.Adapter<flagEditAdapter.ViewHo
         url_list = fragConst.flag_url;
         title_list=fragConst.flag_name;
         icon_list=fragConst.flag_icon;
+        icon_list_string=fragConst.flag_icon_string;
+
         this.mContext = context;
         this.mRv = recyclerView;
     }
@@ -59,6 +69,11 @@ public class flagEditAdapter extends RecyclerView.Adapter<flagEditAdapter.ViewHo
                 .inflate(R.layout.flag_edit_item,parent,false);
         final ViewHolder holder=new ViewHolder(view);
 
+        //准许在主线程中调用网络线程
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         //编辑状态的时候再监听
 //        if(flagActivity.getisEdit()) {
@@ -159,7 +174,8 @@ public class flagEditAdapter extends RecyclerView.Adapter<flagEditAdapter.ViewHo
         if(fragConst.user_account=="") {
             holder.mflagiconView.setImageBitmap(icon_list.get(position));
         }else {
-            holder.mflagiconView.setImageResource(R.mipmap.bookmark_color);
+            holder.mflagiconView.setImageBitmap(returnBitMap(icon_list_string.get(position)));
+            //holder.mflagiconView.setImageResource(R.mipmap.bookmark_color);
         }
 //        if(isAllSelect){
 //            holder.boxselect.setChecked(flagActivity.getListCheck().get(position));
@@ -169,6 +185,27 @@ public class flagEditAdapter extends RecyclerView.Adapter<flagEditAdapter.ViewHo
             Log.e("refresh2",""+flagEditActivity.getListCheck().get(position));
             holder.boxselect.setChecked(flagEditActivity.getListCheck().get(position));
 //        }
+    }
+
+    public Bitmap returnBitMap(String url) {
+        URL myFileUrl = null;
+        Bitmap bitmap = null;
+        try {
+            myFileUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
 

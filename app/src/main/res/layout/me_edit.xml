@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F3F5F7"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:id="@+id/me_above_bar_edit"
+            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:background="#ffffff">
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+
+        <Button
+                android:id="@+id/me_exit_edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:background="@mipmap/ic_cancel"
+                android:scaleX="0.5"
+                android:scaleY="0.6" />
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:text="退出编辑"
+                android:textSize="20sp"
+                android:gravity="center_vertical">
+
+        </TextView>
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+
+                />
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_pic_big_edit"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_launcher_background"
+                app:civ_border_width="3dp"
+                app:civ_border_color="@color/day"/>
+
+        <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
+            android:background="#ffffff">
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:src="@mipmap/mobile_phone"
+                android:scaleX="0.7"
+                android:scaleY="0.7">
+        </ImageView>
+        <EditText
+                android:id="@+id/id_re_useid_edit"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="56dp"
+                android:inputType="text"
+                android:hint="请输入手机号"
+                android:paddingLeft="8dp"
+                android:textColorHint="#000000"
+                />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:background="#ffffff">
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_body"
+                android:scaleX="0.6"
+                android:scaleY="0.6">
+        </ImageView>
+        <EditText
+                android:id="@+id/id_re_username_edit"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="56dp"
+                android:inputType="text"
+                android:hint="请输入用户名"
+                android:paddingLeft="8dp"
+                android:textColorHint="#000000"
+                />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:background="#ffffff">
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:src="@mipmap/email"
+                android:scaleX="0.6"
+                android:scaleY="0.6">
+        </ImageView>
+        <EditText
+                android:id="@+id/id_re_email_edit"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="56dp"
+                android:inputType="text"
+                android:hint="请输入邮箱"
+                android:paddingLeft="8dp"
+                android:textColorHint="#000000"
+                />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:background="#ffffff">
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:src="@mipmap/lock"
+                android:scaleX="0.65"
+                android:scaleY="0.65">
+        </ImageView>
+        <EditText
+                android:id="@+id/id_re_password_edit"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="56dp"
+                android:inputType="textWebPassword"
+                android:hint="请输入密码"
+                android:paddingLeft="8dp"
+                android:textColorHint="#000000"
+                />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:background="#ffffff">
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:src="@mipmap/lock"
+                android:scaleX="0.65"
+                android:scaleY="0.65">
+        </ImageView>
+        <EditText
+                android:id="@+id/id_re_repassword_edit"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="56dp"
+                android:inputType="textWebPassword"
+                android:hint="重复输入密码"
+                android:paddingLeft="8dp"
+                android:textColorHint="#000000"
+                />
+    </LinearLayout>
+
+
+
+
+
+
+
+    <Button
+            android:background="@drawable/login_button"
+            android:id="@+id/id_btn_register_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提交"
+            android:textColor="@color/text_white"
+            android:textSize="18sp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="50dp" />
+
+
+</LinearLayout>
