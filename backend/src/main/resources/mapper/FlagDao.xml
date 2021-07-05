@@ -88,7 +88,7 @@
     select * from flag where flag_user = #{phone};
   </select>
   <update id="updateBytwo">
-    update flag set flag_name = #{flag_name} where flag_url = #{flag_url} and flag_user = #{flag_user};
+    update flag set flag_name = #{flag_name} and flag_url = #{new_url} where flag_url = #{old_url} and flag_user = #{flag_user};
   </update>
   <delete id="deleteBytwo">
     delete from flag where flag_url = #{flag_url} and flag_user = #{flag_user};
@@ -97,6 +97,6 @@
     select * from flag where flag_url = #{flag_url} and flag_user = #{flag_user};
   </select>
   <select id="selectByKey" resultMap="BaseResultMap">
-    select * from flag where flag_url = #{flag_url} and flag_name = #{point};
+    select * from flag where flag_user = #{flag_user} and flag_name like #{point};
   </select>
 </mapper>

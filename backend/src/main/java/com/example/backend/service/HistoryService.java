@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 
+import com.example.backend.BO.DeleteBO;
 import com.example.backend.BO.HistoryBO;
 import com.example.backend.pojo.Flag;
 import com.example.backend.pojo.History;
@@ -17,7 +18,7 @@ public interface HistoryService {
 
     int AddHistory(HistoryBO historyBO);
 
-    int DeleteHistory(String history_user,String history_url);
+    int DeleteHistory(DeleteBO deleteBO);
 
     int UpdateHistory(String history_user,String history_url);
 

@@ -9,15 +9,9 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="unionid" jdbcType="VARCHAR" property="unionid" />
-    <result column="role" jdbcType="VARCHAR" property="role" />
-    <result column="last_access_at" jdbcType="TIMESTAMP" property="lastAccessAt" />
-    <result column="is_mute" jdbcType="BOOLEAN" property="isMute" />
-    <result column="is_valid" jdbcType="BOOLEAN" property="isValid" />
   </resultMap>
   <sql id="Base_Column_List">
-    user_id, nickname, username, avatar, `password`, email, phone, unionid, `role`, last_access_at, 
-    is_mute, is_valid
+    user_id, nickname, username, avatar, `password`, email, phone
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -56,21 +50,6 @@
       <if test="phone != null">
         phone,
       </if>
-      <if test="unionid != null">
-        unionid,
-      </if>
-      <if test="role != null">
-        `role`,
-      </if>
-      <if test="lastAccessAt != null">
-        last_access_at,
-      </if>
-      <if test="isMute != null">
-        is_mute,
-      </if>
-      <if test="isValid != null">
-        is_valid,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nickname != null">
@@ -90,21 +69,6 @@
       </if>
       <if test="phone != null">
         #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="unionid != null">
-        #{unionid,jdbcType=VARCHAR},
-      </if>
-      <if test="role != null">
-        #{role,jdbcType=VARCHAR},
-      </if>
-      <if test="lastAccessAt != null">
-        #{lastAccessAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isMute != null">
-        #{isMute,jdbcType=BOOLEAN},
-      </if>
-      <if test="isValid != null">
-        #{isValid,jdbcType=BOOLEAN},
       </if>
     </trim>
   </insert>
@@ -129,21 +93,6 @@
       <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="unionid != null">
-        unionid = #{unionid,jdbcType=VARCHAR},
-      </if>
-      <if test="role != null">
-        `role` = #{role,jdbcType=VARCHAR},
-      </if>
-      <if test="lastAccessAt != null">
-        last_access_at = #{lastAccessAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isMute != null">
-        is_mute = #{isMute,jdbcType=BOOLEAN},
-      </if>
-      <if test="isValid != null">
-        is_valid = #{isValid,jdbcType=BOOLEAN},
-      </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
@@ -155,14 +104,12 @@
       `password` = #{password,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      unionid = #{unionid,jdbcType=VARCHAR},
-      `role` = #{role,jdbcType=VARCHAR},
-      last_access_at = #{lastAccessAt,jdbcType=TIMESTAMP},
-      is_mute = #{isMute,jdbcType=BOOLEAN},
-      is_valid = #{isValid,jdbcType=BOOLEAN}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
   <select id="selectPasswordByPhone" resultType="java.lang.String">
     select password from user where phone = #{phone};
+  </select>
+  <select id="selectByphone" resultType="com.example.backend.pojo.User">
+    select * from user where phone = #{phone};
   </select>
 </mapper>

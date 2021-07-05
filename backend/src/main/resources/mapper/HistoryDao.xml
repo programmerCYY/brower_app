@@ -26,7 +26,7 @@
     insert into history (history_url, history_name, history_icon, 
       history_time, history_user)
     values (#{historyUrl,jdbcType=VARCHAR}, #{historyName,jdbcType=VARCHAR}, #{historyIcon,jdbcType=VARCHAR}, 
-      #{historyTime,jdbcType=TIME}, #{historyUser,jdbcType=VARCHAR})
+      #{historyTime,jdbcType=TIMESTAMP}, #{historyUser,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.backend.pojo.History" useGeneratedKeys="true">
     insert into history
@@ -58,7 +58,7 @@
         #{historyIcon,jdbcType=VARCHAR},
       </if>
       <if test="historyTime != null">
-        #{historyTime,jdbcType=TIME},
+        #{historyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="historyUser != null">
         #{historyUser,jdbcType=VARCHAR},
@@ -78,7 +78,7 @@
         history_icon = #{historyIcon,jdbcType=VARCHAR},
       </if>
       <if test="historyTime != null">
-        history_time = #{historyTime,jdbcType=TIME},
+        history_time = #{historyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="historyUser != null">
         history_user = #{historyUser,jdbcType=VARCHAR},
@@ -91,7 +91,7 @@
     set history_url = #{historyUrl,jdbcType=VARCHAR},
       history_name = #{historyName,jdbcType=VARCHAR},
       history_icon = #{historyIcon,jdbcType=VARCHAR},
-      history_time = #{historyTime,jdbcType=TIME},
+      history_time = #{historyTime,jdbcType=TIMESTAMP},
       history_user = #{historyUser,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -105,4 +105,7 @@
   <delete id="deleteBytwo">
     delete from history where history_url = #{history_url} and history_user = #{history_user};
   </delete>
+  <select id="selectByTwo" resultMap="BaseResultMap">
+  select * from history where history_url = #{history_url} and history_user = #{history_user};
+</select>
 </mapper>

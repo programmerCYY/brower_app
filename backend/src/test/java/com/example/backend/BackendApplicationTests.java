@@ -37,7 +37,7 @@ class BackendApplicationTests {
 
     @Test
     void contextLoads() {
-        logger.info("开始拉取搜狐体育！");
+/*        logger.info("开始拉取搜狐体育！");
         // 1.获取首页
         Document html = null;
         try {
@@ -61,9 +61,9 @@ class BackendApplicationTests {
             String url = a.attr("href");
             String title = a.text();
 
-/*            if (url.substring(0, 1).equals("/")) {
+*//*            if (url.substring(0, 1).equals("/")) {
                 url = "https://www.sohu.com" + url;
-            }*/
+            }*//*
 
             News n = new News();
             n.setSource("搜狐");
@@ -95,7 +95,7 @@ class BackendApplicationTests {
                 logger.error("体育抽取失败:{}", news.getUrl());
                 e.printStackTrace();
             }
-        });
+        });*/
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.BO.DeleteBO;
 import com.example.backend.BO.HistoryBO;
 import com.example.backend.VO.Result;
 import com.example.backend.pojo.History;
@@ -45,11 +46,10 @@ public class HistoryController {
         return Result.BAD().build();
     }
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     @ResponseBody
-    public Result deleteHistory(@RequestParam String phone,
-                                @RequestParam String history_url) {
-        int delete = historyService.DeleteHistory(phone, history_url);
+    public Result deleteHistory(@RequestBody DeleteBO deleteBO) {
+        int delete = historyService.DeleteHistory(deleteBO);
         if (delete > 0) {
             return Result.OK().build();
         }

@@ -1,5 +1,6 @@
 package com.example.backend.service.serviceimpl;
 
+import com.example.backend.BO.DeleteBO;
 import com.example.backend.BO.FlagBO;
 import com.example.backend.dto.FlagDTO;
 import com.example.backend.mapper.FlagDao;
@@ -39,8 +40,9 @@ public class FlagServiceImpl implements FlagService {
     }
 
     @Override
-    public int DeleteFlags(String flag_user, String flag_url) {
-
+    public int DeleteFlags(DeleteBO deleteBO) {
+        String flag_user = deleteBO.getUser();
+        String flag_url = deleteBO.getUrl();
         Flag flag = flagDao.selectBytwo(flag_user, flag_url);
         if(flag == null){
             return 0;
@@ -50,12 +52,12 @@ public class FlagServiceImpl implements FlagService {
     }
 
     @Override
-    public int UpdateFlags(String flag_user, String flag_url, String flag_name) {
+    public int UpdateFlags(String flag_user, String flag_url, String flag_name,String new_url) {
         Flag flag = flagDao.selectBytwo(flag_user, flag_url);
         if(flag == null){
             return 0;
         }
-        return flagDao.updateBytwo(flag_user,flag_url,flag_name);
+        return flagDao.updateBytwo(flag_user,flag_url,flag_name,new_url);
     }
 
     @Override
