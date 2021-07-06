@@ -5,9 +5,9 @@ package com.example.backend.service;
 
 import com.example.backend.BO.RegisterBO;
 import com.example.backend.VO.Result;
+import com.example.backend.BO.UserDTO;
 import com.example.backend.pojo.User;
 
-import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -18,6 +18,6 @@ public interface UserService {
 
     User getUser(String phone);
 
-    int verifyUser(User user);
+    int modifyUser(UserDTO userDTO);
 
 }

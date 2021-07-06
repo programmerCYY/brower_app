@@ -37,65 +37,39 @@ class BackendApplicationTests {
 
     @Test
     void contextLoads() {
-/*        logger.info("开始拉取搜狐体育！");
-        // 1.获取首页
-        Document html = null;
-        try {
-            html = newsPuller.getHtmlFromUrl(Carurl, false);
-        } catch (Exception e) {
-            logger.error("==============获取搜狐首页失败: {}=============", Carurl);
-            e.printStackTrace();
-            return;
-        }
-        // 2.jsoup获取新闻<a>标签
-        Elements newsATags = html
-                .select("div.box")
-                .select("li")
-                .select("a");
+        String s = "<html>\n" +
+                "\n" +
+                "<head>\n" +
+                "\t<title>Upload Result</title>\n" +
+                "</head>\n" +
+                "\n" +
+                "<body>\n" +
+                "\t<h1>MD5: f44faca741833796bec38b4916996bb2</h1>\n" +
+                "\tImage upload successfully! You can get this image via this address:<br/><br/>\n" +
+                "\t<a\n" +
+                "\t\thref=\"/f44faca741833796bec38b4916996bb2\">http://yourhostname:4869/f44faca741833796bec38b4916996bb2</a>?w=width&h=height&g=isgray&x=position_x&y=position_y&r=rotate&q=quality&f=format\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>";
 
+        System.out.println(getMd5(s));
+    }
 
+    public String getMd5(String s){
+        StringBuilder res = new StringBuilder();
 
-        // 3.从<a>标签中抽取基本信息，封装成news
-        HashSet<News> newsSet = new HashSet<>();
-        for (Element a : newsATags) {
-            String url = a.attr("href");
-            String title = a.text();
-
-*//*            if (url.substring(0, 1).equals("/")) {
-                url = "https://www.sohu.com" + url;
-            }*//*
-
-            News n = new News();
-            n.setSource("搜狐");
-            n.setUrl(url);
-            n.setTitle(title);
-            n.setCreateDate(new Date());
-            n.setTag("3");
-            newsSet.add(n);
-        }
-        // 4.根据新闻url访问新闻，获取新闻内容
-        newsSet.forEach(news -> {
-            logger.info("开始抽取搜狐体育内容：{}", news.getUrl());
-            Document newsHtml = null;
-            try {
-                newsHtml = newsPuller.getHtmlFromUrl(news.getUrl(), false);
-                Element newsContent = newsHtml.select("div.content area")
-                        .select("div.article-box l")
-                        .first();
-                String title = newsContent.select("div.article-title").select("h3").text();
-                String content = newsContent.select("article.article-text").first().toString();
-                String image = NewsUtils.getImageFromContent(content);
-
-                news.setTitle(title);
-                news.setContent(content);
-                news.setImage(image);
-                newsService.saveNews(news);
-                logger.info("抽取搜狐体育《{}》成功！", news.getTitle());
-            } catch (Exception e) {
-                logger.error("体育抽取失败:{}", news.getUrl());
-                e.printStackTrace();
+        int i = 0,j = 0,n = s.length();
+        while(i<n&&j<n){
+            if(s.charAt(i)=='M'){
+                j = i+5;
             }
-        });*/
+
+            if(s.substring(i,i+4).equals("</h1")){
+                break;
+            }
+            i++;
+        }
+        return s.substring(j,i);
     }
 
 }

@@ -4,15 +4,13 @@ package com.example.backend.controller;
 
 import com.example.backend.BO.RegisterBO;
 import com.example.backend.VO.Result;
+import com.example.backend.BO.UserDTO;
 import com.example.backend.pojo.User;
 import com.example.backend.service.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -44,10 +42,10 @@ public class UserController {
     }
 
 
-    @PostMapping("/verify")
+    @PostMapping("/modify")
     @ResponseBody
-    public Result verifyUser(@RequestBody User user) {
-        int update = userService.verifyUser(user);
+    public Result verifyUser(@RequestBody UserDTO userDTO) {
+        int update = userService.modifyUser(userDTO);
         if (update > 0) {
             return Result.OK().build();
         }else if (update == 0){

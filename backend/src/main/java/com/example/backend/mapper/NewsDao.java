@@ -24,4 +24,5 @@ public interface NewsDao {
 
     List<News> selectByExampleWithBLOBs(NewsExample example);
 
+    List<News> selectByTag(String tag);
 }
