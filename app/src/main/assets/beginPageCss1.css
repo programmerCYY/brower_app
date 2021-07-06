@@ -154,7 +154,7 @@ body {
     transition: all .2s ease;
 }
 
-.iconBackBoxAll>a img {
+.iconBackBoxAll>a .photo {
     /* 图片定位 */
     position: absolute;
     width: 46px;
@@ -165,7 +165,7 @@ body {
     margin-left: -23px;
 }
 
-.iconBackBox>div {
+.iconBackBoxAll>a .verble {
     /* 文本定位 */
     position: absolute;
     width: 60px;

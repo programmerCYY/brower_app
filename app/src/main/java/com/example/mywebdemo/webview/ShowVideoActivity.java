@@ -1,4 +1,4 @@
-package com.example.mywebdemo;
+package com.example.mywebdemo.webview;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
+
+import com.example.mywebdemo.R;
 
 import java.util.ArrayList;
 

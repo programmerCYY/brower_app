@@ -98,7 +98,7 @@
         </View>
 
 
-        <WebView
+        <com.github.lzyzsd.jsbridge.BridgeWebView
 
 
                 android:layout_weight="2"

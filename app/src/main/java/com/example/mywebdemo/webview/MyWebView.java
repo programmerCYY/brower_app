@@ -1,11 +1,14 @@
 package com.example.mywebdemo.webview;
 
 import com.example.mywebdemo.FragActivity;
+import com.example.mywebdemo.MainActivity;
+import com.example.mywebdemo.adblock.AdSorting;
 import com.example.mywebdemo.constance.fragConst;
 
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.webkit.DownloadListener;
+import android.webkit.JsResult;
 import android.webkit.URLUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -26,6 +29,11 @@ import android.widget.ImageView;
 
 import com.example.mywebdemo.R;
 import com.example.mywebdemo.httputils.HttpUtils;
+import com.github.lzyzsd.jsbridge.BridgeHandler;
+import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
+import com.github.lzyzsd.jsbridge.CallBackFunction;
+import com.github.lzyzsd.jsbridge.DefaultHandler;
 
 
 import java.io.ByteArrayOutputStream;
@@ -42,6 +50,7 @@ import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class MyWebView {
 
+    private String jsUrl;
     //当前页面的现在的url
     private String current_url="";
     //当前页面url的名字
@@ -50,7 +59,7 @@ public class MyWebView {
     private Bitmap current_icon;
 
     //当前页的webview
-    private WebView webView;
+    private BridgeWebView webView;
     private boolean isWindows=false;
 
     public void setMyurl(String url){
@@ -59,18 +68,25 @@ public class MyWebView {
     public String getMyurl(){return current_url;}
     public String getCurrent_title(){return current_title; }
     public Bitmap getCurrent_icon(){return current_icon;}
-    public void setWebView(WebView webView) {
+    public void setWebView(BridgeWebView webView) {
         this.webView = webView;
     }
     public void change_isWindows(){isWindows=!isWindows;}
     public boolean get_isWindows(){return isWindows;}
 
     //注册浏览器
+    @SuppressLint("JavascriptInterface")
     public void initWebView(String url) {
 //        webView.restoreState();
 //        webView.saveState()
 //        LoadUrl(url);
+
+        //图片编辑：js转java
         webView.addJavascriptInterface(new JavascriptInterface(webView.getContext()), "imagelistener");
+        //视频编辑
+        webView.addJavascriptInterface(new JavascriptInterfaceAdapter(webView.getContext()),"videolistener");
+
+
         Log.d("webView.getContext()",""+webView.getContext());
         WebSettings webSettings = webView.getSettings();
 
@@ -123,7 +139,7 @@ public class MyWebView {
 //        });
 
 
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new BridgeWebViewClient(webView){
             boolean if_load;
 //            @Override
 //            public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -140,6 +156,7 @@ public class MyWebView {
                 view.getSettings().setJavaScriptEnabled(true);
                 super.onPageFinished(view, url);
 
+                //注入js
                 webView.loadUrl("javascript:(function(){" +
                         "var objs = document.getElementsByTagName(\"img\"); " +
                         " var array=new Array(); " +
@@ -151,6 +168,18 @@ public class MyWebView {
 //                        +" console.log('picture_____')"
                         + "        imagelistener.openImage(this.src,array);  " +
                         "    }  " +
+                        "}" +
+                        "})()");
+
+
+                //注入js
+                webView.loadUrl("javascript:(function(){" +
+                        "var objs = document.getElementsByTagName(\"video\"); " +
+                        "for(var i=0;i<objs.length;i++)  " +
+                        "{"+
+                        "    objs[i].addEventListener('play',function()  {" +
+                        "        window.videolistener.openVideo(this.currentSrc);  " +
+                        "    });  " +
                         "}" +
                         "})()");
 
@@ -271,7 +300,87 @@ public class MyWebView {
                 if_load=true;
             }
 
+            @Override
+            //重写urlloading接口，实现在打开超链接时拦截指定url，并重定向到一个本地html
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d("succeed", "shouldOverrideUrlLoading: "+url);
+                jsUrl =url;
+                //对将要打开的url进行匹配
+                AdSorting sortion = new AdSorting();
+                String result = sortion.urlSorting(webView.getContext(),url);
+                //高中低三种风险
+                switch (result){
+                    case "high":
+                        view.loadUrl("file:///android_asset/highRisky.html");
+                        Log.d("success1", "shouldOverrideUrlLoading: "+url);
+                        break;
+                    case "medium":
+                        view.loadUrl("file:///android_asset/mediumRisky.html");
+                        Log.d("success2", "shouldOverrideUrlLoading: "+url);
+                        break;
+                    case"low":
+                        view.loadUrl("file:///android_asset/lowRisky.html");
+                        Log.d("success3", "shouldOverrideUrlLoading: "+url);
+                        break;
+                    default:
+                        view.loadUrl(url);
+                }
+                return super.shouldOverrideUrlLoading(view,url);
+            }
         });
+
+
+        //拦截网站后重定向到一个本地的h5作为中间页，运用jsbride进行控制
+        webView.addJavascriptInterface(this, "Android");
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                if (message.equals("1")) {
+                    Log.d("alert", "onJsAlert1: "+message);
+//                    webView.canGoBack();
+                    webView.goBack();
+                    webView.goBack();
+//                    Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
+                }else if (message.equals("0")) {
+                    Log.d("alert", "onJsAlert2: "+message);
+                    view.stopLoading();
+//                   FragActivity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+                            webView.loadUrl(jsUrl);
+
+//                        }
+//                    });
+
+                    Log.d("alert", "onJsAlert: "+jsUrl);
+//                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+                result.confirm();
+                return true;
+            }
+        });
+        //主页是一个本地的h5文件，运用jsbrid，使得在h5页面上搜索变成调用native的搜索功能。（当然直接在html里面用原生的form标签也可以，只不过就不是从头到尾webview了感觉会有问题）
+        webView.setDefaultHandler(new DefaultHandler());
+        webView.registerHandler("submitFromWeb", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                Log.e("TAG", "js返回 "+data);
+                if (data.equals("")){
+                    data="https://m.baidu.com/";
+                }else {
+                    if(isUrl(data)){
+                        data="http://"+data;
+                    }
+                    if(!isHttpUrl(data)){
+//                         str = "http://www.baidu.com/baidu?tn=02049043_69_pg&le=utf-8&word=" + myEditText.getText().toString();
+                        data = "http://m.baidu.com/s?baiduid=8155C2BBA5E753A5E061F6569491FCEB&tn=baidulocal&le=utf-8&word=" + data +"&pu=sz%401321_480&t_noscript=jump";
+                    }
+                }
+                Log.d("jsbridge", "handler: "+data);
+                initWebView(data);
+            }
+        });
+
         LoadUrl(url);
         //拦截跳转后执行
 //        webView.setWebViewClient(new WebViewClient() {
@@ -444,7 +553,8 @@ public class MyWebView {
     //主页
     public void goHome(){
         if(!isWindows) {
-            initWebView("https://m.baidu.com/");
+            initWebView("file:///android_asset/mainPage.html");
+            //initWebView("https://m.baidu.com/");
         }else {
             initWebView("http://www.baidu.com/");
 

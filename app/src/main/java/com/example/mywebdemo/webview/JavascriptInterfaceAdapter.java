@@ -1,12 +1,11 @@
-package com.example.mywebdemo;
+package com.example.mywebdemo.webview;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
-import java.util.ArrayList;
+import com.example.mywebdemo.webview.ShowVideoActivity;
 
 public class JavascriptInterfaceAdapter {
     private Context context;
@@ -22,7 +21,7 @@ public class JavascriptInterfaceAdapter {
     public void openVideo(String video){
 
 
-        Intent intent = new Intent(context,ShowVideoActivity.class);
+        Intent intent = new Intent(context, ShowVideoActivity.class);
 
         intent.putExtra("video",video);
         Log.d("jsinterface", "openVideo: "+video);

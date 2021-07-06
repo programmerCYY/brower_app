@@ -40,6 +40,7 @@ import com.example.mywebdemo.event.showDelImg;
 import com.example.mywebdemo.event.zoomEvent;
 import com.example.mywebdemo.constance.fragConst;
 import com.example.mywebdemo.webview.MyWebView;
+import com.github.lzyzsd.jsbridge.BridgeWebView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -143,12 +144,12 @@ public class mainFrag extends baseFrag {
 
         //加载WebView控件
 
-        WebView webView = (WebView) view.findViewById(R.id.current_webview);
+        BridgeWebView webView = (BridgeWebView) view.findViewById(R.id.current_webview);
         //判断webview是否挂载
         if (myWebView == null) {
             myWebView = new MyWebView();
             myWebView.setWebView(webView);
-            myWebView.initWebView(myWebView.getMyurl());
+            myWebView.initWebView("file:///android_asset/mainPage.html");
             //fragConst.myWebViewList.add(myWebView);
         }else{
             myWebView.setWebView(webView);
