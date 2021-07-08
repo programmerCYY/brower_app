@@ -38,19 +38,8 @@ public class flagEditAdapter extends RecyclerView.Adapter<flagEditAdapter.ViewHo
     private ArrayList<String> icon_list_string;
     private Context mContext;
     private RecyclerView mRv;
-    //    private boolean isEdit;
     public boolean isAllSelect=false;
 
-//    public void setEdit(boolean isEdit) {
-//        isEdit =isEdit;
-//        Log.d("Edit","successs");
-//
-//    }
-//    public void exitEdit() {
-//        isEdit =false;
-//        Log.d("Edit","successs");
-//
-//    }
 
     public flagEditAdapter(Context context, RecyclerView recyclerView){
         url_list = fragConst.flag_url;

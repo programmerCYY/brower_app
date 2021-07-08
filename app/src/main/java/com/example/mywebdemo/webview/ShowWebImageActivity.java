@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.mywebdemo.R;
 
@@ -34,7 +35,6 @@ public class ShowWebImageActivity extends Activity {
     private static int times=0;
     private ImageView imageView;
     private static int i=0;
-
     // 縮放控制
     private Matrix matrix = new Matrix();
     private Matrix savedMatrix = new Matrix();
@@ -62,7 +62,9 @@ public class ShowWebImageActivity extends Activity {
         }
         Bundle bundle = this.getIntent().getExtras();
         list_imgs=bundle.getStringArrayList("img");
-        imagePath = list_imgs.get(i);
+        String currentimg=bundle.getString("currentimg");
+        imagePath = currentimg;
+        i=list_imgs.indexOf(currentimg);
          imageView  = (ImageView) findViewById(R.id.show_webimage_imageview);
 
          Bitmap bitmap=returnBitMap(imagePath);
@@ -158,6 +160,12 @@ public class ShowWebImageActivity extends Activity {
             }
         });
 
+        TextView current_pic=(TextView)findViewById(R.id.current_pic);
+        TextView all_pic=(TextView)findViewById(R.id.all_pic);
+        current_pic.setText((i+1)+"");
+
+
+
         Button btn_next=(Button) findViewById(R.id.btn_next);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +179,7 @@ public class ShowWebImageActivity extends Activity {
                     imagePath = list_imgs.get(i);
                     toCenter(imagePath);
                 }
+                current_pic.setText((i+1)+"");
             }
         });
 
@@ -183,7 +192,6 @@ public class ShowWebImageActivity extends Activity {
                     imagePath = list_imgs.get(i);
                     toCenter(imagePath);
 
-
                 }
                 else {
                    i=list_imgs.size()-1;
@@ -191,8 +199,15 @@ public class ShowWebImageActivity extends Activity {
                     toCenter(imagePath);
                     //imageView.setImageBitmap(returnBitMap(imagePath));
                 }
+                current_pic.setText((i+1)+"");
+
             }
         });
+
+        all_pic.setText(list_imgs.size()+"");
+
+
+
     }
 
     private void saveBitmap(Bitmap bitmap) {

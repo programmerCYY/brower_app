@@ -41,14 +41,14 @@ public class RegisterActivity extends BaseActivity {
     private EditText mEtUserphone;
     private EditText mEtUsername;
     private EditText mEtUserEmail;
-//    private EditText mEtUserPic;
+
     private EditText mEtPassword;
     private EditText mEtRePassword;
     private Button mBtnRegister;
     private ImageView mEtUserImg;
     private String s="";//图片的本地路径
 
-//    private UserBiz mUserBiz;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,23 +103,28 @@ public class RegisterActivity extends BaseActivity {
                     //上传图片到服务器
                     //上传图片拿到url
                     File f=httpUtils.bitmapChangeFile(bitmap1);
-                    try {
-                        httpUtils.UploadPic(f);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    if(bitmap1!=null) {
+                        try {
+                            httpUtils.UploadPic(f);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
 
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        httpUtils.Register(userphone, password, useremail, username, httpUtils.appendUrl(fragConst.icon_temp_string));
+
+                    }else {
+                        httpUtils.Register(userphone, password, useremail, username, "http://39.108.210.48:4869/c3ce5639c862d4a2eecb12f830d75029");
                     }
 
                     //注册图标
-                    httpUtils.Register(userphone, password, useremail, username, httpUtils.appendUrl(fragConst.icon_temp_string));
                     startLoadingProgress();
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -133,27 +138,6 @@ public class RegisterActivity extends BaseActivity {
                     }
                 }
 
-
-//                fragConst.user.add(new User(userid,username,password));
-
-
-//                mUserBiz.register(username, password, new CommonCallback<User>() {
-//                    @Override
-//                    public void onError(Exception e) {
-//                        T.showToast(e.getMessage());
-//                        Log.d("ee", e.getMessage());
-//                        stopLoadingProgress();
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(User user) {
-//                        stopLoadingProgress();
-//                        T.showToast("注册成功，用户名为：" + user.getUsername());
-//                        LoginActivity.launch(RegisterActivity.this,
-//                                user.getUsername(), user.getPassword());
-//                        finish();
-//                    }
-//                });
             }
 
 
@@ -174,11 +158,6 @@ public class RegisterActivity extends BaseActivity {
 
     }
 
-//    @Override
-//    public void onDetachedFromWindow() {
-//        super.onDetachedFromWindow();
-//        mUserBiz.onDestory();
-//    }
 
     /**
      * 验证邮箱输入是否合法
@@ -264,7 +243,8 @@ public class RegisterActivity extends BaseActivity {
             if (data != null) {
 // 得到图片的全路径
                 photoUri1 = data.getData();
-                Log.d("photoUri1",""+photoUri1);
+//                Log.d("photoUri1",""+photoUri1);
+
 // bitmap1 = decodeUriAsBitmap(photoUri1);
 // img1.setImageBitmap(bitmap1);
 

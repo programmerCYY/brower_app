@@ -121,7 +121,7 @@ public class historyActivity extends AppCompatActivity {
                     if(fragConst.user_account==""){
                         fragConst.history_icon.remove(fragConst.history_icon.size()-1);
                     }
-                    //Log.d("clear",""+ fragConst.history_url.size());
+
                 }
                 historyAdapter.notifyDataSetChanged();
 

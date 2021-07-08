@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import com.example.mywebdemo.fragment.mainFrag;
 import com.example.mywebdemo.webview.MyWebView;
 import com.example.mywebdemo.user.User;
+import com.example.mywebdemo.news.NewsItem;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -36,6 +37,8 @@ public class fragConst {
     public static ArrayList<Bitmap>flag_icon=new ArrayList<>();
     public static ArrayList<String>flag_icon_string=new ArrayList<>();
 
+    public static ArrayList<NewsItem> news_list = new ArrayList<>();
+
     public static String icon_temp_string;
     public static User user;
 
@@ -47,7 +50,7 @@ public class fragConst {
 
     public static  int new_mainfrag_count=0;  // mainFrag类构造函数被调用的次数
 
-    public static String user_account = "12345678912"; //当前登录用户
+    public static String user_account = ""; //当前登录用户
 
     public static String http_msg = ""; // 后台链接失败返回信息
 
@@ -57,7 +60,7 @@ public class fragConst {
         String string=null;
         ByteArrayOutputStream bStream=new ByteArrayOutputStream();
 
-        Log.d("bitmap2",""+bitmap);
+//        Log.d("bitmap2",""+bitmap);
 
         bitmap.compress(Bitmap.CompressFormat.PNG,10,bStream);
         byte[]bytes=bStream.toByteArray();

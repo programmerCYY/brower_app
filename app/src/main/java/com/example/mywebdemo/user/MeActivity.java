@@ -81,7 +81,7 @@ public class MeActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.d("user",""+fragConst.user.getEmail());
+//        Log.d("user",""+fragConst.user.getEmail());
 
 
 
@@ -262,25 +262,36 @@ public class MeActivity extends AppCompatActivity {
                     //上传图片到服务器
                     //上传图片拿到url
                     File f=httpUtils.bitmapChangeFile(bitmap1);
-                    try {
-                        httpUtils.UploadPic(f);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+//                    Log.d("bit",bitmap1+"");
+                    if(bitmap1!=null) {
+                        try {
+                            httpUtils.UploadPic(f);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        httpUtils.ModifyUser(username, useremail, httpUtils.appendUrl(fragConst.icon_temp_string), password);
+
+                    }else {
+//                        Log.d("bit2","success");
+                        if(fragConst.user.getAvatar()!=null){
+                            httpUtils.ModifyUser(username, useremail, fragConst.user.getAvatar(),password);
+                        }else {
+                            httpUtils.ModifyUser(username, useremail, "http://39.108.210.48:4869/c3ce5639c862d4a2eecb12f830d75029",password);
+
+                        }
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
 
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
-                    //注册图标
-                    httpUtils.Register(userphone, password, useremail, username, httpUtils.appendUrl(fragConst.icon_temp_string));
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     if (fragConst.http_msg != "succ") {
                         Toast.makeText(MeActivity.this, "修改失败，请重试", Toast.LENGTH_SHORT).show();
 
@@ -289,7 +300,8 @@ public class MeActivity extends AppCompatActivity {
                         fragConst.http_msg = "";
                     }
                 }
-
+                window.dismiss();
+                MeActivity.this.refresh();
 
             }
 
@@ -375,13 +387,15 @@ public class MeActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PHOTO_REQUEST_GALLERY) {
             if (data != null) {
 // 得到图片的全路径
                 photoUri1 = data.getData();
-                Log.d("photoUri1",""+photoUri1);
+//                Log.d("photoUri1",""+photoUri1);
+
 // bitmap1 = decodeUriAsBitmap(photoUri1);
 // img1.setImageBitmap(bitmap1);
 
@@ -443,6 +457,24 @@ public class MeActivity extends AppCompatActivity {
     public static boolean hasSDCard() {
         return Environment.MEDIA_MOUNTED.equals(Environment
                 .getExternalStorageState());
+    }
+
+    public void refresh(){
+        HttpUtils httpUtils=new HttpUtils();
+        httpUtils.GetUser();
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        tPhone.setText(fragConst.user.getPhone());
+        tNickName.setText(fragConst.user.getNickname());
+        tUsername.setText(fragConst.user.getUsername());
+        tEmail.setText(fragConst.user.getEmail());
+        tImg.setImageBitmap(returnBitMap(fragConst.user.getAvatar()));
+
     }
 
 

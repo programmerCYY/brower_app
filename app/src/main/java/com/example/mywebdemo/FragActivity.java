@@ -1,7 +1,10 @@
 package com.example.mywebdemo;
 
 //import com.nostra13.universalimageloader;
+import com.example.mywebdemo.news.NewsActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.DownloadManager;
@@ -42,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,13 +98,19 @@ public class FragActivity extends FragmentActivity {
     private PercentRelativeLayout mainrootrl;
     private mainActivitySimpleOnGestureListener mainSimpleOnGestureListener;
     private static boolean isDay;
+    private static boolean isNoHistory;
     private static String url="";//接收跳转的url
 
 
+    public static boolean getIsNoHistory() {
+        return isNoHistory;
+    }
 
     public static boolean getIsDay(){
         return isDay;
     }
+
+
     public static void setUrl(String s){
         url=s;
     }
@@ -118,6 +128,17 @@ public class FragActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        final int EXTERNAL_STORAGE_REQ_CODE = 10 ;
+
+        int permission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // 请求权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    EXTERNAL_STORAGE_REQ_CODE);
+        }
+
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -126,6 +147,8 @@ public class FragActivity extends FragmentActivity {
 
         //白天模式
         isDay=true;
+        //无痕模式
+        isNoHistory=false;
 
         //fraglist存fragment对象，fraghashcode存对应随机哈希码
         for (int i = 0; i < fragConst.init_page_count; i++) {
@@ -229,7 +252,7 @@ public class FragActivity extends FragmentActivity {
             case R.id.leftbt:
                 goBack();
                 //command="goBack";
-                Log.d("gol","go");
+//                Log.d("gol","go");
                 break;
             case R.id.rightbt:
                 goForward();
@@ -278,6 +301,7 @@ public class FragActivity extends FragmentActivity {
 //        }
         mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
         m.goBack();
+
 
         //getSupportFragmentManager().getFragment();
 
@@ -348,6 +372,23 @@ public class FragActivity extends FragmentActivity {
             textView.setText("白天模式");
         }
 
+
+        //切换无痕模式
+        if(isNoHistory){
+            ImageView imageView=v.findViewById(R.id.popup_no_history);
+            imageView.setImageResource(R.mipmap.no_history_active);
+            TextView textView=v.findViewById(R.id.popup_no_history_text);
+            textView.setTextColor(getResources().getColor(R.color.active));
+            //禁用分享和添加书签
+            LinearLayout linearLayout=v.findViewById(R.id.popup_set);
+            linearLayout.setEnabled(false);
+            LinearLayout linearLayout1=v.findViewById(R.id.popup_share);
+            linearLayout1.setEnabled(false);
+
+        }
+
+
+
         img1=v.findViewById(R.id.user_pic);
         if(fragConst.user_account!=""){
             TextView textView=(TextView)v.findViewById(R.id.user_name);
@@ -367,13 +408,12 @@ public class FragActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
 
+
 //                showImagePickDialog();
-//                HttpUtils httpUtils=new HttpUtils();
-//                try {
-//                    httpUtils.UploadPic();
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
+
+                Intent intent2 = new Intent(FragActivity.this, NewsActivity.class);
+                startActivity(intent2);
+                window.dismiss();
             }
         });
 
@@ -417,7 +457,7 @@ public class FragActivity extends FragmentActivity {
         v.findViewById(R.id.popup_download).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FragActivity.this,"您点击了下载",Toast.LENGTH_SHORT).show();
+                Toast.makeText(FragActivity.this,"切换到系统下载列表",Toast.LENGTH_SHORT).show();
                 PackageInfo pi = null;
                 try {
                     pi = getPackageManager().getPackageInfo("com.amaze.filemanager", 0);
@@ -475,6 +515,7 @@ public class FragActivity extends FragmentActivity {
                 mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
                 m.change_isWindows();
 
+
                 Toast.makeText(FragActivity.this,!m.get_isWindows()?"切换到手机版":"切换到电脑版",Toast.LENGTH_SHORT).show();
                 window.dismiss();
             }
@@ -482,7 +523,12 @@ public class FragActivity extends FragmentActivity {
         v.findViewById(R.id.popup_no_history).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FragActivity.this,"您点击了无痕浏览",Toast.LENGTH_SHORT).show();
+                isNoHistory=!isNoHistory;
+                if(isNoHistory) {
+                    Toast.makeText(FragActivity.this, "切换到无痕浏览", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(FragActivity.this, "取消无痕浏览", Toast.LENGTH_SHORT).show();
+                }
                 window.dismiss();
             }
         });
@@ -513,7 +559,6 @@ public class FragActivity extends FragmentActivity {
         v.findViewById(R.id.popup_set).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FragActivity.this,"您点击了设置",Toast.LENGTH_SHORT).show();
                 mainFrag m=fragConst.fraglist.get(mViewPager.getCurrentItem());
                 String url=m.geturl();
                 String title=m.gettitle();
@@ -547,7 +592,7 @@ public class FragActivity extends FragmentActivity {
                 }else {
                     fragConst.flag_url.add(url);
                     int sizeBefore=fragConst.flag_url.size();
-                    Log.d("flag_url_1",""+fragConst.flag_url.size()+" "+fragConst.flag_url);
+//                    Log.d("flag_url_1",""+fragConst.flag_url.size()+" "+fragConst.flag_url);
 //                           fragConst.history_name=removeDuplicate(fragConst.history_name);
                     fragConst.flag_url=removeDuplicate(fragConst.flag_url);
                     int sizeAfter=fragConst.flag_url.size();
@@ -555,23 +600,10 @@ public class FragActivity extends FragmentActivity {
                         fragConst.flag_icon.add(icon);
                         fragConst.flag_name.add(title);
                     }
-                    Log.d("flag_url",""+fragConst.history_url.size()+" "+fragConst.history_name.size()+" "+fragConst.history_icon.size());
-//                           fragConst.history_icon=removeDuplicate(fragConst.flag_icon);
+
                 }
 
-//                fragConst.flag_url.add(url);
-//                fragConst.flag_url=removeDuplicate(fragConst.flag_url);
-//                fragConst.flag_name.add(title);
-//                fragConst.flag_name=removeDuplicate(fragConst.flag_name);
-//                if (fragConst.user_account=="") {
-//                    fragConst.flag_icon.add(icon);
-//                }
-//                httpUtils.AddFlag(url,title);
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+                Toast.makeText(FragActivity.this,"已添加到书签",Toast.LENGTH_SHORT).show();
                 window.dismiss();
             }
         });

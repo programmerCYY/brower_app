@@ -35,14 +35,6 @@ public class LoginActivity extends BaseActivity {
     private static final String KEY_USERNAME = "key_username";
     private static final String KEY_PASSWORD = "key_password";
 
-//    private UserBiz mUserBiz = new UserBiz();
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        CookieJarImpl cookieJar = (CookieJarImpl) OkHttpUtils.getInstance().getOkHttpClient().cookieJar();
-//        cookieJar.getCookieStore().removeAll();
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +68,7 @@ public class LoginActivity extends BaseActivity {
 
                 try {
                     startLoadingProgress();
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -95,22 +87,6 @@ public class LoginActivity extends BaseActivity {
 
             }
 
-//                mUserBiz.login(username, password, new CommonCallback<User>() {
-//                    @Override
-//                    public void onError(Exception e) {
-//                        stopLoadingProgress();
-//                        T.showToast(e.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(User user) {
-//                        stopLoadingProgress();
-//                        T.showToast("登录成功");
-//                        UserInfoHolder.getInstance().setUser(user);
-//                        toOrderActivity();
-//                        finish();
-//                    }
-//                });
             }
         });
 
@@ -137,21 +113,12 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-//    private void toOrderActivity() {
-//        Intent intent = new Intent(this, OrderActivity.class);
-//        startActivity(intent);
-//    }
 
     private void toRegisterActivity() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
-        //Log.d("开始register","success");
+
     }
 
-//    public static void launch(Context context, String username, String password) {
-//        Intent intent = new Intent(context, LoginActivity.class);
-//        intent.putExtra(KEY_USERNAME, username);
-//        intent.putExtra(KEY_PASSWORD, password);
-//        context.startActivity(intent);
-//    }
+
 }

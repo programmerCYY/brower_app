@@ -186,11 +186,43 @@ public class MyWebView {
 
 
                 //current_url=url;
-                current_url=view.copyBackForwardList().getCurrentItem().getUrl();//获取url
-                current_title=view.copyBackForwardList().getCurrentItem().getTitle();//获取标题
+                if(webView.copyBackForwardList().getCurrentItem()!=null) {
+                    current_url = webView.copyBackForwardList().getCurrentItem().getUrl();//获取url
+                    current_title = webView.copyBackForwardList().getCurrentItem().getTitle();//获取标题
+                }
 
                 //获取页面图标
                 webView.setWebChromeClient(new WebChromeClient(){
+
+
+                    //拦截网站后重定向到一个本地的h5作为中间页，运用jsbride进行控制
+                    @Override
+                    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                        if (message.equals("1")) {
+                            Log.d("alert", "onJsAlert1: "+message);
+//                    webView.canGoBack();
+                            webView.goBack();
+                            webView.goBack();
+//                    Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
+                        }else if (message.equals("0")) {
+                            Log.d("alert", "onJsAlert2: "+message);
+                            view.stopLoading();
+//                   FragActivity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+                            webView.loadUrl(jsUrl);
+
+//                        }
+//                    });
+
+                            Log.d("alert", "onJsAlert: "+jsUrl);
+//                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                        }
+                        result.confirm();
+                        return true;
+                    }
+
+
                     @Override
                     public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
                         Log.d("onConsoleMessage: " ,consoleMessage.message());
@@ -207,47 +239,50 @@ public class MyWebView {
 //                        Log.d("bitmap",""+current_icon);
 //                        Log.d("bitmaplist",""+fragConst.history_icon);
 
+                        if(!FragActivity.getIsNoHistory()){
 
-                       if (fragConst.user_account!="") {
-                           //Log.d("if","success");
-                           HttpUtils httpUtils = new HttpUtils();
-                           //上传图片拿到url
-                           File f=httpUtils.bitmapChangeFile(current_icon);
-                           try {
-                               httpUtils.UploadPic(f);
-                           } catch (FileNotFoundException e) {
-                               e.printStackTrace();
-                           }
+                            if (fragConst.user_account!="") {
+                                //Log.d("if","success");
+                                HttpUtils httpUtils = new HttpUtils();
+                                //上传图片拿到url
+                                File f=httpUtils.bitmapChangeFile(current_icon);
+                                try {
+                                    httpUtils.UploadPic(f);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
 
-                           try {
-                               Thread.sleep(1000);
-                           } catch (InterruptedException e) {
-                               e.printStackTrace();
-                           }
-                           //添加到数据库文件
-                           httpUtils.AddHistory(current_url, current_title, httpUtils.appendUrl(fragConst.icon_temp_string));
-                           try {
-                               Thread.sleep(1000);
-                           } catch (InterruptedException e) {
-                               e.printStackTrace();
-                           }
-                           fragConst.icon_temp_string="";
-                          // Log.d("icon_temp_string",""+fragConst.icon_temp_string);
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                //添加到数据库文件
+                                httpUtils.AddHistory(current_url, current_title, httpUtils.appendUrl(fragConst.icon_temp_string));
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                fragConst.icon_temp_string="";
+                                // Log.d("icon_temp_string",""+fragConst.icon_temp_string);
 //                           Log.d("history_add", "" + fragConst.http_msg);
 //                           if (fragConst.http_msg != "succ") {
 //                               Log.d("unsuccess", "" + fragConst.http_msg);
 //                               fragConst.http_msg = "";
 //                           }
-                       }else {
-                           fragConst.history_url.add(current_url);
-                           int sizeBefore=fragConst.history_url.size();
-                           fragConst.history_url=removeDuplicate(fragConst.history_url);
-                           int sizeAfter=fragConst.history_url.size();
-                           if(sizeBefore==sizeAfter) {
-                               fragConst.history_icon.add(current_icon);
-                               fragConst.history_name.add(current_title);
-                           }
-                       }
+                            }else {
+                                fragConst.history_url.add(current_url);
+                                int sizeBefore=fragConst.history_url.size();
+                                fragConst.history_url=removeDuplicate(fragConst.history_url);
+                                int sizeAfter=fragConst.history_url.size();
+                                if(sizeBefore==sizeAfter) {
+                                    fragConst.history_icon.add(current_icon);
+                                    fragConst.history_name.add(current_title);
+                                }
+                            }
+                        }
+
 
                     }
 
@@ -303,7 +338,6 @@ public class MyWebView {
             @Override
             //重写urlloading接口，实现在打开超链接时拦截指定url，并重定向到一个本地html
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d("succeed", "shouldOverrideUrlLoading: "+url);
                 jsUrl =url;
                 //对将要打开的url进行匹配
                 AdSorting sortion = new AdSorting();
@@ -312,15 +346,12 @@ public class MyWebView {
                 switch (result){
                     case "high":
                         view.loadUrl("file:///android_asset/highRisky.html");
-                        Log.d("success1", "shouldOverrideUrlLoading: "+url);
                         break;
                     case "medium":
                         view.loadUrl("file:///android_asset/mediumRisky.html");
-                        Log.d("success2", "shouldOverrideUrlLoading: "+url);
                         break;
                     case"low":
                         view.loadUrl("file:///android_asset/lowRisky.html");
-                        Log.d("success3", "shouldOverrideUrlLoading: "+url);
                         break;
                     default:
                         view.loadUrl(url);
@@ -330,35 +361,8 @@ public class MyWebView {
         });
 
 
-        //拦截网站后重定向到一个本地的h5作为中间页，运用jsbride进行控制
-        webView.addJavascriptInterface(this, "Android");
-        webView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                if (message.equals("1")) {
-                    Log.d("alert", "onJsAlert1: "+message);
-//                    webView.canGoBack();
-                    webView.goBack();
-                    webView.goBack();
-//                    Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
-                }else if (message.equals("0")) {
-                    Log.d("alert", "onJsAlert2: "+message);
-                    view.stopLoading();
-//                   FragActivity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-                            webView.loadUrl(jsUrl);
 
-//                        }
-//                    });
 
-                    Log.d("alert", "onJsAlert: "+jsUrl);
-//                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-                }
-                result.confirm();
-                return true;
-            }
-        });
         //主页是一个本地的h5文件，运用jsbrid，使得在h5页面上搜索变成调用native的搜索功能。（当然直接在html里面用原生的form标签也可以，只不过就不是从头到尾webview了感觉会有问题）
         webView.setDefaultHandler(new DefaultHandler());
         webView.registerHandler("submitFromWeb", new BridgeHandler() {
@@ -476,7 +480,6 @@ public class MyWebView {
     public static boolean isDuplicate(ArrayList <String>list){
         HashSet<String> temp = new HashSet<String>();
         for(int i=0;i<list.size();i++){
-            Log.d("index:"+i,list.get(i)+"");
             temp.add(list.get(i));
         }
         if(temp.size()==list.size()){
@@ -533,6 +536,7 @@ public class MyWebView {
     //回退功能
     public void goBack(){
                 if (webView.canGoBack()) {
+                    webView.goBack();
                     webView.goBack();
                 } else {
                     Log.d("goback","不能回退");

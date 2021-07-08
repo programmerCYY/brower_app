@@ -30,6 +30,7 @@ public class JavascriptInterface {
             Intent intent = new Intent();
             intent.setClass(context, ShowWebImageActivity.class);
             Bundle bundle=new Bundle();
+            bundle.putString("currentimg",img);
             bundle.putStringArrayList("img",list_imgs);
             intent.putExtras(bundle);
             context.startActivity(intent);

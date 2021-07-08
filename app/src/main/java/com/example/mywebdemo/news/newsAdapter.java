@@ -1,4 +1,4 @@
-package com.example.mywebdemo.history;
+package com.example.mywebdemo.news;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywebdemo.FragActivity;
-import com.example.mywebdemo.constance.fragConst;
 import com.example.mywebdemo.R;
+import com.example.mywebdemo.constance.fragConst;
+import com.example.mywebdemo.history.historyActivity;
+import com.example.mywebdemo.history.historyAdapter;
 import com.example.mywebdemo.httputils.HttpUtils;
 
 import java.io.IOException;
@@ -28,30 +30,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHolder> {
-
-    private ArrayList<String> mList;
-    private ArrayList<String> mtitle;
-    private ArrayList<Bitmap> micon;
-    private ArrayList<String> micon_string;
+public class newsAdapter extends RecyclerView.Adapter<newsAdapter.ViewHolder> {
+    private ArrayList<NewsItem> mList;
     private Context mContext;
     private RecyclerView mRv;
 
-    public historyAdapter(Context context, RecyclerView recyclerView) {
-        mList =fragConst.history_url;
-        mtitle=fragConst.history_name;
-        micon=fragConst.history_icon;
-        micon_string=fragConst.history_icon_string;
+    public newsAdapter(Context context, RecyclerView recyclerView) {
+        mList = fragConst.news_list;
         this.mContext = context;
         this.mRv = recyclerView;
     }
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public newsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //挂载item视图
         final View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.history_item,parent,false);
-        final ViewHolder holder = new ViewHolder(view);
+                .inflate(R.layout.news_item,parent,false);
+        final newsAdapter.ViewHolder holder = new newsAdapter.ViewHolder(view);
 
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -59,42 +54,19 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
             StrictMode.setThreadPolicy(policy);
         }
 
-        //删除按钮
-        holder.btnDelete =(Button) view.findViewById(R.id.btn_delete);
-         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 int position = holder.getAdapterPosition();
-
-                 String temp=fragConst.history_url.get(position);
-
-                 HttpUtils httpUtils = new HttpUtils();
-                 httpUtils.DeleteHistory(temp);
-                 fragConst.history_url.remove(position);
-                 fragConst.history_name.remove(position);
-                 if(fragConst.user_account=="") {
-                     fragConst.history_icon.remove(position);
-                 }else {
-                     fragConst.history_icon_string.remove(position);
-                 }
-
-                 notifyItemRemoved(position);
-                 notifyDataSetChanged();
-             }
-         });
         //编写点击事件
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //用v.getContext();
                 int position = holder.getAdapterPosition();
-                String currenturl=fragConst.history_url.get(position);
+                String currenturl=mList.get(position).url;
                 Intent intent = new Intent(v.getContext(), FragActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 FragActivity.setUrl(currenturl);
 
                 v.getContext().startActivity(intent);
-                historyActivity activity=(historyActivity)v.getContext();
+                NewsActivity activity=(NewsActivity)v.getContext();
                 activity.finish();
             }
         });
@@ -104,15 +76,12 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.mtitleView.setText(mtitle.get(position));
-        holder.murlView.setText(mList.get(position));
-        if(fragConst.user_account!=""){
-            //holder.miconView.setImageResource(R.mipmap.earth);
-            holder.miconView.setImageBitmap(returnBitMap(micon_string.get(position)));
-        }else {
-            holder.miconView.setImageBitmap(micon.get(position));
-        }
+    public void onBindViewHolder(@NonNull newsAdapter.ViewHolder holder, final int position) {
+//        Log.d("size",mList.size()+" "+fragConst.history_url.size());
+//        Log.d("position",""+position);
+        holder.mtitleView.setText(mList.get(position).title);
+        holder.murlView.setText(mList.get(position).source+"  "+mList.get(position).date.substring(0,10));
+        holder.miconView.setImageBitmap(returnBitMap(mList.get(position).imgUrl));
     }
 
     public Bitmap returnBitMap(String url) {
@@ -137,7 +106,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
     }
     @Override
     public int getItemCount() {
-        return fragConst.history_url.size() ;
+        return fragConst.news_list.size() ;
     }
 
 
@@ -146,13 +115,13 @@ public class historyAdapter extends RecyclerView.Adapter<historyAdapter.ViewHold
         public TextView mtitleView;
         public TextView murlView;
         public ImageView miconView;
-        public Button btnDelete;
+//        public Button btnDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mtitleView= itemView.findViewById(R.id.history_name);
-            murlView=itemView.findViewById(R.id.history_url);
-            miconView=itemView.findViewById(R.id.history_icon);
+            mtitleView= itemView.findViewById(R.id.news_name);
+            murlView=itemView.findViewById(R.id.news_message);
+            miconView=itemView.findViewById(R.id.news_icon);
         }
     }
 

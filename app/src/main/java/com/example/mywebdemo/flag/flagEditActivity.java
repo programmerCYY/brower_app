@@ -116,8 +116,7 @@ public class flagEditActivity extends AppCompatActivity {
 //                flagAdapter.isAllSelect=true;
                 flagEditAdapter.notifyItemRangeChanged(0,flagEditAdapter.getItemCount());
                 flagEditAdapter.notifyDataSetChanged();
-                Log.d("all_select_flag",
-                        ""+listCheck);
+
             }
         });
 
@@ -141,7 +140,7 @@ public class flagEditActivity extends AppCompatActivity {
                         }
                         listCheck.remove(i);
                         flagEditAdapter.notifyItemRemoved(i);
-                        //Log.d("isEdit",isEdit+"");
+
                         //flagEditAdapter.notifyItemRangeChanged(0, flagEditAdapter.getItemCount());
 
 
@@ -151,7 +150,7 @@ public class flagEditActivity extends AppCompatActivity {
                 }
                 flagEditAdapter.notifyItemChanged(0,flagEditAdapter.getItemCount());
 
-                Log.d("delete_select_flag",listCheck+"");
+
 
             }
         });
@@ -177,7 +176,7 @@ public class flagEditActivity extends AppCompatActivity {
                     fragConst.flag_name.remove(fragConst.flag_name.size()-1);
                     if(fragConst.user_account=="") {
                         fragConst.flag_icon.remove(fragConst.flag_icon.size() - 1);
-                    }//Log.d("clear",""+ fragConst.history_url.size());
+                    }
                 }
                 flagEditAdapter.notifyDataSetChanged();
             }

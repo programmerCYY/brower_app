@@ -8,6 +8,36 @@
         >
 
     <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:background="@color/night">
+        <TextView
+                android:id="@+id/current_pic"
+                android:layout_width="50sp"
+                android:layout_height="match_parent"
+                android:textColor="@color/day"
+                android:textSize="40sp"
+                >
+        </TextView>
+        <TextView
+                android:layout_width="20sp"
+                android:layout_height="match_parent"
+                android:text="/"
+                android:textSize="40sp"
+                android:textColor="@color/day"
+                >
+        </TextView>
+        <TextView
+                android:id="@+id/all_pic"
+                android:layout_width="50sp"
+                android:layout_height="match_parent"
+                android:textColor="@color/day"
+                android:textSize="40sp"
+                >
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="400dp">
 

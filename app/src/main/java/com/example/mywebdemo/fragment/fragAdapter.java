@@ -13,7 +13,6 @@ public class fragAdapter extends FragmentStatePagerAdapter {
     private Context context;
     private FragmentManager fm;
 
-    // data struct
 
 
     public fragAdapter(Context context, FragmentManager fm) {

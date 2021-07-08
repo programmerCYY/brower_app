@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
@@ -22,20 +22,25 @@
             </View>
         </LinearLayout>
         <LinearLayout
+                android:id="@+id/to_user"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_pic"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@mipmap/user_filling"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8">
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="@color/light_gray">
 
-            </ImageView>
+            </de.hdodenhof.circleimageview.CircleImageView>
             <TextView
+                    android:id="@+id/user_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
@@ -46,6 +51,7 @@
 
             </TextView>
             <ImageView
+                    android:id="@+id/popup_message"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -235,13 +241,13 @@
 
             </LinearLayout>
             <LinearLayout
-                    android:id="@+id/popup_no_history"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                 <ImageView
+                        android:id="@+id/popup_no_history"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="2"
@@ -252,6 +258,7 @@
                 </ImageView>
 
                 <TextView
+                        android:id="@+id/popup_no_history_text"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
@@ -302,7 +309,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="2"
-                        android:src="@mipmap/setting"
+                        android:src="@mipmap/file_add"
                         android:scaleX="0.6"
                         android:scaleY="0.6">
 
@@ -313,7 +320,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="13sp"
-                        android:text="设置"
+                        android:text="添加到书签"
                         android:textColor="@color/text_white">
 
                 </TextView>

@@ -1,4 +1,5 @@
 package com.example.mywebdemo.httputils;
+import com.example.mywebdemo.news.NewsItem;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,7 @@ public class HttpUtils {
     private static final String sLogin = "/user/login";
     private static final String sRegister = "/user/register";
     private static final String sUserGet="/user/getuser";
+    private static final String sUserModify="/user/modify";
 
     private static final String sHistoryAdd = "/history/add";
     private static final String sHistoryDelete = "/history/delete";
@@ -78,15 +80,15 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HttpUtils", "onFailure: 失败");
+//                Log.d("HttpUtils", "onFailure: 失败");
                 fragConst.user_account = "";
                 fragConst.http_msg = "failed:" + e.getMessage();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("HttpUtils", "succ");
-                Log.d("data2",""+response);
+//                Log.d("HttpUtils", "succ");
+//                Log.d("data2",""+response);
                 fragConst.user_account = sAccount;
                 fragConst.http_msg = "succ";
             }
@@ -119,14 +121,14 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HttpUtils", "onFailure: 失败");
+//                Log.d("HttpUtils", "onFailure: 失败");
                 fragConst.user_account = "";
                 fragConst.http_msg = "failed:" + e.getMessage();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("HttpUtils_register", "succ");
+//                Log.d("HttpUtils_register", "succ");
                 fragConst.user_account = sAccount;
                 fragConst.http_msg = "succ";
             }
@@ -142,14 +144,14 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HttpUtils", "onFailure: 失败");
+//                Log.d("HttpUtils", "onFailure: 失败");
                 fragConst.http_msg = "failed:" + e.getMessage();
             }
 
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("HttpUtils", "succ");
+//                Log.d("HttpUtils", "succ");
                 fragConst.http_msg = "succ";
 
                 String result = response.body().string();
@@ -169,6 +171,37 @@ public class HttpUtils {
 
     }
 
+    public void ModifyUser(String sUserName,String sEmail,String sAvatar,String sPassWord){
+        Map map = new HashMap<>();
+        map.put("phone",fragConst.user_account);
+        map.put("email",sEmail);
+        map.put("nickname","111");
+        map.put("username",sUserName);
+        map.put("avatar",sAvatar);
+        map.put("password",sPassWord);
+        String param = gson.toJson(map);
+
+        RequestBody requestBody = RequestBody.create(JSON, param);
+        Request request = new Request.Builder()
+                .post(requestBody)
+                .url(sUrl + sUserModify)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+//                Log.d("HttpUtils", "onFailure: 失败");
+                fragConst.http_msg = "failed:" + e.getMessage();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                Log.d("HttpUtils", "succ");
+                fragConst.http_msg = "succ";
+            }
+        });
+    }
+
 
 
     /*-------------------------History--------------------------------*/
@@ -181,7 +214,7 @@ public class HttpUtils {
         map.put("historyIcon",sIcon);
         String param = gson.toJson(map);
 
-        Log.d("sUserUrl",""+sUserUrl);
+//        Log.d("sUserUrl",""+sUserUrl);
         RequestBody requestBody = RequestBody.create(JSON, param);
         Request request = new Request.Builder()
                 .post(requestBody)
@@ -246,17 +279,17 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HttpUtils", "onFailure: 失败");
+//                Log.d("HttpUtils", "onFailure: 失败");
                 fragConst.http_msg = "failed:" + e.getMessage();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("HttpUtils", "succ");
+//                Log.d("HttpUtils", "succ");
                 fragConst.http_msg = "succ";
 
                 String result = response.body().string();
-                Log.d("HttpUtils",result);
+//                Log.d("HttpUtils",result);
                 JsonParser jparser = new JsonParser();
                 JsonObject jobject = jparser.parse(result).getAsJsonObject();
                 JsonArray Jarray = jparser.parse(String.valueOf(jobject.get("data"))).getAsJsonArray();
@@ -295,13 +328,13 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HttpUtils", "onFailure: 失败");
+//                Log.d("HttpUtils", "onFailure: 失败");
                 fragConst.http_msg = "failed:" + e.getMessage();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("HttpUtilsK", "succ");
+//                Log.d("HttpUtilsK", "succ");
                 fragConst.http_msg = "succ";
             }
         });
@@ -338,7 +371,7 @@ public class HttpUtils {
     public void GetFlag()
     {
         String url = sUrl + sFlagGet + "?phone=" + fragConst.user_account;
-        Log.d("HttpUtils",url);
+//        Log.d("HttpUtils",url);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -346,14 +379,14 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HttpUtils", "onFailure: 失败");
+//                Log.d("HttpUtils", "onFailure: 失败");
                 fragConst.http_msg = "failed:" + e.getMessage();
             }
 
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("HttpUtils", "succ");
+//                Log.d("HttpUtils", "succ");
                 fragConst.http_msg = "succ";
 
                 String result = response.body().string();
@@ -392,13 +425,13 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HttpUtils", "onFailure: 失败");
+//                Log.d("HttpUtils", "onFailure: 失败");
                 fragConst.http_msg = "failed:" + e.getMessage();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("HttpUtils", "succ");
+//                Log.d("HttpUtils", "succ");
                 fragConst.http_msg = "succ";
             }
         });
@@ -487,13 +520,13 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("ff", "uploadMultiFile() e=" + e);
+//                Log.e("ff", "uploadMultiFile() e=" + e);
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 fragConst.icon_temp_string=getMd5(response.body().string());
 //                Log.i("ff", "uploadMultiFile() response=" + response.body().string());
-                Log.d("md5",fragConst.icon_temp_string);
+//                Log.d("md5",fragConst.icon_temp_string);
             }
         });
     }
@@ -527,7 +560,7 @@ public class HttpUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("ff", "uploadMultiFile() e=" + e);
+//                Log.e("ff", "uploadMultiFile() e=" + e);
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -535,6 +568,51 @@ public class HttpUtils {
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 //                fragConst.bitmap_temp=bitmap;
                 //Log.i("ff", "uploadMultiFile() response=" + response.body().string());
+            }
+        });
+    }
+
+
+    //新闻
+    public void GetNews()
+    {
+        String url = sUrl + "/news?page=1&pageSize=20";
+        Log.d("HttpUtils",url);
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+//                Log.d("HttpUtils", "onFailure: 失败");
+                fragConst.http_msg = "failed:" + e.getMessage();
+            }
+
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String result = response.body().string();
+                JsonParser jparser = new JsonParser();
+                JsonObject jobject = jparser.parse(result).getAsJsonObject();
+                JsonArray Jarray = jparser.parse(String.valueOf(jobject.get("data"))).getAsJsonArray();
+
+                fragConst.news_list =new ArrayList<>();
+                for(int i = 0;i<Jarray.size();++i)
+                {
+                    JsonObject oJson = (JsonObject) Jarray.get(i);
+                    NewsItem oItem = new NewsItem();
+                    oItem.date = String.valueOf(oJson.get("createDate")).replace("\"","");
+                    oItem.title = String.valueOf(oJson.get("title")).replace("\"","");
+                    oItem.imgUrl = String.valueOf(oJson.get("image")).replace("\"","");
+                    oItem.url = String.valueOf(oJson.get("url")).replace("\"","");
+                    oItem.source = String.valueOf(oJson.get("source")).replace("\"","");
+                    fragConst.news_list.add(oItem);
+                }
+//                Log.d("HttpUtils", "succ");
+                fragConst.http_msg = "succ";
+//                Log.d("list",""+fragConst.news_list);
             }
         });
     }
