@@ -210,4 +210,7 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByTag" resultMap="BaseResultMap">
+    select * from news where tag = #{tag} order by rand()
+  </select>
 </mapper>

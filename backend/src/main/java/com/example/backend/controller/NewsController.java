@@ -35,44 +35,46 @@ public class  NewsController {
     private NewsService newsService;
 
 
-    @ApiOperation(value = "爬虫拉取搜狐新闻")
-    @GetMapping("/pull/sohu/news")
-    public Result pullSohuNews() {
-
-        sohuNewsPuller.pullNews();
-        return Result.OK().build();
+    @ApiOperation(value = "拉取搜狐新闻")
+    @GetMapping("/sohunews")
+    public Result pullSohuNews(@RequestParam int pageNum,
+                               @RequestParam int pageSize) {
+        List<News> list = newsService.selectByTag("1",pageNum,pageSize);
+        return Result.OK().data(list).build();
     }
 
-    @ApiOperation(value = "爬虫拉取搜狐体育")
-    @GetMapping("/pull/sohu/sports")
-    public Result pullSohuSports() {
-
-        sohuNewsPuller.pullSports();
-        return Result.OK().build();
+    @ApiOperation(value = "拉取搜狐体育")
+    @GetMapping("sohusports")
+    public Result pullSohuSports(@RequestParam int pageNum,
+                                 @RequestParam int pageSize) {
+        List<News> list = newsService.selectByTag("2",pageNum,pageSize);
+        return Result.OK().data(list).build();
     }
 
-    @ApiOperation(value = "爬虫拉取搜狐车")
-    @GetMapping("/pull/sohu/cars")
-    public Result pullSohuCars() {
+    @ApiOperation(value = "拉取搜狐车")
+    @GetMapping("sohucars")
+    public Result pullSohuCars(@RequestParam int pageNum,
+                               @RequestParam int pageSize) {
+        List<News> list = newsService.selectByTag("3",pageNum,pageSize);
 
-        sohuNewsPuller.pullCars();
-        return Result.OK().build();
+        return Result.OK().data(list).build();
     }
 
-    @ApiOperation(value = "爬虫拉取搜狐娱乐")
-    @GetMapping("/pull/sohu/Entertains")
-    public Result pullSohuEntertain() {
+    @ApiOperation(value = "拉取搜狐娱乐")
+    @GetMapping("sohuentertains")
+    public Result pullSohuEntertain(@RequestParam int pageNum,
+                                    @RequestParam int pageSize) {
+        List<News> list = newsService.selectByTag("4",pageNum,pageSize);
 
-        sohuNewsPuller.pullEntertain();
-        return Result.OK().build();
+        return Result.OK().data(list).build();
     }
 
-    @ApiOperation(value = "爬虫拉取搜狐科技")
-    @GetMapping("/pull/sohu/it")
-    public Result pullSohuIt() {
-
-        sohuNewsPuller.pullIt();
-        return Result.OK().build();
+    @ApiOperation(value = "拉取搜狐科技")
+    @GetMapping("sohuit")
+    public Result pullSohuIt(@RequestParam int pageNum,
+                             @RequestParam int pageSize) {
+        List<News> list = newsService.selectByTag("5",pageNum,pageSize);
+        return Result.OK().data(list).build();
     }
 
     @ApiOperation(value = "获取所有新闻")

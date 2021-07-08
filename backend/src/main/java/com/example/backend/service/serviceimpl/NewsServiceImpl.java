@@ -54,4 +54,10 @@ public class NewsServiceImpl implements NewsService {
         return newsDao.countByExample(example);
     }
 
+    @Override
+    public List<News> selectByTag(String tag,int pagenum,int pagesize) {
+        PageHelper.startPage(pagenum, pagesize);
+        return newsDao.selectByTag(tag);
+    }
+
 }

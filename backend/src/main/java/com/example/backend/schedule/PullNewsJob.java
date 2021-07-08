@@ -19,7 +19,8 @@ public class PullNewsJob {
     @Autowired
     NewsPuller newsPuller;
 
-    @Scheduled(fixedDelay = 1000)
+
+    @Scheduled(cron="0 0 6,11,17 * * ? ")
     public void pullContent() {
         newsPuller.pullNews();
         newsPuller.pullCars();

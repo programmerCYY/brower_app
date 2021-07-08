@@ -109,7 +109,7 @@
   <select id="selectPasswordByPhone" resultType="java.lang.String">
     select password from user where phone = #{phone};
   </select>
-  <select id="selectByphone" resultType="com.example.backend.pojo.User">
+  <select id="selectByphone" resultMap="BaseResultMap">
     select * from user where phone = #{phone};
   </select>
 </mapper>

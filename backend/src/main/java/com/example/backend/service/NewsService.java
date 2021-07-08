@@ -18,4 +18,6 @@ public interface NewsService {
     List<News> searchNewsForPage(int page, int pageSize, NewsExample example);
 
     Long countByExample(NewsExample example);
+
+    List<News> selectByTag(String tag,int pagenum,int pagesize);
 }
